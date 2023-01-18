@@ -30,6 +30,7 @@ const NavigationNonAuth = () => (
     <li>
       <Link to={ROUTES.LANDING}>Landing</Link>
     </li>
+//adding random change
     <li>
       <Link to={ROUTES.SIGN_IN}>Sign In</Link>
     </li>
