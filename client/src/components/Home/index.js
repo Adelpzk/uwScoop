@@ -1,20 +1,34 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-
+import Card from "@material-ui/core/Card";
+import Box from "@material-ui/core/Box";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Button from "@mui/material/Button";
+import StartIcon from "@mui/icons-material/Start";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import Landing from "../images/Landing2.jpeg";
+import Request from "../images/Request.gif";
+import Post from "../images/Post2.png";
+import { fontWeight } from "@mui/system";
+import { Link } from "react-router-dom";
+import "./index.css";
 
 //Dev mode
 const serverURL = ""; //enable for dev mode
 
 //Deployment mode instructions
 //const serverURL = "http://ov-research-4.uwaterloo.ca:PORT"; //enable for deployed mode; Change PORT to the port number given to you;
-//To find your port number: 
-//ssh to ov-research-4.uwaterloo.ca and run the following command: 
+//To find your port number:
+//ssh to ov-research-4.uwaterloo.ca and run the following command:
 //env | grep "PORT"
 //copy the number only and paste it in the serverURL in place of PORT, e.g.: const serverURL = "http://ov-research-4.uwaterloo.ca:3000";
 
@@ -24,12 +38,12 @@ const opacityValue = 0.9;
 
 const theme = createTheme({
   palette: {
-    type: 'dark',
+    type: "light",
     background: {
-      default: "#000000"
+      default: "#FFFFFF",
     },
     primary: {
-      main: "#52f1ff",
+      main: "#000000",
     },
     secondary: {
       main: "#b552f7",
@@ -37,7 +51,7 @@ const theme = createTheme({
   },
 });
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     body: {
       backgroundColor: "#000000",
@@ -52,7 +66,7 @@ const styles = theme => ({
   mainMessageContainer: {
     marginTop: "20vh",
     marginLeft: theme.spacing(20),
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down("xs")]: {
       marginLeft: theme.spacing(4),
     },
   },
@@ -65,31 +79,29 @@ const styles = theme => ({
     paddingBottom: theme.spacing(2),
   },
 
+  image: {},
 });
-
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userID: 1,
-      mode: 0
-    }
-  };
+      mode: 0,
+    };
+  }
 
   componentDidMount() {
     //this.loadUserSettings();
   }
 
-
   loadUserSettings() {
-    this.callApiLoadUserSettings()
-      .then(res => {
-        //console.log("loadUserSettings returned: ", res)
-        var parsed = JSON.parse(res.express);
-        console.log("loadUserSettings parsed: ", parsed[0].mode)
-        this.setState({ mode: parsed[0].mode });
-      });
+    this.callApiLoadUserSettings().then((res) => {
+      //console.log("loadUserSettings returned: ", res)
+      var parsed = JSON.parse(res.express);
+      console.log("loadUserSettings parsed: ", parsed[0].mode);
+      this.setState({ mode: parsed[0].mode });
+    });
   }
 
   callApiLoadUserSettings = async () => {
@@ -102,19 +114,17 @@ class Home extends Component {
         //authorization: `Bearer ${this.state.token}`
       },
       body: JSON.stringify({
-        userID: this.state.userID
-      })
+        userID: this.state.userID,
+      }),
     });
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     console.log("User settings: ", body);
     return body;
-  }
+  };
 
   render() {
     const { classes } = this.props;
-
-
 
     const mainMessage = (
       <Grid
@@ -123,31 +133,24 @@ class Home extends Component {
         direction="column"
         justify="flex-start"
         alignItems="flex-start"
-        style={{ minHeight: '100vh' }}
+        style={{ minHeight: "100vh" }}
         className={classes.mainMessageContainer}
       >
         <Grid item>
-
           <Typography
             variant={"h3"}
             className={classes.mainMessage}
             align="flex-start"
           >
             {this.state.mode === 0 ? (
-              <React.Fragment>
-                Adel's Crazy Change!
-              </React.Fragment>
+              <React.Fragment>Adel's Crazy Change!</React.Fragment>
             ) : (
-              <React.Fragment>
-                Welcome back!
-              </React.Fragment>
+              <React.Fragment>Welcome back!</React.Fragment>
             )}
           </Typography>
-
         </Grid>
       </Grid>
-    )
-
+    );
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -155,10 +158,257 @@ class Home extends Component {
           <CssBaseline />
           <Paper
             className={classes.paper}
+            style={{ border: "none", boxShadow: "none" }}
           >
-            {mainMessage}
-          </Paper>
+            <Card style={{ border: "none", boxShadow: "none" }}>
+              <Box>
+                <CardContent xs={12} sm={12} md={6}>
+                  <a>
+                    <Link to={`/Home`}>
+                      <CardMedia
+                        className="image"
+                        component="img"
+                        image={Landing}
+                        alt="Live from space album cover"
+                        style={{ maxWidth: 600, float: "right" }}
+                      />
+                    </Link>
+                  </a>
+                  <div style={{ marginTop: 100 }}>
+                    <Typography
+                      variant="h4"
+                      style={{
+                        marginLeft: 50,
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Share Rides.
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      style={{
+                        marginLeft: 50,
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Make Friends.
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      style={{
+                        marginLeft: 50,
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Stay Safe.
+                    </Typography>
+                  </div>
+                  <br />
+                  <Button
+                    variant="contained"
+                    startIcon={<StartIcon />}
+                    sx={{
+                      marginLeft: 6.5,
+                      marginTop: 2,
+                      backgroundColor: "#ffd500",
+                      color: "black",
+                      "&:hover": {
+                        backgroundColor: "#ffd500",
+                        color: "#be0002",
+                      },
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Get Started
+                  </Button>
+                  <br />
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      marginTop: 40,
+                      marginLeft: 50,
+                    }}
+                  >
+                    <MonetizationOnIcon fontSize="large" />
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      style={{
+                        fontSize: 12,
+                      }}
+                    >
+                      cheap & <br />
+                      affordable
+                    </Typography>
+                    <EmojiEmotionsIcon
+                      fontSize="large"
+                      style={{ marginLeft: 30 }}
+                    />
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      style={{
+                        fontSize: 12,
+                      }}
+                    >
+                      safe & <br />
+                      secure
+                    </Typography>
+                    <PeopleAltIcon
+                      fontSize="large"
+                      style={{ marginLeft: 30 }}
+                    />
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      style={{
+                        fontSize: 12,
+                      }}
+                    >
+                      friendly & <br />
+                      comfortable
+                    </Typography>
+                  </div>
 
+                  {/* <img src={Landing} style={{ display: { xs: 'flex', md: 'none' }, mr: 1, maxWidth: 150}}/> */}
+                </CardContent>
+              </Box>
+            </Card>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <Card
+              style={{
+                backgroundColor: "rgba(255, 213, 0, .7)",
+                border: "none",
+                boxShadow: "none",
+              }}
+            >
+              <Box>
+                <CardContent xs={12} sm={12} md={6}>
+                  <a>
+                    <Link to={`/Request`}>
+                      <CardMedia
+                        className="imageRequest"
+                        component="img"
+                        image={Request}
+                        alt="Live from space album cover"
+                        style={{}}
+                      />
+                    </Link>
+                  </a>
+                  <div className="request">
+                    <Typography
+                      variant="h4"
+                      style={{
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Request for Rides
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      style={{
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      from a Trusted
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      style={{
+                        paddingRight: 20,
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      UW Fellow and
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      style={{
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Make a New Friend.
+                    </Typography>
+                  </div>
+                </CardContent>
+              </Box>
+            </Card>
+            <Card
+              style={{
+                border: "none",
+                boxShadow: "none",
+                paddingBottom: 20,
+              }}
+            >
+              <Box>
+                <CardContent xs={12} sm={12} md={6}>
+                  <a>
+                    <Link to={`/Post`}>
+                      <CardMedia
+                        className="imagePost"
+                        component="img"
+                        image={Post}
+                        alt="Live from space album cover"
+                        style={{}}
+                      />
+                    </Link>
+                  </a>
+                  <div className="post">
+                    <Typography
+                      variant="h4"
+                      style={{
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Driving Back Home?
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      style={{
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      or Driving to Waterloo?
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      style={{
+                        paddingRight: 20,
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Why not Drive
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      style={{
+                        fontStyle: "oblique",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      a UW fellow.
+                    </Typography>
+                  </div>
+                </CardContent>
+              </Box>
+            </Card>
+          </Paper>
         </div>
       </MuiThemeProvider>
     );
@@ -166,7 +416,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(Home);
