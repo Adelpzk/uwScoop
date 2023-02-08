@@ -11,6 +11,24 @@ import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Form from "./Form";
+import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import "material-react-toastify/dist/ReactToastify.css";
+import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
+
+const theme = createTheme({
+  palette: {
+    type: "light",
+    background: {
+      default: "#FFFFFF",
+    },
+    primary: {
+      main: "#ffd500",
+    },
+    secondary: {
+      main: "#be0002",
+    },
+  },
+});
 
 export default function Request() {
   const [open, setOpen] = React.useState(false);
@@ -24,11 +42,27 @@ export default function Request() {
   };
 
   return (
+    <MuiThemeProvider theme={theme}>
     <div className={classes.root}>
+      <ToastContainer
+        enableMultiContainer
+        containerId={"A"}
+        toastStyle={{ color: "black" }}
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <CssBaseline />
       <Paper
         className={classes.paper}
-        style={{ border: "none", boxShadow: "none" }}
+        style={{ border: "none", boxShadow: "none", overflow: "hidden" }}
       >
         <Card style={{ border: "none", boxShadow: "none" }}>
           <Button
@@ -56,7 +90,7 @@ export default function Request() {
                 Provide the necassary information of your trip, to get matched
                 with UW drivers!
               </DialogContentText>
-              <Form />
+              <Form setOpen={handleClose} />
             </DialogContent>
             <DialogActions>
               <Button
@@ -79,5 +113,6 @@ export default function Request() {
         </Card>
       </Paper>
     </div>
+    </MuiThemeProvider>
   );
 }

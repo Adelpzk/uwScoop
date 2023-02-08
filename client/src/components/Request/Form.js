@@ -2,56 +2,147 @@ import * as React from "react";
 import { Avatar } from "@mui/material";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+import dayjs from "dayjs";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import GoogleAutoComplete from "./googleAutoComplete";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import DatePicker from "./DatePicker";
+import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import "material-react-toastify/dist/ReactToastify.css";
 
 const theme = createTheme();
 
-export default function SignUp() {
+//Dev mode
+const serverURL = " "; //enable for dev mode
+
+//Deployment mode instructions
+//const serverURL = "http://ec2-18-216-101-119.us-east-2.compute.amazonaws.com:3100"; //enable for deployed mode; Change PORT to the port number given to you;
+//To find your port number:
+//ssh to ov-research-4.uwaterloo.ca and run the following command:
+//env | grep "PORT"
+//copy the number only and paste it in the serverURL in place of PORT, e.g.: const serverURL = "http://ov-research-4.uwaterloo.ca:3000";
+
+const fetch = require("node-fetch");
+
+export default function RequestForm(props) {
+  const notify1 = () =>
+    toast.error("📍Please enter pick up location", {
+      containerId: "B",
+    });
+  const notify2 = () =>
+    toast.error("📍Please enter drop off location", {
+      containerId: "B",
+    });
+  const notify3 = () =>
+    toast.error("🗓Please enter a valid pick up date", {
+      containerId: "B",
+    });
+  const notifyAll = () =>
+    toast.success(
+      <p>
+        🎉your request was posted successfully
+        <br />
+        <br />
+        📍pick up location: {pickup}
+        <br />
+        <br />
+        📍drop off location: {dropoff}
+        <br />
+        <br />
+        🗓pick up date: {date.format("DD/MM/YYYY")}
+      </p>,
+      {
+        containerId: "A",
+      }
+    );
+
+  const [pickup, setPickUp] = React.useState("");
+  const [pickupError, setPickUpError] = React.useState(false);
+  const [dropoff, setDropOff] = React.useState("");
+  const [dropoffError, setDropOffError] = React.useState(false);
+  const [date, setDate] = React.useState(dayjs());
+  const [dateError, setDateError] = React.useState(false);
+
+  const userId = 1;
+
+  const callApiPostRequest = async () => {
+    const url = serverURL + "/api/postRequest";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pickupLocation: pickup,
+        dropoffLocation: dropoff,
+        deaprtureDate: date.format("DD/MM/YYYY"),
+        users_userId: userId,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    return body;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    if (
+      date.format("DD/MM/YYYY") >= dayjs().format("DD/MM/YYYY") &&
+      pickup !== "" &&
+      dropoff !== ""
+    ) {
+      callApiPostRequest();
+      notifyAll();
+      props.setOpen();
+    }
+    if (pickup === "") {
+      notify1();
+      setPickUpError(true);
+    }
+    if (pickup !== "") {
+      setPickUpError(false);
+    }
+    if (dropoff === "") {
+      notify2();
+      setDropOffError(true);
+    }
+    if (dropoff !== "") {
+      setDropOffError(false);
+    }
+    if (date.format("DD/MM/YYYY") < dayjs().format("DD/MM/YYYY")) {
+      notify3();
+      setDateError(true);
+    }
+    if (date.format("DD/MM/YYYY") >= dayjs().format("DD/MM/YYYY")) {
+      setDateError(false);
+    }
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
+        <ToastContainer
+          enableMultiContainer
+          containerId={"B"}
+          toastStyle={{ color: "black" }}
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <CssBaseline />
         <Box
           sx={{
@@ -74,60 +165,27 @@ export default function SignUp() {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <FormControl variant="standard">
+                  <GoogleAutoComplete
+                    label={"Pick Up Location"}
+                    onChange={setPickUp}
+                    error={pickupError}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <GoogleAutoComplete
+                  label={"Drop Off Location"}
+                  onChange={setDropOff}
+                  error={dropoffError}
+                />
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl variant="standard">
-                  <InputLabel
-                    htmlFor="input-with-icon-adornment"
-                    style={{ fontWeight: "bold" }}
-                  >
-                    Departure Date
-                  </InputLabel>
-                  <Input
-                    id="input-with-icon-adornment"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <CalendarMonthIcon />
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl variant="standard">
-                  <InputLabel
-                    htmlFor="input-with-icon-adornment"
-                    style={{ fontWeight: "bold" }}
-                  >
-                    Pick Up Location
-                  </InputLabel>
-                  <Input
-                    style={{ width: 500 }}
-                    id="input-with-icon-adornment"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <FmdGoodIcon />
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl variant="standard">
-                  <InputLabel
-                    htmlFor="input-with-icon-adornment"
-                    style={{ fontWeight: "bold" }}
-                  >
-                    Drop Off Location
-                  </InputLabel>
-                  <Input
-                    style={{ width: 500 }}
-                    id="input-with-icon-adornment"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <FmdGoodIcon />
-                      </InputAdornment>
-                    }
-                  />
+                  <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+                    <DatePicker label={"Departure Date"} onChange={setDate} error={dateError} />
+                  </Box>
                 </FormControl>
               </Grid>
               <Grid item xs={12}></Grid>
