@@ -71,7 +71,7 @@ app.post("/api/postRequest", (req, res) => {
   let connection = mysql.createConnection(config);
   const pickupLocation = req.body.pickupLocation;
   const dropoffLocation = req.body.dropoffLocation;
-  const deaprtureDate = req.body.deaprtureDate;
+  const deaprtureDate = req.body.departureDate;
   const users_userId = req.body.users_userId;
   let sql = `INSERT INTO requested_trips (pickup_location, dropoff_location, departure_date, users_user_id) values 
   (?, ?, ?, ?)`;

@@ -232,7 +232,9 @@ export default function Request() {
               >
                 Make a new Request
               </Button>
-              <Dialog open={open} onClose={handleClose}>
+              <Dialog open={open} onClose={handleClose} 
+              style={{ boxShadow: "none", border: "none"}}
+              >
                 <DialogTitle>Post a Request</DialogTitle>
                 <DialogContent>
                   <DialogContentText>

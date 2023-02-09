@@ -83,7 +83,7 @@ export default function RequestForm(props) {
       body: JSON.stringify({
         pickupLocation: pickup,
         dropoffLocation: dropoff,
-        deaprtureDate: date.format("DD/MM/YYYY"),
+        departureDate: date.format("DD/MM/YYYY"),
         users_userId: userId,
       }),
     });
@@ -105,7 +105,7 @@ export default function RequestForm(props) {
       props.setRenderList(true);
       notifyAll();
       props.setOpen();
-      window.location.reload(false);
+      // window.location.reload(false);
     }
     if (pickup === "") {
       notify1();

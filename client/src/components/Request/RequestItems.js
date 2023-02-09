@@ -272,11 +272,16 @@ export default function RequestItems(props) {
                       },
                     }}
                   >
-                    <DialogTitle>Post a Request</DialogTitle>
+                    <DialogTitle
+                      display="flex"
+                      alignItems="center"
+                      flexWrap="wrap"
+                    >
+                      <DeleteIcon /> Deleting Request
+                    </DialogTitle>
                     <DialogContent>
                       <DialogContentText>
-                        Provide the necassary information of your trip, to get
-                        matched with UW drivers!
+                        Are you sure you want to delete the request?
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
