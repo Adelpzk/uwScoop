@@ -13,6 +13,8 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
+
+
 app.post("/api/loadUserSettings", (req, res) => {
   let connection = mysql.createConnection(config);
   let userID = req.body.userID;
@@ -29,6 +31,37 @@ app.post("/api/loadUserSettings", (req, res) => {
 
     let string = JSON.stringify(results);
     //let obj = JSON.parse(string);
+    res.send({ express: string });
+  });
+  connection.end();
+});
+
+app.post("/api/getRequests", (req, res) => {
+  let connection = mysql.createConnection(config);
+  let sql = `SELECT * FROM requested_trips Where users_user_id = 1;`;
+  let data = [];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: string });
+  });
+  connection.end();
+});
+
+app.delete("/api/deleteRequest", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const postedTrip_id = req.body.postedTrip_id;
+  let sql = `DELETE FROM requested_trips WHERE (postedtrips_id = ?);`;
+  let data = [postedTrip_id];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
     res.send({ express: string });
   });
   connection.end();

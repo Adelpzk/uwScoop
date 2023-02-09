@@ -74,7 +74,7 @@ export default function GoogleAutoComplete(props) {
       return undefined;
     }
 
-    fetch({ input: inputValue }, (results) => {
+    fetch({ input: inputValue, types: ['(cities)'] }, (results) => {
       if (active) {
         let newOptions = [];
 

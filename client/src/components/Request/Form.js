@@ -9,7 +9,7 @@ import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import FormControl from "@mui/material/FormControl";
-import GoogleAutoComplete from "./googleAutoComplete";
+import GoogleAutoComplete from "./GoogleAutoComplete";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import DatePicker from "./DatePicker";
 import { ToastContainer, toast, Bounce } from "material-react-toastify";
