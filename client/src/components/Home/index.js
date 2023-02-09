@@ -21,6 +21,7 @@ import Post from "../images/Post2.png";
 import { fontWeight } from "@mui/system";
 import { Link } from "react-router-dom";
 import "./index.css";
+import SignIn from "../SignIn";
 
 //Dev mode
 const serverURL = ""; //enable for dev mode
@@ -207,23 +208,30 @@ class Home extends Component {
                     </Typography>
                   </div>
                   <br />
-                  <Button
-                    variant="contained"
-                    startIcon={<StartIcon />}
-                    sx={{
-                      marginLeft: 6.5,
-                      marginTop: 2,
-                      backgroundColor: "#ffd500",
-                      color: "black",
-                      "&:hover": {
+                  <Link to={`/SignIn`}>
+
+                    <Button
+                      variant="contained"
+                      startIcon={<StartIcon />}
+                      sx={{
+                        marginLeft: 6.5,
+                        marginTop: 2,
                         backgroundColor: "#ffd500",
-                        color: "#be0002",
-                      },
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Get Started
-                  </Button>
+                        color: "black",
+                        "&:hover": {
+                          backgroundColor: "#ffd500",
+                          color: "#be0002",
+                        },
+                        fontWeight: "bold",
+                      }}
+                    >
+
+                      Get Started
+                    </Button>
+                  </Link>
+
+                  
+
                   <br />
                   <div
                     style={{
