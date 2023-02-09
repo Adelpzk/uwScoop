@@ -61,6 +61,7 @@ export default function RequestForm(props) {
       }
     );
 
+  
   const [pickup, setPickUp] = React.useState("");
   const [pickupError, setPickUpError] = React.useState(false);
   const [dropoff, setDropOff] = React.useState("");
@@ -69,6 +70,8 @@ export default function RequestForm(props) {
   const [dateError, setDateError] = React.useState(false);
 
   const userId = 1;
+
+  props.setRenderList(false);
 
   const callApiPostRequest = async () => {
     const url = serverURL + "/api/postRequest";
@@ -99,8 +102,10 @@ export default function RequestForm(props) {
       dropoff !== ""
     ) {
       callApiPostRequest();
+      props.setRenderList(true);
       notifyAll();
       props.setOpen();
+      window.location.reload(false);
     }
     if (pickup === "") {
       notify1();

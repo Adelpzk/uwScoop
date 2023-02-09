@@ -46,6 +46,7 @@ const theme = createTheme({
 
 export default function Request() {
   const [open, setOpen] = React.useState(false);
+  const [renderList, setRenderList] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -203,7 +204,7 @@ export default function Request() {
           className={classes.paper}
           style={{ border: "none", boxShadow: "none", overflow: "hidden" }}
         >
-          <RequestItems props={open} />
+          <RequestItems props={renderList} />
           <Card style={{ border: "none", boxShadow: "none" }}>
             <Grid
               container
@@ -238,7 +239,7 @@ export default function Request() {
                     Provide the necassary information of your trip, to get
                     matched with UW drivers!
                   </DialogContentText>
-                  <Form setOpen={handleClose} />
+                  <Form setOpen={handleClose} setRenderList={setRenderList} />
                 </DialogContent>
                 <DialogActions>
                   <Button

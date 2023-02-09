@@ -52,7 +52,7 @@ const theme = createTheme({
 });
 
 export default function RequestItems(props) {
-    const notifyAll = () =>
+  const notifyAll = () =>
     toast.success(
       <p>
         🎉your request was Deleted successfully
@@ -68,7 +68,7 @@ export default function RequestItems(props) {
       </p>,
       {
         containerId: "A",
-        style: {backgroundColor:"#C02F1D", color:"white"}
+        style: { backgroundColor: "#C02F1D", color: "white" },
       }
     );
 
@@ -80,9 +80,9 @@ export default function RequestItems(props) {
   const handleClickOpen = (selectedId, pickup, dropoff, date) => {
     setOpen(true);
     setId(selectedId);
-    setPickup(pickup)
-    setDropoff(dropoff)
-    setDate(date)
+    setPickup(pickup);
+    setDropoff(dropoff);
+    setDate(date);
   };
 
   const handleClose = () => {
@@ -123,11 +123,13 @@ export default function RequestItems(props) {
     }
     return body;
   };
+  console.log(props.props);
 
   const loadRequestsList = () => {
     callApiGetRequests().then((res) => {
       var parsed = JSON.parse(res.express);
       console.log("LoadMoviesList Returned: " + JSON.stringify(parsed));
+      console.log(props.props);
       setRequests(parsed);
     });
   };
@@ -136,17 +138,12 @@ export default function RequestItems(props) {
     loadRequestsList();
   }, [props.props]);
 
-//   React.useEffect(() => {
-    
-//   }, []);
-
   const handleRemove = () => {
     console.log(id);
     callApiDeleteRequest();
-    loadRequestsList();
     notifyAll();
     handleClose();
-    
+    window.location.reload(false);
   };
 
   return (
@@ -243,7 +240,14 @@ export default function RequestItems(props) {
                     fontWeight: "bold",
                     justifyContent: "end",
                   }}
-                  onClick={() => handleClickOpen(option.postedtrips_id, option.pickup_location, option.dropoff_location, option.departure_date)}
+                  onClick={() =>
+                    handleClickOpen(
+                      option.postedtrips_id,
+                      option.pickup_location,
+                      option.dropoff_location,
+                      option.departure_date
+                    )
+                  }
                   startIcon={<DeleteIcon />}
                 >
                   Delete
