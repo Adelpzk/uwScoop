@@ -50,12 +50,12 @@ export default function SignIn() {
     
 
     const [error, setError] = React.useState(false);
-    const [firstName, setFirstName] = React.useState(false);
-    const [lastName, setLastName] = React.useState(false);
-    const [password, setPassword] = React.useState(false);
-    const [email, setEmail] = React.useState(false);
-    const [program, setProgram] = React.useState(false);
-    const [year, setYear] = React.useState(false);
+    const [firstName, setFirstName] = React.useState("");
+    const [lastName, setLastName] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [program, setProgram] = React.useState("");
+    const [year, setYear] = React.useState("");
 
     const callApiPostRequest = async () => {
         const url = serverURL + "/api/registerUser";
@@ -90,6 +90,7 @@ export default function SignIn() {
             // notifyAll();
             callApiPostRequest();
         }
+        console.log(firstName, lastName, password, email, program, year)
     }
 
     return (
@@ -149,7 +150,7 @@ export default function SignIn() {
                                         fullWidth: true
                                     }}
                                     type="text"
-                                    onChange={setFirstName}
+                                    onChange={(event) => setFirstName(event.target.value)}
                                 />
                                 <TextField
                                     label="Last Name"
@@ -157,7 +158,7 @@ export default function SignIn() {
                                         fullWidth: true
                                     }}
                                     type="text"
-                                    onChange={setLastName}
+                                    onChange={(event) => setLastName(event.target.value)}
                                 />
                             </div>
                             <br />
@@ -168,7 +169,7 @@ export default function SignIn() {
                                     fullWidth: true
                                 }}
                                 type="text"
-                                onChange={setEmail}
+                                onChange={(event) => setEmail(event.target.value)}
 
                             />
                             <br />
@@ -179,7 +180,7 @@ export default function SignIn() {
                                     fullWidth: true
                                 }}
                                 type="password"
-                                onChange={setPassword}
+                                onChange={(event) => setPassword(event.target.value)}
 
                             />
                             <br />
@@ -192,14 +193,14 @@ export default function SignIn() {
                                         fullWidth: true
                                     }}
                                     type="text"
-                                    onChange={setProgram}
+                                    onChange={(event) => setProgram(event.target.value)}
 
                                 />
                                 <TextField
                                     label="Year"
                                     id="names"
                                     type="text"
-                                    onChange={setYear}
+                                    onChange={(event) => setYear(event.target.value)}
                                 />
                             </div>
                             <br />
