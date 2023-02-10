@@ -66,9 +66,11 @@ app.post("/api/registerUser", (req, res) => {
 	const program = req.body.program;
 	const year = req.body.year;
 	const birthday = req.body.birthday;
-	let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program, birthday) values 
-  (?, ?, ?, ?, ?, ?, ?);`;
-	let data = [firstName, email, lastName, pass, year, program, birthday];
+	const phoneNumber = req.body.phoneNumber;
+	const music = req.body.music;
+	let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program, birthday, phone_number, music_prefrence) values 
+  (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+	let data = [firstName, email, lastName, pass, year, program, birthday, phoneNumber, music];
 	connection.query(sql, data, (error, results, fields) => {
 		if (error) {
 			return console.error(error.message);
