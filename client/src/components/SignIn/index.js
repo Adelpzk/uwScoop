@@ -9,9 +9,10 @@ import StartIcon from "@mui/icons-material/Start";
 import TextField from '@mui/material/TextField';
 import Typography from "@material-ui/core/Typography";
 import "./index.css";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "material-react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
+
 
 const serverURL = "";
 
@@ -55,6 +56,7 @@ export default function SignIn() {
     const [email, setEmail] = React.useState("");
     const [program, setProgram] = React.useState("");
     const [year, setYear] = React.useState("");
+    const [birthday, setBirthday] = React.useState("");
 
     const history = useHistory();
 
@@ -72,6 +74,7 @@ export default function SignIn() {
                 password: password,
                 program: program,
                 year: year,
+                birthday: birthday,
             }),
         });
         const body = await response.json();
@@ -81,7 +84,7 @@ export default function SignIn() {
         return body;
     };
 
-    const redirectHome = () =>{
+    const redirectHome = () => {
         history.push("/Home");
     }
 
@@ -92,9 +95,9 @@ export default function SignIn() {
             error1();
         } else {
             callApiPostRequest();
+            console.log(firstName, lastName, password, email, program, year)
             redirectHome();
         }
-        console.log(firstName, lastName, password, email, program, year)
     }
 
     return (
@@ -141,11 +144,11 @@ export default function SignIn() {
                             <Typography
                                 variant="h4"
                                 style={{
-                                    marginBottom: 10,
+                                    marginBottom: 20,
                                     fontStyle: "oblique",
                                     fontWeight: "bold",
                                 }}
-                            >Register
+                            >Sign up to uwScoop!
                             </Typography>
                             <div className="nameCols">
                                 <TextField
@@ -174,7 +177,6 @@ export default function SignIn() {
                                 }}
                                 type="text"
                                 onChange={(event) => setEmail(event.target.value)}
-
                             />
                             <br />
                             <TextField
@@ -185,7 +187,6 @@ export default function SignIn() {
                                 }}
                                 type="password"
                                 onChange={(event) => setPassword(event.target.value)}
-
                             />
                             <br />
 
@@ -208,8 +209,13 @@ export default function SignIn() {
                                 />
                             </div>
                             <br />
-
-
+                            <TextField
+                                label="Birthday"
+                                id="names"
+                                type="text"
+                                onChange={(event) => setBirthday(event.target.value)}
+                            />
+                            <br />
                             <Button
                                 variant="contained"
                                 startIcon={<StartIcon />}
@@ -224,12 +230,9 @@ export default function SignIn() {
                                     fontWeight: "bold",
                                 }}
                                 onClick={handleSubmit}
-                            >Register
+                            >Create Account
                             </Button>
-
-
                         </form>
-
                     </Card>
                 </Paper>
             </div>

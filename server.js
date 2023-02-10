@@ -58,26 +58,27 @@ app.post("/api/registerUser", (req, res) => {
 	// });
 	// connection.end();
 
-  let connection = mysql.createConnection(config);
-  const firstName = req.body.firstName;
+	let connection = mysql.createConnection(config);
+	const firstName = req.body.firstName;
 	const lastName = req.body.lastName;
 	const email = req.body.email;
 	const pass = req.body.password;
 	const program = req.body.program;
 	const year = req.body.year;
-  let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program) values 
-  (?, ?, ?, ?, ?, ?);`;
-  let data = [firstName, email, lastName, pass, year, program];
-  connection.query(sql, data, (error, results, fields) => {
-    if (error) {
-      return console.error(error.message);
-    }
-    console.log(results);
-    let string = JSON.stringify(results);
-    res.send({ express: string });
-  });
-  connection.end();
-  });
+	const birthday = req.body.birthday;
+	let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program, birthday) values 
+  (?, ?, ?, ?, ?, ?, ?);`;
+	let data = [firstName, email, lastName, pass, year, program, birthday];
+	connection.query(sql, data, (error, results, fields) => {
+		if (error) {
+			return console.error(error.message);
+		}
+		console.log(results);
+		let string = JSON.stringify(results);
+		res.send({ express: string });
+	});
+	connection.end();
+});
 
 
 
