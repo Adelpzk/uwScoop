@@ -9,7 +9,8 @@ import StartIcon from "@mui/icons-material/Start";
 import TextField from '@mui/material/TextField';
 import Typography from "@material-ui/core/Typography";
 import "./index.css";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { Link, Redirect, useHistory } from "react-router-dom";
+import { ToastContainer, toast } from "material-react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 
 const serverURL = "";
@@ -47,8 +48,6 @@ export default function SignIn() {
             }
         );
 
-    
-
     const [error, setError] = React.useState(false);
     const [firstName, setFirstName] = React.useState("");
     const [lastName, setLastName] = React.useState("");
@@ -56,6 +55,8 @@ export default function SignIn() {
     const [email, setEmail] = React.useState("");
     const [program, setProgram] = React.useState("");
     const [year, setYear] = React.useState("");
+
+    const history = useHistory();
 
     const callApiPostRequest = async () => {
         const url = serverURL + "/api/registerUser";
@@ -80,15 +81,18 @@ export default function SignIn() {
         return body;
     };
 
+    const redirectHome = () =>{
+        history.push("/Home");
+    }
+
     const handleSubmit = (e) => {
         e.persist();
         if (firstName == "" || lastName == "" || email == "" || password == "" || program == "" || year == "") {
             setError(true)
             error1();
         } else {
-            console.log('1')
-            // notifyAll();
             callApiPostRequest();
+            redirectHome();
         }
         console.log(firstName, lastName, password, email, program, year)
     }
@@ -204,6 +208,8 @@ export default function SignIn() {
                                 />
                             </div>
                             <br />
+
+
                             <Button
                                 variant="contained"
                                 startIcon={<StartIcon />}
@@ -220,6 +226,7 @@ export default function SignIn() {
                                 onClick={handleSubmit}
                             >Register
                             </Button>
+
 
                         </form>
 
