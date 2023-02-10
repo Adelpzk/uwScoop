@@ -41,7 +41,7 @@ export default function DatePicker(props) {
               error={props.error}
               color="error"
               label={props.label}
-              style={{ marginLeft: 30 }}
+              style={{ marginLeft: 30,minWidth: 270 }}
               SelectProps={{
                 native: true,
               }}

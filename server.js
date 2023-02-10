@@ -13,8 +13,6 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
-
-
 app.post("/api/loadUserSettings", (req, res) => {
   let connection = mysql.createConnection(config);
   let userID = req.body.userID;
@@ -76,6 +74,65 @@ app.post("/api/postRequest", (req, res) => {
   let sql = `INSERT INTO requested_trips (pickup_location, dropoff_location, departure_date, users_user_id) values 
   (?, ?, ?, ?)`;
   let data = [pickupLocation, dropoffLocation, deaprtureDate, users_userId];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    console.log(results);
+    let string = JSON.stringify(results);
+    res.send({ express: string });
+  });
+  connection.end();
+});
+
+
+app.post("/api/getRides", (req, res) => {
+  let connection = mysql.createConnection(config);
+  let sql = `SELECT * FROM posted_trips Where users_user_id = 1;`;
+  let data = [];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: string });
+  });
+  connection.end();
+});
+
+app.delete("/api/deleteRide", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const postedTrip_id = req.body.postedTrip_id;
+  let sql = `DELETE FROM posted_trips WHERE (postedtrips_id = ?);`;
+  let data = [postedTrip_id];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: string });
+  });
+  connection.end();
+});
+
+
+app.post("/api/postRide", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const pickupLocation = req.body.pickupLocation;
+  const dropoffLocation = req.body.dropoffLocation;
+  const deaprtureDate = req.body.departureDate;
+  const payment = req.body.payment;
+  const amount = req.body.amount;
+  const carModel = req.body.carModel;
+  const color = req.body.color;
+  const departureTime = req.body.departureTime;
+  const arrivalTime = req.body.arrivalTime;
+  const users_userId = req.body.users_userId;
+  let sql = `INSERT INTO posted_trips (pickup_location, dropoff_location, departure_date, departure_time, arrival_time, payment_method, amount, car_brand, car_color, users_user_id)
+   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+  let data = [pickupLocation, dropoffLocation, deaprtureDate, departureTime, arrivalTime,  payment, amount, carModel, color, users_userId];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
       return console.error(error.message);
