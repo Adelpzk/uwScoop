@@ -10,6 +10,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import Box from "@mui/material/Box";
 
+
 export default function DatePicker(props) {
   const [value, setValue] = React.useState(dayjs());
 
@@ -41,7 +42,7 @@ export default function DatePicker(props) {
               error={props.error}
               color="error"
               label={props.label}
-              style={{ marginLeft: 30 }}
+              style={{ marginLeft: 30,minWidth: 270 }}
               SelectProps={{
                 native: true,
               }}
