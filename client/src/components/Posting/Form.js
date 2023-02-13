@@ -3,10 +3,13 @@ import { Avatar } from "@mui/material";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import dayjs from "dayjs";
+import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import PaymentIcon from "@mui/icons-material/Payment";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -23,9 +26,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import TextField from "@mui/material/TextField";
 import DirectionsCarFilledOutlinedIcon from "@mui/icons-material/DirectionsCarFilledOutlined";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import PaletteOutlinedIcon from "@mui/icons-material/PaletteOutlined";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
- 
+
 const theme = createTheme();
 
 //Dev mode
@@ -89,8 +93,8 @@ export default function RequestForm(props) {
   const [amount, setAmount] = React.useState("");
   const [carModel, setCarModel] = React.useState("");
   const [color, setColor] = React.useState("");
-  const [departureTime, setDepartureTime] = React.useState("");
-  const [arrivalTime, setArrivalTime] = React.useState("");
+  const [departureTime, setDepartureTime] = React.useState(dayjs('2014-08-18T21:11:54'));
+  const [arrivalTime, setArrivalTime] = React.useState(dayjs('2014-08-18T21:11:54'));
   const [error, setError] = React.useState(false);
 
   const userId = 1;
@@ -112,8 +116,8 @@ export default function RequestForm(props) {
         amount: amount,
         carModel: carModel,
         color: color,
-        departureTime: departureTime,
-        arrivalTime: arrivalTime,
+        departureTime: departureTime.format("h:mm:ss A"),
+        arrivalTime: arrivalTime.format("h:mm:ss A"),
         users_userId: userId,
       }),
     });
@@ -252,7 +256,7 @@ export default function RequestForm(props) {
                     style={{ marginLeft: 30 }}
                     onChange={(event) => setPayment(event.target.value)}
                     error={error}
-                    >
+                  >
                     <MenuItem value={"Interac e-Transfer"}>
                       <em>Interac e-Transfer</em>
                     </MenuItem>
@@ -302,36 +306,44 @@ export default function RequestForm(props) {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Departure Time"
-                  style={{ marginLeft: 30, maxWidth: 130 }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccessTimeOutlinedIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="standard"
-                  onChange={(event) => setDepartureTime(event.target.value)}
-                  error={error}
-                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="Departure Time"
+                    value={departureTime}
+                    onChange={(newValue) =>
+                      setDepartureTime(newValue)
+                    }
+                    InputAdornmentProps={{ position: "start" }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        style={{ marginLeft: 30, maxWidth: 130 }}
+                        variant="standard"
+                        error={error}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Estimated Arrival Time"
-                  style={{ maxWidth: 130 }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccessTimeOutlinedIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="standard"
-                  onChange={(event) => setArrivalTime(event.target.value)}
-                  error={error}
-                />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="Estimated Arrival Time"
+                    onChange={(newValue) =>
+                      setArrivalTime(newValue)
+                    }
+                    value={arrivalTime}
+                    InputAdornmentProps={{ position: "start" }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        style={{ maxWidth: 130 }}
+                        variant="standard"
+                        error={error}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl variant="standard">
