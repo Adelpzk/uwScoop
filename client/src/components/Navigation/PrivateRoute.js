@@ -7,6 +7,8 @@ import history from './history';
 import Request from "../Request";
 import Driver from "../Posting";
 import SignIn from "../SignIn";
+import Footer from "../Footer";
+
 
 export default function PrivateRoute({
   //authenticated,
@@ -26,6 +28,7 @@ export default function PrivateRoute({
           <Redirect to="/Home" />
       </Route>
       </Switch>
+      <Footer/>
     </Router>
   );
 }

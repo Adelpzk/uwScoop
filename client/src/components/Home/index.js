@@ -171,7 +171,7 @@ class Home extends Component {
                         component="img"
                         image={Landing}
                         alt="Live from space album cover"
-                        style={{ maxWidth: 600, float: "right" }}
+                        style={{ maxWidth: 600, float: "right"}}
                       />
                     </Link>
                   </a>
