@@ -36,6 +36,54 @@ app.post("/api/loadUserSettings", (req, res) => {
   connection.end();
 });
 
+
+app.post("/api/registerUser", (req, res) => {
+	// let connection = mysql.createConnection(config);
+	// const firstName = req.body.firstName;
+	// const lastName = req.body.lastName;
+	// const email = req.body.email;
+	// const pass = req.body.password;
+	// const program = req.body.program;
+	// const year = req.body.year;
+	// let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program) values (?, ?, ?, ?, ?, ?);`;
+
+	// let data = [firstName, email, lastName, pass, year, program];
+
+	// connection.query(sql, data, (error, results, fields) => {
+	//   if (error) {
+	// 	return console.error(error.message);
+	//   }
+	//   console.log(results);
+	//   let string = JSON.stringify(results);
+	//   res.send({ express: string });
+	// });
+	// connection.end();
+
+	let connection = mysql.createConnection(config);
+	const firstName = req.body.firstName;
+	const lastName = req.body.lastName;
+	const email = req.body.email;
+	const pass = req.body.password;
+	const program = req.body.program;
+	const year = req.body.year;
+	const birthday = req.body.birthday;
+	const phoneNumber = req.body.phoneNumber;
+	const music = req.body.music;
+	let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program, birthday, phone_number, music_prefrence) values 
+  (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+	let data = [firstName, email, lastName, pass, year, program, birthday, phoneNumber, music];
+	connection.query(sql, data, (error, results, fields) => {
+		if (error) {
+			return console.error(error.message);
+		}
+		console.log(results);
+		let string = JSON.stringify(results);
+		res.send({ express: string });
+	});
+	connection.end();
+});
+
+
 app.post("/api/getRequests", (req, res) => {
   let connection = mysql.createConnection(config);
   let sql = `SELECT * FROM requested_trips Where users_user_id = 1;`;
@@ -66,6 +114,7 @@ app.delete("/api/deleteRequest", (req, res) => {
   });
   connection.end();
 });
+
 
 app.post("/api/postRequest", (req, res) => {
   let connection = mysql.createConnection(config);

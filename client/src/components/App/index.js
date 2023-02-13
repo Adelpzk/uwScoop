@@ -5,6 +5,7 @@ import Home from "../Home";
 import PrivateRoute from "../Navigation/PrivateRoute.js";
 import NavBar from "../NavBar/index";
 import Footer from "../Footer";
+import SignIn from "../SignIn";
 
 class App extends Component {
   constructor(props) {

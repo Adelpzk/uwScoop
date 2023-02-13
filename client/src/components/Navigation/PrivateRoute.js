@@ -6,7 +6,9 @@ import Home from '../Home';
 import history from './history';
 import Request from "../Request";
 import Driver from "../Posting";
+import SignIn from "../SignIn";
 import Footer from "../Footer";
+
 
 export default function PrivateRoute({
   //authenticated,
@@ -20,6 +22,8 @@ export default function PrivateRoute({
       <Route path="/Home" exact component={Home} />
       <Route path="/Post" exact component={Driver} />
       <Route path="/Request" exact component={Request} />
+      <Route path="/SignIn" exact component={SignIn} />
+
       <Route path="*">
           <Redirect to="/Home" />
       </Route>
