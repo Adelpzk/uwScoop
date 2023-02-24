@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import DatePicker from "./DatePicker";
 import { ToastContainer, toast, Bounce } from "material-react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../Context/AuthContext";
 
 const theme = createTheme();
 
@@ -68,8 +69,8 @@ export default function RequestForm(props) {
   const [dropoffError, setDropOffError] = React.useState(false);
   const [date, setDate] = React.useState(dayjs());
   const [dateError, setDateError] = React.useState(false);
-
-  const userId = 1;
+  const { currentUser } = useAuth();
+  
 
   props.setRenderList(false);
 
@@ -84,7 +85,7 @@ export default function RequestForm(props) {
         pickupLocation: pickup,
         dropoffLocation: dropoff,
         departureDate: date.format("DD/MM/YYYY"),
-        users_userId: userId,
+        users_email: currentUser.email,
       }),
     });
     const body = await response.json();

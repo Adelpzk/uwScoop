@@ -18,10 +18,17 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import Landing from "../images/Landing2.jpeg";
 import Request from "../images/Request.gif";
 import Post from "../images/Post2.png";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CloseIcon from "@mui/icons-material/Close";
+import DialogHome from "./Dialog"
 import { fontWeight } from "@mui/system";
 import { Link } from "react-router-dom";
 import "./index.css";
-import SignIn from "../SignIn";
+import SignIn from "../SignUp";
 
 //Dev mode
 const serverURL = ""; //enable for dev mode
@@ -83,12 +90,25 @@ const styles = (theme) => ({
   image: {},
 });
 
+
+// const [open, setOpen] = React.useState(false);
+// const [renderList, setRenderList] = React.useState(false);
+
+// const handleClickOpen = () => {
+//   setOpen(true);
+// };
+
+// const handleClose = () => {
+//   setOpen(false);
+// };
+
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userID: 1,
       mode: 0,
+      open: false,
     };
   }
 
@@ -126,6 +146,8 @@ class Home extends Component {
 
   render() {
     const { classes } = this.props;
+
+   
 
     const mainMessage = (
       <Grid
@@ -171,7 +193,7 @@ class Home extends Component {
                         component="img"
                         image={Landing}
                         alt="Live from space album cover"
-                        style={{ maxWidth: 600, float: "right"}}
+                        style={{ maxWidth: 600, float: "right" }}
                       />
                     </Link>
                   </a>
@@ -208,29 +230,57 @@ class Home extends Component {
                     </Typography>
                   </div>
                   <br />
-                  <Link to={`/SignIn`}>
 
-                    <Button
-                      variant="contained"
-                      startIcon={<StartIcon />}
-                      sx={{
-                        marginLeft: 6.5,
-                        marginTop: 2,
+                  <Button
+                    variant="contained"
+                    startIcon={<StartIcon />}
+                    onClick={() => this.setState({ open: true })}
+                    sx={{
+                      marginLeft: 6.5,
+                      marginTop: 2,
+                      backgroundColor: "#ffd500",
+                      color: "black",
+                      "&:hover": {
                         backgroundColor: "#ffd500",
-                        color: "black",
-                        "&:hover": {
-                          backgroundColor: "#ffd500",
-                          color: "#be0002",
-                        },
-                        fontWeight: "bold",
-                      }}
-                    >
-
-                      Get Started
-                    </Button>
-                  </Link>
-
-                  
+                        color: "#be0002",
+                      },
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Get Started
+                  </Button>
+                  <Dialog
+                    fullWidth='true'
+                    open={this.state.open}
+                    onClose={() => this.setState({ open: false })}
+                    style={{ boxShadow: "none", border: "none"}}
+                  >
+                    <DialogTitle><strong>Leaving or Heading to Waterloo?</strong></DialogTitle>
+                    <DialogContent>
+                      <DialogContentText style={{marginBottom: 20}}>
+                        Choose whether youre driving or need a ride
+                      </DialogContentText>
+                      <DialogHome/>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          borderColor: "#ffd500",
+                          color: "black",
+                          "&:hover": {
+                            borderColor: "#ffd500",
+                            color: "#be0002",
+                          },
+                          fontWeight: "bold",
+                        }}
+                        onClick={() => this.setState({ open: false })}
+                        startIcon={<CloseIcon />}
+                      >
+                        Cancel
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
 
                   <br />
                   <div

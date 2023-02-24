@@ -23,6 +23,7 @@ import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { useAuth } from "../Context/AuthContext";
 
 //Dev mode
 const serverURL = " "; //enable for dev mode
@@ -76,6 +77,7 @@ export default function RequestItems(props) {
   const [pickup, setPickup] = React.useState();
   const [dropoff, setDropoff] = React.useState();
   const [date, setDate] = React.useState();
+  
 
   const handleClickOpen = (selectedId, pickup, dropoff, date) => {
     setOpen(true);
@@ -90,6 +92,7 @@ export default function RequestItems(props) {
   };
   const [requests, setRequests] = React.useState([]);
   const [id, setId] = React.useState(null);
+  const { currentUser } = useAuth();
 
   const callApiDeleteRequest = async () => {
     const url = serverURL + "/api/deleteRequest";
@@ -115,8 +118,11 @@ export default function RequestItems(props) {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "applications/json",
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        users_email: currentUser.email,
+      }),
     });
     const body = await response.json();
     if (response.status !== 200) {
@@ -124,6 +130,25 @@ export default function RequestItems(props) {
     }
     return body;
   };
+
+  // const callApiGetRequests = async () => {
+  //   const url = serverURL + "/api/getRequests";
+  //   const response = await fetch(url, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "applications/json",
+  //     },
+  //     body: JSON.stringify({
+  //       users_email: currentUser.email,
+  //     }),
+  //   });
+  //   const body = await response.json();
+  //   if (response.status !== 200) {
+  //     throw Error(body.message);
+  //   }
+  //   return body;
+  // };
+  
   console.log("list  ");
 
   const loadRequestsList = () => {

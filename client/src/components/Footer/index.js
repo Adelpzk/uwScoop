@@ -33,6 +33,7 @@ const Footer = () => {
           backgroundColor: "rgb(0,0,0,0.92)",
           paddingTop: "1rem",
           paddingBottom: "1rem",
+          
         }}
       >
         <Container maxWidth="xxl">

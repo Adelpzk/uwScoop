@@ -234,7 +234,7 @@ export default function Request() {
               <Dialog open={open} onClose={handleClose} 
               style={{ boxShadow: "none", border: "none"}}
               >
-                <DialogTitle>Post a Request</DialogTitle>
+                <DialogTitle><strong>Post a Request</strong></DialogTitle>
                 <DialogContent>
                   <DialogContentText>
                     Provide the necassary information of your trip, to get

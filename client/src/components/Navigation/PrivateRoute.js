@@ -1,34 +1,33 @@
 import React from "react";
 import { Router, Switch, Route } from "react-router-dom";
-import { Redirect } from 'react-router';
-import Navbar from "../NavBar";
-import Home from '../Home';
-import history from './history';
+import { Redirect } from "react-router";
+import Home from "../Home";
+import history from "./history";
 import Request from "../Request";
 import Driver from "../Posting";
-import SignIn from "../SignIn";
-import Footer from "../Footer";
+import SignUpForm from "../SignUp";
+import SignInPage from "../SignIn";
+import ForgotPassword from "../SignIn/ForgotPassword";
+import PrivateRouteAuth from "./PrivateRoute-authenticated";
+import { AuthProvider, useAuth } from "../Context/AuthContext";
 
-
-export default function PrivateRoute({
-  //authenticated,
-  //...rest
-}) {
+export default function PrivateRoute () {
+  // const { currentUser } = useAuth();
   return (
-
-    <Router history={history}>
-      <Navbar/>
-      <Switch>
-      <Route path="/Home" exact component={Home} />
-      <Route path="/Post" exact component={Driver} />
-      <Route path="/Request" exact component={Request} />
-      <Route path="/SignIn" exact component={SignIn} />
-
-      <Route path="*">
-          <Redirect to="/Home" />
-      </Route>
-      </Switch>
-      <Footer/>
-    </Router>
+    <AuthProvider>
+      <Router history={history}>
+        <Switch>
+          <PrivateRouteAuth path="/Home" exact component={Home} />
+          <PrivateRouteAuth path="/Post" exact component={Driver} />
+          <PrivateRouteAuth path="/Request" exact component={Request} />
+          <Route path="/SignUp" component={SignUpForm} />
+          <Route path="/SignIn" component={SignInPage} />
+          <Route path="/ForgotPassword" component={ForgotPassword} />
+          <Route path="*">
+            <Redirect to="/Home" />
+          </Route>
+        </Switch>
+      </Router>
+    </AuthProvider>
   );
 }
