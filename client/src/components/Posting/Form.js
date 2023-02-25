@@ -29,6 +29,8 @@ import DirectionsCarFilledOutlinedIcon from "@mui/icons-material/DirectionsCarFi
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import PaletteOutlinedIcon from "@mui/icons-material/PaletteOutlined";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import { useAuth } from "../Context/AuthContext";
+
 
 const theme = createTheme();
 
@@ -96,8 +98,7 @@ export default function RequestForm(props) {
   const [departureTime, setDepartureTime] = React.useState(dayjs('2014-08-18T21:11:54'));
   const [arrivalTime, setArrivalTime] = React.useState(dayjs('2014-08-18T21:11:54'));
   const [error, setError] = React.useState(false);
-
-  const userId = 1;
+  const { currentUser } = useAuth();
 
   props.setRenderList(false);
 
@@ -118,7 +119,7 @@ export default function RequestForm(props) {
         color: color,
         departureTime: departureTime.format("h:mm:ss A"),
         arrivalTime: arrivalTime.format("h:mm:ss A"),
-        users_userId: userId,
+        users_email: currentUser.email,
       }),
     });
     const body = await response.json();

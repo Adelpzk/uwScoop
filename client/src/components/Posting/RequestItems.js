@@ -4,7 +4,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import { Avatar } from "@mui/material";
-import TaxiAlertIcon from "@mui/icons-material/TaxiAlert";
+import DriveEtaIcon from '@mui/icons-material/DriveEta';
 import CloseIcon from "@mui/icons-material/Close";
 import CardMedia from "@mui/material/CardMedia";
 import { Grid } from "@mui/material";
@@ -23,6 +23,8 @@ import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { useAuth } from "../Context/AuthContext";
+
 
 //Dev mode
 const serverURL = " "; //enable for dev mode
@@ -95,6 +97,7 @@ export default function RequestItems(props) {
   };
   const [rides, setRides] = React.useState([]);
   const [id, setId] = React.useState(null);
+  const { currentUser } = useAuth();
 
   const callApiDeleteRide = async () => {
     const url = serverURL + "/api/deleteRide";
@@ -120,8 +123,11 @@ export default function RequestItems(props) {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "applications/json",
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        users_email: currentUser.email,
+      }),
     });
     const body = await response.json();
     if (response.status !== 200) {
@@ -187,7 +193,7 @@ export default function RequestItems(props) {
                   }}
                 >
                   <Avatar sx={{ m: 1, bgcolor: "#ffd500" }}>
-                    <TaxiAlertIcon
+                    <DriveEtaIcon
                       fontSize="medium"
                       style={{ color: "black" }}
                     />

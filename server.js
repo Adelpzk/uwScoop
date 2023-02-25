@@ -36,27 +36,6 @@ app.post("/api/loadUserSettings", (req, res) => {
 
 
 app.post("/api/registerUser", (req, res) => {
-	// let connection = mysql.createConnection(config);
-	// const firstName = req.body.firstName;
-	// const lastName = req.body.lastName;
-	// const email = req.body.email;
-	// const pass = req.body.password;
-	// const program = req.body.program;
-	// const year = req.body.year;
-	// let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program) values (?, ?, ?, ?, ?, ?);`;
-
-	// let data = [firstName, email, lastName, pass, year, program];
-
-	// connection.query(sql, data, (error, results, fields) => {
-	//   if (error) {
-	// 	return console.error(error.message);
-	//   }
-	//   console.log(results);
-	//   let string = JSON.stringify(results);
-	//   res.send({ express: string });
-	// });
-	// connection.end();
-
 	let connection = mysql.createConnection(config);
 	const firstName = req.body.firstName;
 	const lastName = req.body.lastName;
@@ -84,8 +63,9 @@ app.post("/api/registerUser", (req, res) => {
 
 app.post("/api/getRequests", (req, res) => {
   let connection = mysql.createConnection(config);
-  let sql = `SELECT * FROM requested_trips Where users_user_id = 1;`;
-  let data = [];
+  const userEmail = req.body.users_email;
+  let sql = `SELECT * FROM requested_trips Where users_email = (?);`;
+  let data = [userEmail];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
       return console.error(error.message);
@@ -119,10 +99,10 @@ app.post("/api/postRequest", (req, res) => {
   const pickupLocation = req.body.pickupLocation;
   const dropoffLocation = req.body.dropoffLocation;
   const deaprtureDate = req.body.departureDate;
-  const users_userId = req.body.users_userId;
-  let sql = `INSERT INTO requested_trips (pickup_location, dropoff_location, departure_date, users_user_id) values 
+  const users_email = req.body.users_email;
+  let sql = `INSERT INTO requested_trips (pickup_location, dropoff_location, departure_date, users_email) values 
   (?, ?, ?, ?)`;
-  let data = [pickupLocation, dropoffLocation, deaprtureDate, users_userId];
+  let data = [pickupLocation, dropoffLocation, deaprtureDate, users_email];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
       return console.error(error.message);
@@ -137,8 +117,9 @@ app.post("/api/postRequest", (req, res) => {
 
 app.post("/api/getRides", (req, res) => {
   let connection = mysql.createConnection(config);
-  let sql = `SELECT * FROM posted_trips Where users_user_id = 1;`;
-  let data = [];
+  const userEmail = req.body.users_email;
+  let sql = `SELECT * FROM posted_trips Where users_email = (?);`;
+  let data = [userEmail];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
       return console.error(error.message);
@@ -149,6 +130,21 @@ app.post("/api/getRides", (req, res) => {
   });
   connection.end();
 });
+
+// app.post("/api/getRides", (req, res) => {
+//   let connection = mysql.createConnection(config);
+//   let sql = `SELECT * FROM posted_trips Where users_user_id = 1;`;
+//   let data = [];
+//   connection.query(sql, data, (error, results, fields) => {
+//     if (error) {
+//       return console.error(error.message);
+//     }
+//     let string = JSON.stringify(results);
+//     let obj = JSON.parse(string);
+//     res.send({ express: string });
+//   });
+//   connection.end();
+// });
 
 app.delete("/api/deleteRide", (req, res) => {
   let connection = mysql.createConnection(config);
@@ -178,10 +174,10 @@ app.post("/api/postRide", (req, res) => {
   const color = req.body.color;
   const departureTime = req.body.departureTime;
   const arrivalTime = req.body.arrivalTime;
-  const users_userId = req.body.users_userId;
-  let sql = `INSERT INTO posted_trips (pickup_location, dropoff_location, departure_date, departure_time, arrival_time, payment_method, amount, car_brand, car_color, users_user_id)
+  const users_email = req.body.users_email;
+  let sql = `INSERT INTO posted_trips (pickup_location, dropoff_location, departure_date, departure_time, arrival_time, payment_method, amount, car_brand, car_color, users_email)
    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
-  let data = [pickupLocation, dropoffLocation, deaprtureDate, departureTime, arrivalTime,  payment, amount, carModel, color, users_userId];
+  let data = [pickupLocation, dropoffLocation, deaprtureDate, departureTime, arrivalTime,  payment, amount, carModel, color, users_email];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
       return console.error(error.message);

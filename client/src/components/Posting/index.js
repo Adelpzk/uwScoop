@@ -97,7 +97,7 @@ export default function Request() {
                     fontWeight: "bold",
                   }}
                 >
-                  Driving Back Home? 
+                  Driving Back Home?
                 </Typography>
                 <Typography
                   variant="h4"
@@ -117,7 +117,7 @@ export default function Request() {
                     fontWeight: "bold",
                   }}
                 >
-                  Drive a UW fellow, 
+                  Drive a UW fellow,
                 </Typography>
                 <Typography
                   variant="h4"
@@ -219,7 +219,7 @@ export default function Request() {
                 startIcon={<AddCircleIcon />}
                 onClick={handleClickOpen}
                 sx={{
-                  marginLeft:0,
+                  marginLeft: 0,
                   marginTop: 5,
                   backgroundColor: "#ffd500",
                   color: "black",
@@ -232,10 +232,14 @@ export default function Request() {
               >
                 Post a new Ride
               </Button>
-              <Dialog open={open} onClose={handleClose} 
-              style={{ boxShadow: "none", border: "none"}}
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                style={{ boxShadow: "none", border: "none" }}
               >
-                <DialogTitle>Post your Ride</DialogTitle>
+                <DialogTitle>
+                  <strong>Post your Ride</strong>
+                </DialogTitle>
                 <DialogContent>
                   <DialogContentText>
                     Provide the necassary information of your trip, to get

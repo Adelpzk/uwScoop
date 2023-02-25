@@ -20,6 +20,7 @@
     "autosuggest-highlight": "^3.3.4",
     "date-fns": "^2.0.0-beta.5",
     "dayjs": "^1.11.7",
+    "firebase": "^9.17.1",
     "install": "^0.12.2",
     "material-react-toastify": "^2.0.1",
     "mathjs": "^5.10.3",
@@ -45,7 +46,7 @@
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -62,5 +63,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "jest": "^29.4.3"
   }
 }
