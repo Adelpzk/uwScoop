@@ -16,21 +16,7 @@ import { useAuth } from "../Context/AuthContext";
 import { ToastContainer, toast } from "material-react-toastify";
 import { useHistory } from "react-router-dom";
 import UwScoop from "../images/uw-scoop-logo-removebg.png";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      The Algorithm Avengers {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Copyright from "./Copyright";
 
 const theme = createTheme();
 
@@ -106,7 +92,7 @@ export default function ForgotPassword() {
                   },
                   fontWeight: "bold",
                 }}
-                onClick = {() => resetPassword(email)}
+                onClick={() => resetPassword(email)}
               >
                 Reset Password
               </Button>
