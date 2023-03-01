@@ -37,6 +37,7 @@ export default function DatePicker(props) {
             <TextField
               {...params}
               onChange={DatePicker}
+              data-testid="textField"
               fullWidth
               error={props.error}
               color="error"

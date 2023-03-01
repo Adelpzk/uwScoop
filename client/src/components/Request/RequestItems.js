@@ -131,23 +131,6 @@ export default function RequestItems(props) {
     return body;
   };
 
-  // const callApiGetRequests = async () => {
-  //   const url = serverURL + "/api/getRequests";
-  //   const response = await fetch(url, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "applications/json",
-  //     },
-  //     body: JSON.stringify({
-  //       users_email: currentUser.email,
-  //     }),
-  //   });
-  //   const body = await response.json();
-  //   if (response.status !== 200) {
-  //     throw Error(body.message);
-  //   }
-  //   return body;
-  // };
   
   console.log("list  ");
 
