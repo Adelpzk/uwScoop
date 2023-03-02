@@ -68,7 +68,7 @@ export function AuthProvider({ children }) {
 
     const successCreated = (email) =>
     toast.success(
-       "Account with following email was created successfully" + email,
+       "Account with following email was created successfully: " + email + ". Please verify email",
       {
         containerId: "error",
       }
@@ -86,7 +86,11 @@ export function AuthProvider({ children }) {
     try{
       await auth
       .createUserWithEmailAndPassword(email, password)
-      .then(() => successCreated())
+      .then((userCredential) => {
+        successCreated(email)
+        userCredential.user.sendEmailVerification();
+        auth.signOut();
+      })
     }
     catch(error){
       switch (error.code) {

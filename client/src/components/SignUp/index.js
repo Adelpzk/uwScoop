@@ -80,7 +80,10 @@ export default function SignIn() {
       containerId: "error",
     });
 
-  
+  const notifyAll = () =>
+    toast.success(<p>🎉Welcome to uwScoop, {firstName}!</p>, {
+      containerId: "success",
+    });
 
   const [error, setError] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
