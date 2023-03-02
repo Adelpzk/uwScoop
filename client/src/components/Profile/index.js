@@ -27,21 +27,6 @@ import { Box } from "@mui/material";
 
 const serverURL = "";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      The Algorithm Avengers {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 const theme = createTheme({
   palette: {
     type: "light",
@@ -49,7 +34,7 @@ const theme = createTheme({
       default: "#FFFFFF",
     },
     primary: {
-      main: "#ffd500", 
+      main: "#ffd500",
     },
     secondary: {
       main: "#be0002",
@@ -80,7 +65,6 @@ export default function Profile(props) {
       containerId: "error",
     });
 
-
   const [error, setError] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -95,8 +79,7 @@ export default function Profile(props) {
   const [music, setMusic] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
-  const [userInfo, setUserInfo] = React.useState({})
-
+  const [userInfo, setUserInfo] = React.useState([]);
 
   const history = useHistory();
 
@@ -129,7 +112,6 @@ export default function Profile(props) {
   React.useEffect(() => {
     loadUserInfo();
   }, [props.props]);
-  
 
   const callApiPostRequest = async () => {
     const url = serverURL + "/api/updateUserProfile";
@@ -185,7 +167,7 @@ export default function Profile(props) {
       failEmal();
     } else {
       setLoading(true);
-    //   callApiPostRequest();
+      //   callApiPostRequest();
       console.log(firstName, lastName, password, email, program, year);
     }
 
@@ -235,179 +217,187 @@ export default function Profile(props) {
           alignItems: "center",
         }}
       >
-        <form>
-          <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <img
-              src={UwScoop}
+        {userInfo.map((option, index) => (
+          <form>
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Avatar sx={{ mt: 2, bgcolor: "#ffd500" }}>
+                <LockOutlinedIcon
+                  fontSize="medium"
+                  style={{ color: "black" }}
+                />
+              </Avatar>
+
+              <Typography
+                style={{ marginBottom: 50 }}
+                component="h1"
+                variant="h5"
+              >
+                Update Profile
+                
+                {}
+              </Typography>
+            </Box>
+
+            <div className="nameCols">
+              <TextField
+                label="First Name"
+                formControlProps={{
+                  fullWidth: true,
+                }}
+                type="text"
+                onChange={(event) => setFirstName(event.target.value)}
+                defaultValue={option.first_name}
+              />
+              <TextField
+                label="Last Name"
+                formControlProps={{
+                  fullWidth: true,
+                }}
+                type="text"
+                onChange={(event) => setLastName(event.target.value)}
+                defaultValue={option.last_name}
+              />
+            </div>
+            <br />
+            <TextField
+              label="Phone Number"
+              id="names"
+              formControlProps={{
+                fullWidth: true,
+              }}
+              type="text"
+              onChange={(event) => setPhoneNumber(event.target.value)}
+              defaultValue={option.phone_number}
+            />
+            <br />
+            <TextField
+              label="Email"
+              id="email"
+              formControlProps={{
+                fullWidth: true,
+              }}
+              type="text"
+              disabled={true}
+              defaultValue={currentUser.email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <br />
+            <TextField
+              label="Password"
+              id="password"
+              formControlProps={{
+                fullWidth: true,
+              }}
+              type="password"
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="Leave blank to keep the same"
+            />
+            <br />
+            <TextField
+              label="Confirm Password"
+              id="password"
+              formControlProps={{
+                fullWidth: true,
+              }}
+              type="password"
+              onChange={(event) => setConfirmPassword(event.target.value)}
+              placeholder="Leave blank to keep the same"
+            />
+            <br />
+            <hr
               style={{
-                display: { xs: "flex", md: "none" },
-                marginBottom: 20,
-                maxWidth: 200,
+                backgroundColor: "#ffd500",
+                height: "2px",
+                border: "none",
               }}
             />
-            <Avatar sx={{ mt: 2, bgcolor: "#ffd500" }}>
-              <LockOutlinedIcon fontSize="medium" style={{ color: "black" }} />
-            </Avatar>
+            <br />
 
-            <Typography
-              style={{ marginBottom: 50 }}
-              component="h1"
-              variant="h5"
+            <div className="dateCols">
+              <TextField
+                label="Program"
+                id="names"
+                formControlProps={{
+                  fullWidth: true,
+                }}
+                type="text"
+                onChange={(event) => setProgram(event.target.value)}
+                defaultValue={option.program}
+              />
+              <TextField
+                label="Year"
+                id="names"
+                type="text"
+                onChange={(event) => setYear(event.target.value)}
+                defaultValue={option.school_year}
+              />
+            </div>
+            <br />
+            <div className="nameCols">
+              <DatePicker
+                label={"Birthday"}
+                onChange={setBirthday}
+                defaultValue={dayjs(
+                  option.birthday
+                    .replace(new RegExp("/", "g"), "-")
+                    .substring(6, 10) +
+                    "-" +
+                    option.birthday
+                      .replace(new RegExp("/", "g"), "-")
+                      .substring(3, 5) +
+                    "-" +
+                    option.birthday
+                      .replace(new RegExp("/", "g"), "-")
+                      .substring(0, 2)
+                ).toString()}
+              />
+              <FormControl sx={{ minWidth: 120 }}>
+                <InputLabel>Music Preference</InputLabel>
+                <Select
+                  value={music ? music : option.music_prefrence}
+                  label="Music Preference"
+                  onChange={(event) => setMusic(event.target.value)}
+                  defaultValue={option.music_prefrence}
+                >
+                  <MenuItem value={"Country"}>Country</MenuItem>
+                  <MenuItem value={"Classical"}>Classical</MenuItem>
+                  <MenuItem value={"Jazz"}>Jazz</MenuItem>
+                  <MenuItem value={"Latin"}>Latin</MenuItem>
+                  <MenuItem value={"Pop"}>Pop</MenuItem>
+                  <MenuItem value={"Rap"}>Rap</MenuItem>
+                  <MenuItem value={"R&B"}>R&B</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            <Button
+              variant="contained"
+              startIcon={<StartIcon />}
+              sx={{
+                marginTop: 2,
+                marginBottom: 1,
+                backgroundColor: "#ffd500",
+                color: "black",
+                "&:hover": {
+                  backgroundColor: "#ffd500",
+                  color: "#be0002",
+                },
+                fontWeight: "bold",
+              }}
+              onClick={handleSubmit}
+              disabled={loading}
             >
               Update Profile
-            </Typography>
-          </Box>
-
-          <div className="nameCols">
-            <TextField
-              label="First Name"
-              formControlProps={{
-                fullWidth: true,
-              }}
-              type="text"
-              onChange={(event) => setFirstName(event.target.value)}
-              defaultValue={userInfo.first_name}
-            />
-            <TextField
-              label="Last Name"
-              formControlProps={{
-                fullWidth: true,
-              }}
-              type="text"
-              onChange={(event) => setLastName(event.target.value)}
-              defaultValue={userInfo.last_name}
-
-            />
-          </div>
-          <br />
-          <TextField
-            label="Phone Number"
-            id="names"
-            formControlProps={{
-              fullWidth: true,
-            }}
-            type="text"
-            onChange={(event) => setPhoneNumber(event.target.value)}
-            defaultValue={userInfo.phone_number}
-
-          />
-          <br />
-          <TextField
-            label="Email"
-            id="email"
-            formControlProps={{
-              fullWidth: true,
-            }}
-            type="text"
-            disabled={true}
-            defaultValue={currentUser.email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <br />
-          <TextField
-            label="Password"
-            id="password"
-            formControlProps={{
-              fullWidth: true,
-            }}
-            type="password"
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder = "Leave blank to keep the same"
-          />
-          <br />
-          <TextField
-            label="Confirm Password"
-            id="password"
-            formControlProps={{
-              fullWidth: true,
-            }}
-            type="password"
-            onChange={(event) => setConfirmPassword(event.target.value)}
-            placeholder = "Leave blank to keep the same"
-
-          />
-          <br />
-          <hr
-            style={{
-              backgroundColor: "#ffd500",
-              height: "2px",
-              border: "none",
-            }}
-          />
-          <br />
-
-          <div className="dateCols">
-            <TextField
-              label="Program"
-              id="names"
-              formControlProps={{
-                fullWidth: true,
-              }}
-              type="text"
-              onChange={(event) => setProgram(event.target.value)}
-              defaultValue={userInfo.program}
-
-              
-            />
-            <TextField
-              label="Year"
-              id="names"
-              type="text"
-              onChange={(event) => setYear(event.target.value)}
-              defaultValue={userInfo.school_year}
-            />
-          </div>
-          <br />
-          <div className="nameCols">
-            <DatePicker label={"Birthday"} onChange={setBirthday} defaultValue={userInfo.birthday}/>
-            <FormControl sx={{ minWidth: 120 }}>
-              <InputLabel>Music Preference</InputLabel>
-              <Select
-                value={music}
-                label="Music Preference"
-                onChange={(event) => setMusic(event.target.value)}
-                defaultValue={userInfo.music_prefrence}
-              >
-                <MenuItem value={"Country"}>Country</MenuItem>
-                <MenuItem value={"Classical"}>Classical</MenuItem>
-                <MenuItem value={"Jazz"}>Jazz</MenuItem>
-                <MenuItem value={"Latin"}>Latin</MenuItem>
-                <MenuItem value={"Pop"}>Pop</MenuItem>
-                <MenuItem value={"Rap"}>Rap</MenuItem>
-                <MenuItem value={"R&B"}>R&B</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <Button
-            variant="contained"
-            startIcon={<StartIcon />}
-            sx={{
-              marginTop: 2,
-              marginBottom: 1,
-              backgroundColor: "#ffd500",
-              color: "black",
-              "&:hover": {
-                backgroundColor: "#ffd500",
-                color: "#be0002",
-              },
-              fontWeight: "bold",
-            }}
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            Update Profile
-          </Button>
-          
-        </form>
+            </Button>
+          </form>
+        ))}
       </Card>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
     </div>
   );
 }
