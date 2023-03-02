@@ -10,6 +10,7 @@ import SignInPage from "../SignIn";
 import ForgotPassword from "../SignIn/ForgotPassword";
 import PrivateRouteAuth from "./PrivateRoute-authenticated";
 import { AuthProvider, useAuth } from "../Context/AuthContext";
+import Profile from "../Profile";
 
 export default function PrivateRoute () {
   // const { currentUser } = useAuth();
@@ -20,6 +21,8 @@ export default function PrivateRoute () {
           <PrivateRouteAuth path="/Home" exact component={Home} />
           <PrivateRouteAuth path="/Post" exact component={Driver} />
           <PrivateRouteAuth path="/Request" exact component={Request} />
+          <PrivateRouteAuth path="/Profile" exact component={Profile} />
+
           <Route path="/SignUp" component={SignUpForm} />
           <Route path="/SignIn" component={SignInPage} />
           <Route path="/ForgotPassword" component={ForgotPassword} />

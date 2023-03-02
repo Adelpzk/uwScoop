@@ -151,6 +151,12 @@ export function AuthProvider({ children }) {
     }
   }
 
+
+
+  function updatePassword(password){
+    return currentUser.updatePassword(password);
+  }
+
   function logout() {
     return auth.signOut();
   }
@@ -170,6 +176,7 @@ export function AuthProvider({ children }) {
     logout,
     signup,
     resetPassword,
+    updatePassword,
   };
   return (
     <AuthContext.Provider value={value}>

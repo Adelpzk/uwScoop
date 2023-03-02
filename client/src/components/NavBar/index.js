@@ -43,7 +43,7 @@ function ResponsiveAppBar() {
 
   const history = useHistory();
 
-  function handleLogOut ( ) { 
+  function handleLogOut() {
     logout();
     history.push("/signin")
   }
@@ -205,7 +205,9 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               <MenuItem key="logout" onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Profile</Typography>
+                <Link to={'./Profile'}>
+                  <Typography textAlign="center">Profile</Typography>
+                </Link>
               </MenuItem>
               <MenuItem key="logout" onClick={handleLogOut}>
                 <Typography textAlign="center">Log Out</Typography>
