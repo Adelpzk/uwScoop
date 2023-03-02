@@ -16,6 +16,8 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.7",
     "@mui/x-date-pickers": "^5.0.17",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "12.1.2",
     "@unicef/material-ui-currency-textfield": "^0.8.6",
     "autosuggest-highlight": "^3.3.4",
     "date-fns": "^2.0.0-beta.5",
@@ -43,7 +45,7 @@
     "yarn": "^1.22.19"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest ",
     "eject": "react-scripts eject"
@@ -71,5 +73,6 @@
     "react-dom": "^16.8.6",
     "react-test-renderer": "^16.8.6",
     "ts-jest": "^29.0.5"
+    "jest-environment-jsdom": "^29.4.3",
   }
 }
