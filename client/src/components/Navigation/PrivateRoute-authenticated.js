@@ -1,34 +1,30 @@
 import React from "react";
-import { Router, Switch, Route } from "react-router-dom";
-import SignInForm from '../SignIn';
-import SignUpPage from '../SignUp';
-import LandingPage from '../Landing';
-import HomePage from '../Home';
-import history from './history';
+import { Router, Switch, Route, Redirect } from "react-router-dom";
+import SignInForm from "../SignUp";
+import SignUpPage from "../SignIn";
+import LandingPage from "../Landing";
+import HomePage from "../Home";
+import Navbar from "../NavBar";
+import history from "./history";
+import { AuthProvider, useAuth } from "../Context/AuthContext";
+import Footer from "../Footer";
 
-export default function PrivateRoute({
-  authenticated,
-  ...rest
-}) {
+export default function PrivateRoute({ component: Component, ...rest }) {
+  const { currentUser } = useAuth();
   return (
-
-    <Router history={history}>
-      <Switch>
-        <Route
-          path="/" exact
-          {...rest}
-          render={props =>
-            authenticated === true ? (
-              <HomePage {...props} {...rest} />
-            ) : (
-              <LandingPage {...props} {...rest} />
-            )
-          }
-        />
-        <Route path="/SignIn" component={SignInForm} />
-        <Route path="/SignUp" component={SignUpPage} />
-
-      </Switch>
-    </Router>
+    <React.Fragment>
+    <Navbar/>
+    <Route
+      {...rest}
+      render={(props) => {
+        return currentUser ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/signin" />
+        );
+      }}
+    />
+    <Footer/>
+    </React.Fragment>
   );
 }

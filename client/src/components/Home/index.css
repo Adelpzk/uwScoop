@@ -12,3 +12,146 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.request{
+  padding-top : 150px; 
+  padding-bottom: 100px; 
+  float: right;
+  margin-right: 150px;
+}
+
+.post{
+  padding-top : 150px; 
+  padding-bottom: 100px; 
+  float: left;
+  margin-left: 150px;
+}
+
+.imageBell {
+  -webkit-transform: scale(0.8);
+	transform: scale(0.8);
+	-webkit-transition: .2s ease-in-out;
+	transition: .2s ease-in-out;
+}
+
+.image{
+  -webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .2s ease-in-out;
+	transition: .2s ease-in-out;
+}
+
+.imageRequest{
+  max-width: 600px;
+  float: left;
+  padding-bottom: 20px;
+  -webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .2s ease-in-out;
+	transition: .2s ease-in-out;
+}
+
+.imagePost{
+  max-width: 600px;
+  float: right;
+  -webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .2s ease-in-out;
+	transition: .2s ease-in-out;
+}
+
+.imageBell:hover {
+	-webkit-transform: scale(1);
+	transform: scale(1);
+}
+
+.image:hover {
+	-webkit-transform: scale(1.1);
+	transform: scale(1.1);
+}
+.imageRequest:hover {
+	-webkit-transform: scale(1.1);
+	transform: scale(1.1);
+}
+.imagePost:hover {
+	-webkit-transform: scale(1.1);
+	transform: scale(1.1);
+}
+
+
+
+@media only screen and (max-width: 1032px) {
+
+  .image{
+    margin-right: 0px;
+    position: sticky;
+    display: grid;
+  }
+  .imageRequest{
+    margin-right: 0px;
+    position: sticky;
+    display: grid;
+  }
+
+  .imagePost{
+    margin-left: 0px;
+    position: sticky;
+    display: grid;
+  }
+}
+
+@media only screen and (max-width: 1102px) {
+
+  .request{
+   float: none;
+   margin-right: 70px;
+  }
+
+  .post{
+    float: none;
+    margin-left: 70px;
+  }
+
+  
+}
+
+@media only screen and (max-width: 967px) {
+
+  .imageRequest{
+    margin-top: 50px;
+  }  
+
+  .imagePost{
+    margin-top: 50px;
+  }  
+}
+
+@media only screen and (max-width: 897px) {
+
+  .imageRequest{
+    
+    margin-right: 50%;
+    float: none;
+  }  
+  .imagePost{
+    
+    margin-right: 50%;
+    float: none;
+  }  
+
+  .request{
+    margin-right: 150px;
+    padding-top: 30px;
+    margin-left: 30%;
+    margin-bottom: 0%;
+  }
+  .post{
+    margin-right: 150px;
+    padding-top: 30px;
+    margin-left: 30%;
+    margin-bottom: 0%;
+  }
+}
+
+
+
