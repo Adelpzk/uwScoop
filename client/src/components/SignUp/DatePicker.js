@@ -27,7 +27,6 @@ export default function DatePicker(props) {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DesktopDatePicker
         inputFormat="MM-DD-YYYY"
-        minDate={'2023-01-01'}
         maxDate={'2030-12-30'}
         value={value}
         onChange={handleChange}
@@ -38,6 +37,7 @@ export default function DatePicker(props) {
             <TextField
               {...params}
               onChange={DatePicker}
+              data-testid="textField"
               fullWidth
               error={props.error}
               color="error"

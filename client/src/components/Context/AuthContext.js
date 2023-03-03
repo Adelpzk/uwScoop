@@ -66,6 +66,14 @@ export function AuthProvider({ children }) {
       }
     );
 
+    const successCreated = (email) =>
+    toast.success(
+       "Account with following email was created successfully" + email,
+      {
+        containerId: "error",
+      }
+    );
+
     const SuccessFP = (email) =>
     toast.success(
       "An email was sent to " + email + " reset your password",
@@ -74,32 +82,33 @@ export function AuthProvider({ children }) {
       }
     );
 
-  function signup(email, password, redirectHome) {
-    auth
+  async function signup(email, password, redirectHome) {
+    try{
+      await auth
       .createUserWithEmailAndPassword(email, password)
-      .then(redirectHome())
-      .catch((error) => {
-        switch (error.code) {
-          case "auth/email-already-in-use":
-            errorEmailExists(email);
-            break;
-          case "auth/invalid-email":
-            errorInvalidEmail(email);
-            break;
-          case "auth/operation-not-allowed":
-            console.log(`Error during sign up.`);
-            break;
-          case "auth/weak-password":
-            console.log(
-              "Password is not strong enough. Add additional characters including special characters and numbers."
-            );
-            break;
-          default:
-            console.log(error.message);
-            break;
-        }
-      });
-    redirectHome();
+      .then(() => successCreated())
+    }
+    catch(error){
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          errorEmailExists(email);
+          break;
+        case "auth/invalid-email":
+          errorInvalidEmail(email);
+          break;
+        case "auth/operation-not-allowed":
+          console.log(`Error during sign up.`);
+          break;
+        case "auth/weak-password":
+          console.log(
+            "Password is not strong enough. Add additional characters including special characters and numbers."
+          );
+          break;
+        default:
+          console.log(error.message);
+          break;
+      }
+    }
   }
 
   async function login(email, password, redirectHome) {

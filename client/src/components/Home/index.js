@@ -24,10 +24,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
-import DialogHome from "./Dialog"
+import DialogHome from "./Dialog";
 import { fontWeight } from "@mui/system";
 import { Link } from "react-router-dom";
 import "./index.css";
+import { ToastContainer, toast } from "material-react-toastify";
 import SignIn from "../SignUp";
 
 //Dev mode
@@ -90,7 +91,6 @@ const styles = (theme) => ({
   image: {},
 });
 
-
 // const [open, setOpen] = React.useState(false);
 // const [renderList, setRenderList] = React.useState(false);
 
@@ -125,6 +125,7 @@ class Home extends Component {
     });
   }
 
+
   callApiLoadUserSettings = async () => {
     const url = serverURL + "/api/loadUserSettings";
 
@@ -146,8 +147,6 @@ class Home extends Component {
 
   render() {
     const { classes } = this.props;
-
-   
 
     const mainMessage = (
       <Grid
@@ -179,6 +178,21 @@ class Home extends Component {
       <MuiThemeProvider theme={theme}>
         <div className={classes.root}>
           <CssBaseline />
+          <ToastContainer
+              enableMultiContainer
+              containerId={"Home"}
+              toastStyle={{ color: "black" }}
+              position="top-center"
+              autoClose={2000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
           <Paper
             className={classes.paper}
             style={{ border: "none", boxShadow: "none" }}
@@ -250,17 +264,19 @@ class Home extends Component {
                     Get Started
                   </Button>
                   <Dialog
-                    fullWidth='true'
+                    fullWidth="true"
                     open={this.state.open}
                     onClose={() => this.setState({ open: false })}
-                    style={{ boxShadow: "none", border: "none"}}
+                    style={{ boxShadow: "none", border: "none" }}
                   >
-                    <DialogTitle><strong>Leaving or Heading to Waterloo?</strong></DialogTitle>
+                    <DialogTitle>
+                      <strong>Leaving or Heading to Waterloo?</strong>
+                    </DialogTitle>
                     <DialogContent>
-                      <DialogContentText style={{marginBottom: 20}}>
+                      <DialogContentText style={{ marginBottom: 20 }}>
                         Choose whether youre driving or need a ride
                       </DialogContentText>
-                      <DialogHome/>
+                      <DialogHome />
                     </DialogContent>
                     <DialogActions>
                       <Button
