@@ -16,7 +16,7 @@ import UwScoop from "../images/uw-scoop-logo-removebg.png";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 
-const pages = ["Home", "Request", "Post"];
+const pages = ["Home", "Request", "Post", "Matches"];
 const settings = ["Profile", "Logout"];
 
 function ResponsiveAppBar() {

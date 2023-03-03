@@ -37,13 +37,6 @@ code {
 }
 
 
-@media only screen and (max-width: 930px) {
-
-  .buttonAdd{
-    margin-left: 50px;
-  }
-}
-  
 
 @media only screen and (max-width: 1032px) {
 
