@@ -201,13 +201,13 @@ export default function Profile(props) {
 
   };
 
-  const passwordChange = (password) => {
-    const promise = [];
-    promise.push(updatePassword(password))
-    Promise.all(promise).then(()=>{
-        passSuccess()
-    })
-  }
+  // const passwordChange = (password) => {
+  //   const promise = [];
+  //   promise.push(updatePassword(password))
+  //   Promise.all(promise).then(()=>{
+  //       passSuccess()
+  //   })
+  // }
 
   return (
     <MuiThemeProvider theme={theme}>
