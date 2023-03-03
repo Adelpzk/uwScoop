@@ -50,45 +50,41 @@ export function AuthProvider({ children }) {
       }
     );
 
-    const errorFPEmptyEmail = () =>
-    toast.error(
-      "Please enter your email",
-      {
-        containerId: "FP",
-      }
-    );
+  const errorFPEmptyEmail = () =>
+    toast.error("Please enter your email", {
+      containerId: "FP",
+    });
 
-    const errorFPEmailNotFound = (email) =>
-    toast.error(
-      email + " Not Found, try again",
-      {
-        containerId: "FP",
-      }
-    );
+  const errorFPEmailNotFound = (email) =>
+    toast.error(email + " Not Found, try again", {
+      containerId: "FP",
+    });
 
-    const successCreated = (email) =>
+  const successCreated = (email) =>
     toast.success(
-       "Account with following email was created successfully" + email,
+      "Account with following email was created successfully " +
+        email +
+        " Please Verify your email!",
       {
         containerId: "error",
       }
     );
 
-    const SuccessFP = (email) =>
-    toast.success(
-      "An email was sent to " + email + " reset your password",
-      {
-        containerId: "FP",
-      }
-    );
+  const SuccessFP = (email) =>
+    toast.success("An email was sent to " + email + " reset your password", {
+      containerId: "FP",
+    });
 
   async function signup(email, password, redirectHome) {
-    try{
+    try {
       await auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => successCreated())
-    }
-    catch(error){
+        .createUserWithEmailAndPassword(email, password)
+        .then((userCredentials) => {
+          successCreated(email);
+          userCredentials.user.sendEmailVerification();
+          logout();
+        });
+    } catch (error) {
       switch (error.code) {
         case "auth/email-already-in-use":
           errorEmailExists(email);
@@ -141,11 +137,10 @@ export function AuthProvider({ children }) {
   }
 
   async function resetPassword(email) {
-    try{
-      await auth.sendPasswordResetEmail(email)
+    try {
+      await auth.sendPasswordResetEmail(email);
       SuccessFP(email);
-    }
-    catch (error){
+    } catch (error) {
       switch (error.code) {
         case "auth/missing-email":
           errorFPEmptyEmail();

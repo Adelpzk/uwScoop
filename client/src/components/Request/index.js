@@ -84,7 +84,12 @@ export default function Request() {
                     component="img"
                     image={CarPool}
                     alt="Live from space album cover"
-                    style={{ maxWidth: 550, float: "right", marginRight: "2%" }}
+                    style={{
+                      maxWidth: 550,
+                      float: "left",
+                      marginRight: "10%",
+                      marginLeft: "2%",
+                    }}
                   />
                 </Link>
               </a>
@@ -129,26 +134,30 @@ export default function Request() {
                 >
                   Below you can Access your Requests.
                 </Typography>
-              </div>
-              <br />
-              <Button
-                variant="contained"
-                startIcon={<AddCircleIcon />}
-                onClick={handleClickOpen}
-                sx={{
-                  marginLeft: 6.5,
-                  marginTop: 2,
-                  backgroundColor: "#ffd500",
-                  color: "black",
-                  "&:hover": {
+
+                <br />
+                <Button
+                  variant="contained"
+                  className="buttonAdd"
+                  startIcon={<AddCircleIcon />}
+                  onClick={handleClickOpen}
+                  sx={{
+                    marginTop: 2,
                     backgroundColor: "#ffd500",
-                    color: "#be0002",
-                  },
-                  fontWeight: "bold",
-                }}
-              >
-                Make a new Request
-              </Button>
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "#ffd500",
+                      color: "#be0002",
+                    },
+                    fontWeight: "bold",
+                    '@media (max-width: 931px)': {
+                      marginLeft: "8%"
+                    }
+                  }}
+                >
+                  Make a new Request
+                </Button>
+              </div>
               <br />
               <div
                 style={{
@@ -231,10 +240,14 @@ export default function Request() {
               >
                 Make a new Request
               </Button>
-              <Dialog open={open} onClose={handleClose} 
-              style={{ boxShadow: "none", border: "none"}}
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                style={{ boxShadow: "none", border: "none" }}
               >
-                <DialogTitle><strong>Post a Request</strong></DialogTitle>
+                <DialogTitle>
+                  <strong>Post a Request</strong>
+                </DialogTitle>
                 <DialogContent>
                   <DialogContentText>
                     Provide the necassary information of your trip, to get
