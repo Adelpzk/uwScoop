@@ -59,6 +59,11 @@ export default function Profile(props) {
       containerId: "error",
     });
 
+    const success = () =>
+    toast.success(<p>🎉Information updated successfully!</p>, {
+      containerId: "A",
+    });
+
   const [error, setError] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -133,7 +138,7 @@ export default function Profile(props) {
         password: password,
         program: program,
         year: year,
-        birthday: birthday,
+        birthday: birthday.format("DD/MM/YYYY"),
         phoneNumber: phoneNumber,
         music: music,
       }),
@@ -172,6 +177,7 @@ export default function Profile(props) {
       updatePassword(password);
         callApiPostRequest();
     }
+    success();
     setLoading(false);
   };
 
