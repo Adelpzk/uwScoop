@@ -4,14 +4,12 @@ import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
-import classes from "./index.module.css";
 import StartIcon from "@mui/icons-material/Start";
 import TextField from "@mui/material/TextField";
 import Typography from "@material-ui/core/Typography";
-import "./index.module.css";
+
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "material-react-toastify";
-import "material-react-toastify/dist/ReactToastify.css";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
@@ -211,7 +209,7 @@ export default function Profile(props) {
 
   return (
     <MuiThemeProvider theme={theme}>
-    <div className={classes.root}>
+    <div>
       <ToastContainer
         enableMultiContainer
         containerId={"profile"}
