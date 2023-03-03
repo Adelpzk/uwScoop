@@ -46,18 +46,18 @@ export default function Dialog(props) {
             <CardContent xs={12} sm={12} md={6}>
               <a>
                 <CardMedia
-                  className="image"
+                  className="imageBell"
                   component="img"
                   image={Bell}
                   alt="Live from space album cover"
-                  style={{ maxWidth: 80, float: "left", marginRight: "2%", marginLeft: "2%", marginBottom: 10 }}
+                  style={{ maxWidth: 80, maxHeight:100 , float: "left", marginRight: "2%", marginLeft: "2%", marginBottom: 10 }}
                 />
 
                 <Typography
                   variant={"h6"}
                   style={{
                     position: "relative",
-                    top: "30px",
+                    top: "20px",
                     left: "20px",
                     color: "black",
                   }}

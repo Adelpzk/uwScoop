@@ -4,15 +4,16 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import { Avatar } from "@mui/material";
-import TaxiAlertIcon from "@mui/icons-material/TaxiAlert";
+import GroupIcon from '@mui/icons-material/Group';
 import CloseIcon from "@mui/icons-material/Close";
 import CardMedia from "@mui/material/CardMedia";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import DeleteIcon from "@mui/icons-material/Delete";
-import "./RequestItems.css";
-import classes from "./RequestItems.css";
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
+import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
+import "./MatchedItems.css";
+import classes from "./MatchedItems.css";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -24,6 +25,7 @@ import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ToastContainer, toast, Bounce } from "material-react-toastify";
 import { useAuth } from "../Context/AuthContext";
+
 
 //Dev mode
 const serverURL = " "; //enable for dev mode
@@ -53,68 +55,13 @@ const theme = createTheme({
 });
 
 export default function RequestItems(props) {
-  const notifyAll = () =>
-    toast.success(
-      <p>
-        🎉your request was Deleted successfully
-        <br />
-        <br />
-        📍pick up location: {pickup}
-        <br />
-        <br />
-        📍drop off location: {dropoff}
-        <br />
-        <br />
-        🗓pick up date: {date}
-      </p>,
-      {
-        containerId: "A",
-        style: { backgroundColor: "#C02F1D", color: "white" },
-      }
-    );
 
-  const [open, setOpen] = React.useState(false);
-  const [pickup, setPickup] = React.useState();
-  const [dropoff, setDropoff] = React.useState();
-  const [date, setDate] = React.useState();
-  
-
-  const handleClickOpen = (selectedId, pickup, dropoff, date) => {
-    setOpen(true);
-    setId(selectedId);
-    setPickup(pickup);
-    setDropoff(dropoff);
-    setDate(date);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const [requests, setRequests] = React.useState([]);
-  const [id, setId] = React.useState(null);
+  const [matches, setMatches] = React.useState([]);
   const { currentUser } = useAuth();
 
-  const callApiDeleteRequest = async () => {
-    const url = serverURL + "/api/deleteRequest";
-    const response = await fetch(url, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        postedTrip_id: id,
-      }),
-    });
-    const body = await response.json();
-    if (response.status !== 200) {
-      throw Error(body.message);
-    }
-    await loadRequestsList();
-    return body;
-  };
 
-  const callApiGetRequests = async () => {
-    const url = serverURL + "/api/getRequests";
+  const callApiGetMatches = async () => {
+    const url = serverURL + "/api/getMatchesFromPosts";
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -131,28 +78,18 @@ export default function RequestItems(props) {
     return body;
   };
 
-  
-  console.log("list  ");
-
-  const loadRequestsList = () => {
-    callApiGetRequests().then((res) => {
+  const loadRidesList = () => {
+    callApiGetMatches().then((res) => {
       var parsed = JSON.parse(res.express);
       console.log("LoadMoviesList Returned: " + JSON.stringify(parsed));
-      setRequests(parsed);
+      setMatches(parsed);
     });
   };
 
   React.useEffect(() => {
-    loadRequestsList();
-  }, [props.props]);
+    loadRidesList();
+  }, []);
 
-  const handleRemove = () => {
-    console.log(id);
-    callApiDeleteRequest();
-    notifyAll();
-    handleClose();
-    //window.location.reload(false);
-  };
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -170,7 +107,7 @@ export default function RequestItems(props) {
             boxShadow: "none",
           }}
         >
-          {requests.map((option, index) => (
+          {matches.map((option, index) => (
             <Card
               className="card"
               sx={{
@@ -189,7 +126,7 @@ export default function RequestItems(props) {
                   }}
                 >
                   <Avatar sx={{ m: 1, bgcolor: "#ffd500" }}>
-                    <TaxiAlertIcon
+                    <GroupIcon
                       fontSize="medium"
                       style={{ color: "black" }}
                     />
@@ -201,7 +138,7 @@ export default function RequestItems(props) {
                   component="div"
                   marginTop={2}
                 >
-                  <b>Request Details</b>
+                  <b>Ride Details</b>
                 </Typography>
                 <Typography gutterBottom variant="h6" component="div">
                   <b>Date:</b> {option.departure_date}
@@ -224,6 +161,60 @@ export default function RequestItems(props) {
                     <b>To: </b> {option.dropoff_location}
                   </Typography>
                 </div>
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  marginTop={2}
+                >
+                  <b>Requesters Details</b>
+                </Typography>
+
+                <div>
+                  <Typography
+                    gutterBottom
+                    variant="h7"
+                    component="div"
+                  >
+                    <b>Name: </b> {option.first_name + " " + option.last_name} 
+                  </Typography>
+                </div>
+                <div>
+                  <Typography
+                    gutterBottom
+                    variant="h7"
+                    component="div"
+                  >
+                    <b>Phone Number: </b> {option.phone_number} 
+                  </Typography>
+                </div>
+                <div>
+                  <Typography
+                    gutterBottom
+                    variant="h7"
+                    component="div"
+                  >
+                    <b>School Year: </b> {option.school_year} 
+                  </Typography>
+                </div>
+                <div>
+                  <Typography
+                    gutterBottom
+                    variant="h7"
+                    component="div"
+                  >
+                    <b>Program: </b> {option.program} 
+                  </Typography>
+                </div>
+                <div>
+                  <Typography
+                    gutterBottom
+                    variant="h7"
+                    component="div"
+                  >
+                    <b>Music Taste: </b> {option.music_prefrence} 
+                  </Typography>
+                </div>
               </CardContent>
               <CardActions sx={{ justifyContent: "end" }}>
                 <Button
@@ -233,91 +224,31 @@ export default function RequestItems(props) {
                     color: "black",
                     "&:hover": {
                       borderColor: "#ffd500",
-                      color: "#be0002",
+                      color: "green",
                     },
                     fontWeight: "bold",
                     justifyContent: "end",
                   }}
-                  onClick={() =>
-                    handleClickOpen(
-                      option.postedtrips_id,
-                      option.pickup_location,
-                      option.dropoff_location,
-                      option.departure_date
-                    )
-                  }
-                  startIcon={<DeleteIcon />}
+                  startIcon={<PersonAddAltOutlinedIcon />}
                 >
-                  Delete
+                  Invite
                 </Button>
-                <CssBaseline />
-                <Paper
-                  className={classes.paper}
-                  style={{
-                    border: "none",
-                    boxShadow: "none",
-                    overflow: "hidden",
+                <Button
+                  variant="outlined"
+                  sx={{
+                    borderColor: "#ffd500",
+                    color: "black",
+                    "&:hover": {
+                      borderColor: "#ffd500",
+                      color: "green",
+                    },
+                    fontWeight: "bold",
+                    justifyContent: "end",
                   }}
+                  startIcon={<MessageOutlinedIcon />}
                 >
-                  <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    BackdropProps={{
-                      style: {
-                        backgroundColor: "transparent",
-                        border: "none",
-                        boxShadow: "none",
-                      },
-                    }}
-                  >
-                    <DialogTitle
-                      display="flex"
-                      alignItems="center"
-                      flexWrap="wrap"
-                    >
-                      <DeleteIcon /> Deleting Request
-                    </DialogTitle>
-                    <DialogContent>
-                      <DialogContentText>
-                        Are you sure you want to delete the request?
-                      </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                      <Button
-                        variant="outlined"
-                        sx={{
-                          borderColor: "#ffd500",
-                          color: "black",
-                          "&:hover": {
-                            borderColor: "#ffd500",
-                            color: "#be0002",
-                          },
-                          fontWeight: "bold",
-                        }}
-                        onClick={handleRemove}
-                        startIcon={<DeleteIcon />}
-                      >
-                        Delete
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        sx={{
-                          borderColor: "#ffd500",
-                          color: "black",
-                          "&:hover": {
-                            borderColor: "#ffd500",
-                            color: "#be0002",
-                          },
-                          fontWeight: "bold",
-                        }}
-                        startIcon={<CloseIcon />}
-                        onClick={handleClose}
-                      >
-                        Cancel
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </Paper>
+                  Message
+                </Button>
               </CardActions>
             </Card>
           ))}

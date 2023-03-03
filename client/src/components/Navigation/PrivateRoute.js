@@ -4,6 +4,7 @@ import { Redirect } from "react-router";
 import Home from "../Home";
 import history from "./history";
 import Request from "../Request";
+import MatchedRides from "../MatchedRides";
 import Driver from "../Posting";
 import SignUpForm from "../SignUp";
 import SignInPage from "../SignIn";
@@ -21,7 +22,11 @@ export default function PrivateRoute () {
           <PrivateRouteAuth path="/Home" exact component={Home} />
           <PrivateRouteAuth path="/Post" exact component={Driver} />
           <PrivateRouteAuth path="/Request" exact component={Request} />
+<<<<<<< HEAD
           <PrivateRouteAuth path="/Profile" exact component={Profile} />
+=======
+          <PrivateRouteAuth path="/Matches" exact component={MatchedRides} />
+>>>>>>> sprint-1
           <Route path="/SignUp" component={SignUpForm} />
           <Route path="/SignIn" component={SignInPage} />
           <Route path="/ForgotPassword" component={ForgotPassword} />

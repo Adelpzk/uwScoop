@@ -51,21 +51,15 @@ export function AuthProvider({ children }) {
       }
     );
 
-    const errorFPEmptyEmail = () =>
-    toast.error(
-      "Please enter your email",
-      {
-        containerId: "FP",
-      }
-    );
+  const errorFPEmptyEmail = () =>
+    toast.error("Please enter your email", {
+      containerId: "FP",
+    });
 
-    const errorFPEmailNotFound = (email) =>
-    toast.error(
-      email + " Not Found, try again",
-      {
-        containerId: "FP",
-      }
-    );
+  const errorFPEmailNotFound = (email) =>
+    toast.error(email + " Not Found, try again", {
+      containerId: "FP",
+    });
 
     const errorUPRecentLogin = (email) =>
     toast.error(
@@ -75,40 +69,51 @@ export function AuthProvider({ children }) {
       }
     );
 
-    const SuccessFP = (email) =>
+  const successCreated = (email) =>
     toast.success(
-      "An email was sent to " + email + " reset your password",
+      "Account with following email was created successfully " +
+        email +
+        " Please Verify your email!",
       {
-        containerId: "FP",
+        containerId: "error",
       }
     );
 
-  function signup(email, password, redirectHome) {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(redirectHome())
-      .catch((error) => {
-        switch (error.code) {
-          case "auth/email-already-in-use":
-            errorEmailExists(email);
-            break;
-          case "auth/invalid-email":
-            errorInvalidEmail(email);
-            break;
-          case "auth/operation-not-allowed":
-            console.log(`Error during sign up.`);
-            break;
-          case "auth/weak-password":
-            console.log(
-              "Password is not strong enough. Add additional characters including special characters and numbers."
-            );
-            break;
-          default:
-            console.log(error.message);
-            break;
-        }
-      });
-    redirectHome();
+  const SuccessFP = (email) =>
+    toast.success("An email was sent to " + email + " reset your password", {
+      containerId: "FP",
+    });
+
+  async function signup(email, password, redirectHome) {
+    try {
+      await auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((userCredentials) => {
+          successCreated(email);
+          userCredentials.user.sendEmailVerification();
+          logout();
+        });
+    } catch (error) {
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          errorEmailExists(email);
+          break;
+        case "auth/invalid-email":
+          errorInvalidEmail(email);
+          break;
+        case "auth/operation-not-allowed":
+          console.log(`Error during sign up.`);
+          break;
+        case "auth/weak-password":
+          console.log(
+            "Password is not strong enough. Add additional characters including special characters and numbers."
+          );
+          break;
+        default:
+          console.log(error.message);
+          break;
+      }
+    }
   }
 
   async function login(email, password, redirectHome) {
@@ -141,11 +146,10 @@ export function AuthProvider({ children }) {
   }
 
   async function resetPassword(email) {
-    try{
-      await auth.sendPasswordResetEmail(email)
+    try {
+      await auth.sendPasswordResetEmail(email);
       SuccessFP(email);
-    }
-    catch (error){
+    } catch (error) {
       switch (error.code) {
         case "auth/missing-email":
           errorFPEmptyEmail();

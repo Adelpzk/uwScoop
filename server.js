@@ -34,32 +34,40 @@ app.post("/api/loadUserSettings", (req, res) => {
   connection.end();
 });
 
-
 app.post("/api/registerUser", (req, res) => {
-	let connection = mysql.createConnection(config);
-	const firstName = req.body.firstName;
-	const lastName = req.body.lastName;
-	const email = req.body.email;
-	const pass = req.body.password;
-	const program = req.body.program;
-	const year = req.body.year;
-	const birthday = req.body.birthday;
-	const phoneNumber = req.body.phoneNumber;
-	const music = req.body.music;
-	let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program, birthday, phone_number, music_prefrence) values 
+  let connection = mysql.createConnection(config);
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const email = req.body.email;
+  const pass = req.body.password;
+  const program = req.body.program;
+  const year = req.body.year;
+  const birthday = req.body.birthday;
+  const phoneNumber = req.body.phoneNumber;
+  const music = req.body.music;
+  let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program, birthday, phone_number, music_prefrence) values 
   (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
-	let data = [firstName, email, lastName, pass, year, program, birthday, phoneNumber, music];
-	connection.query(sql, data, (error, results, fields) => {
-		if (error) {
-			return console.error(error.message);
-		}
-		console.log(results);
-		let string = JSON.stringify(results);
-		res.send({ express: string });
-	});
-	connection.end();
+  let data = [
+    firstName,
+    email,
+    lastName,
+    pass,
+    year,
+    program,
+    birthday,
+    phoneNumber,
+    music,
+  ];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    console.log(results);
+    let string = JSON.stringify(results);
+    res.send({ express: string });
+  });
+  connection.end();
 });
-
 
 app.post("/api/getRequests", (req, res) => {
   let connection = mysql.createConnection(config);
@@ -93,7 +101,6 @@ app.delete("/api/deleteRequest", (req, res) => {
   connection.end();
 });
 
-
 app.post("/api/postRequest", (req, res) => {
   let connection = mysql.createConnection(config);
   const pickupLocation = req.body.pickupLocation;
@@ -113,7 +120,6 @@ app.post("/api/postRequest", (req, res) => {
   });
   connection.end();
 });
-
 
 app.post("/api/getRides", (req, res) => {
   let connection = mysql.createConnection(config);
@@ -212,7 +218,6 @@ app.delete("/api/deleteRide", (req, res) => {
   connection.end();
 });
 
-
 app.post("/api/postRide", (req, res) => {
   let connection = mysql.createConnection(config);
   const pickupLocation = req.body.pickupLocation;
@@ -227,13 +232,62 @@ app.post("/api/postRide", (req, res) => {
   const users_email = req.body.users_email;
   let sql = `INSERT INTO posted_trips (pickup_location, dropoff_location, departure_date, departure_time, arrival_time, payment_method, amount, car_brand, car_color, users_email)
    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
-  let data = [pickupLocation, dropoffLocation, deaprtureDate, departureTime, arrivalTime,  payment, amount, carModel, color, users_email];
+  let data = [
+    pickupLocation,
+    dropoffLocation,
+    deaprtureDate,
+    departureTime,
+    arrivalTime,
+    payment,
+    amount,
+    carModel,
+    color,
+    users_email,
+  ];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
       return console.error(error.message);
     }
     console.log(results);
     let string = JSON.stringify(results);
+    res.send({ express: string });
+  });
+  connection.end();
+});
+
+app.post("/api/getMatchesFromRequests", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const userEmail = req.body.users_email;
+  let sql = `select * from apazokit.posted_trips inner join apazokit.users on apazokit.users.email = apazokit.posted_trips.users_email WHERE exists 
+  (Select t2.* from apazokit.requested_trips t2 WHERE users_email = (?) and apazokit.posted_trips.pickup_location Like t2.pickup_location and 
+  apazokit.posted_trips.dropoff_location Like t2.dropoff_location and apazokit.posted_trips.departure_date Like t2.departure_date and apazokit.posted_trips.users_email != (?))
+  `;
+  let data = [userEmail, userEmail];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: string });
+  });
+  connection.end();
+});
+
+app.post("/api/getMatchesFromPosts", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const userEmail = req.body.users_email;
+  let sql = `select * from apazokit.requested_trips inner join apazokit.users on apazokit.users.email = apazokit.requested_trips.users_email WHERE exists 
+  (Select t2.* from apazokit.posted_trips t2 WHERE users_email = (?) and apazokit.requested_trips.pickup_location Like t2.pickup_location and 
+  apazokit.requested_trips.dropoff_location Like t2.dropoff_location and apazokit.requested_trips.departure_date Like t2.departure_date and apazokit.requested_trips.users_email != (?))
+  `;
+  let data = [userEmail, userEmail];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
     res.send({ express: string });
   });
   connection.end();

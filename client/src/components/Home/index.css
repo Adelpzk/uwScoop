@@ -26,6 +26,14 @@ code {
   float: left;
   margin-left: 150px;
 }
+
+.imageBell {
+  -webkit-transform: scale(0.8);
+	transform: scale(0.8);
+	-webkit-transition: .2s ease-in-out;
+	transition: .2s ease-in-out;
+}
+
 .image{
   -webkit-transform: scale(1);
 	transform: scale(1);
@@ -50,6 +58,11 @@ code {
 	transform: scale(1);
 	-webkit-transition: .2s ease-in-out;
 	transition: .2s ease-in-out;
+}
+
+.imageBell:hover {
+	-webkit-transform: scale(1);
+	transform: scale(1);
 }
 
 .image:hover {
