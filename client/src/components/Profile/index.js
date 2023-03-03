@@ -20,7 +20,6 @@ import { useAuth } from "../Context/AuthContext";
 import DatePicker from "./DatePicker";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
-import UwScoop from "../images/uw-scoop-logo-removebg.png";
 import Avatar from "@mui/material/Avatar";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Box } from "@mui/material";
@@ -60,11 +59,6 @@ export default function Profile(props) {
       containerId: "error",
     });
 
-  const failEmal = () =>
-    toast.error("Not a university of waterloo email!", {
-      containerId: "error",
-    });
-
   const [error, setError] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -78,6 +72,7 @@ export default function Profile(props) {
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const [music, setMusic] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [passwordChanged, setPasswordChanged] = React.useState(false)
 
   const [userInfo, setUserInfo] = React.useState([]);
 
@@ -106,6 +101,17 @@ export default function Profile(props) {
       var parsed = JSON.parse(res.express);
       console.log("User Info Returned: " + JSON.stringify(parsed));
       setUserInfo(parsed);
+
+      setFirstName(parsed[0].first_name)
+      setLastName(parsed[0].last_name)
+      setPhoneNumber(parsed[0].phone_number)
+      setEmail(parsed[0].email)
+      setPassword(parsed[0].password)
+      setConfirmPassword(parsed[0].password)
+      setProgram(parsed[0].program)
+      setMusic(parsed[0].music_prefrence)
+      setYear(parsed[0].school_year)
+      setBirthday(parsed[0].birthday)
     });
   };
 
@@ -127,7 +133,7 @@ export default function Profile(props) {
         password: password,
         program: program,
         year: year,
-        birthday: birthday.format("DD/MM/YYYY"),
+        birthday: birthday,
         phoneNumber: phoneNumber,
         music: music,
       }),
@@ -149,8 +155,9 @@ export default function Profile(props) {
       firstName == "" ||
       lastName == "" ||
       email == "" ||
-      password == "" ||
       program == "" ||
+      password == "" ||
+      confirmPassword == "" ||
       year == "" ||
       phoneNumber == "" ||
       music == ""
@@ -160,17 +167,11 @@ export default function Profile(props) {
     } else if (password != confirmPassword) {
       setError(true);
       failConfirmPassword();
-    } else if (password.length < 6) {
-      setPasswordValid(true);
-      failPasswordValid();
-    } else if (!email.toLowerCase().includes("@uwaterloo.ca")) {
-      failEmal();
     } else {
       setLoading(true);
-      //   callApiPostRequest();
-      console.log(firstName, lastName, password, email, program, year);
+      updatePassword(password);
+        callApiPostRequest();
     }
-
     setLoading(false);
   };
 
@@ -206,9 +207,7 @@ export default function Profile(props) {
         pauseOnHover
         theme="light"
       />
-
       <CssBaseline />
-
       <Card
         style={{
           border: "none",
@@ -240,7 +239,6 @@ export default function Profile(props) {
                 variant="h5"
               >
                 Update Profile
-                
                 {}
               </Typography>
             </Box>
@@ -296,8 +294,12 @@ export default function Profile(props) {
                 fullWidth: true,
               }}
               type="password"
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="Leave blank to keep the same"
+              onChange={(event) => 
+                setPassword(event.target.value)
+                
+            }
+              defaultValue={option.password}
+
             />
             <br />
             <TextField
@@ -308,7 +310,7 @@ export default function Profile(props) {
               }}
               type="password"
               onChange={(event) => setConfirmPassword(event.target.value)}
-              placeholder="Leave blank to keep the same"
+              defaultValue={option.password}
             />
             <br />
             <hr
