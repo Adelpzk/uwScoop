@@ -7,4 +7,10 @@ You meet new people along the way too! uwScoop considers your year, program and 
 # Installation Requirements
 To install our app, simply clone our repository to your machine. You can run by either running "yarn dev" on main directory or run "npm start" on both main and client directories.
 
+IMPORTANT: You may run into an error similar to this. "error: error:0308010c:digital envelope routines::unsupported"
+
+If you see this please run the following command prior to any npm/yarn command when starting dev server.
+
+$ export NODE_OPTIONS=--openssl-legacy-provider
+
 Thank you and enjoy!
