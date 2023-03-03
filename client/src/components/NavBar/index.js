@@ -204,11 +204,17 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem key="logout" onClick={handleCloseUserMenu}>
-                <Link to={'./Profile'}>
+               <Link
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                  }}
+                  to={`/Profile`}
+                >
+              <MenuItem key="profile" onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">Profile</Typography>
-                </Link>
               </MenuItem>
+              </Link>
               <MenuItem key="logout" onClick={handleLogOut}>
                 <Typography textAlign="center">Log Out</Typography>
               </MenuItem>

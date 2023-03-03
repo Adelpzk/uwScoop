@@ -22,7 +22,6 @@ export default function PrivateRoute () {
           <PrivateRouteAuth path="/Post" exact component={Driver} />
           <PrivateRouteAuth path="/Request" exact component={Request} />
           <PrivateRouteAuth path="/Profile" exact component={Profile} />
-
           <Route path="/SignUp" component={SignUpForm} />
           <Route path="/SignIn" component={SignInPage} />
           <Route path="/ForgotPassword" component={ForgotPassword} />

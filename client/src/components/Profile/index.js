@@ -43,25 +43,25 @@ const theme = createTheme({
 
 export default function Profile(props) {
   const { signup } = useAuth();
-  const { currentUser, updatePassword } = useAuth();
+  const { currentUser, updatePassword, upSuccess } = useAuth();
 
   const error1 = () =>
     toast.error("Please fill out all required fields!", {
-      containerId: "error",
+      containerId: "profile",
     });
 
   const failConfirmPassword = () =>
     toast.error("Passwords do not match!", {
-      containerId: "error",
+      containerId: "profile",
     });
   const failPasswordValid = () =>
     toast.error("Passwords must be 6 characters long!", {
-      containerId: "error",
+      containerId: "profile",
     });
 
     const success = () =>
     toast.success(<p>🎉Information updated successfully!</p>, {
-      containerId: "A",
+      containerId: "profile",
     });
 
   const [error, setError] = React.useState(false);
@@ -116,13 +116,26 @@ export default function Profile(props) {
       setProgram(parsed[0].program)
       setMusic(parsed[0].music_prefrence)
       setYear(parsed[0].school_year)
-      setBirthday(parsed[0].birthday)
+      setBirthday(dayjs(
+        parsed[0].birthday
+          .replace(new RegExp("/", "g"), "-")
+          .substring(6, 10) +
+          "-" +
+          parsed[0].birthday
+            .replace(new RegExp("/", "g"), "-")
+            .substring(3, 5) +
+          "-" +
+          parsed[0].birthday
+            .replace(new RegExp("/", "g"), "-")
+            .substring(0, 2)
+      ))
     });
   };
 
   React.useEffect(() => {
     loadUserInfo();
   }, [props.props]);
+
 
   const callApiPostRequest = async () => {
     const url = serverURL + "/api/updateUserProfile";
@@ -156,6 +169,7 @@ export default function Profile(props) {
 
   const handleSubmit = (e) => {
     e.persist();
+    updatePassword(password);
     if (
       firstName == "" ||
       lastName == "" ||
@@ -172,35 +186,21 @@ export default function Profile(props) {
     } else if (password != confirmPassword) {
       setError(true);
       failConfirmPassword();
-    } else {
+    } else if(upSuccess == true) {
       setLoading(true);
-      updatePassword(password);
-        callApiPostRequest();
+      callApiPostRequest();
+      success();
     }
-    success();
     setLoading(false);
+
   };
 
   return (
+    <MuiThemeProvider theme={theme}>
     <div className={classes.root}>
       <ToastContainer
         enableMultiContainer
-        containerId={"error"}
-        toastStyle={{ color: "black" }}
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <ToastContainer
-        enableMultiContainer
-        containerId={"A"}
+        containerId={"profile"}
         toastStyle={{ color: "black" }}
         position="top-center"
         autoClose={2000}
@@ -220,13 +220,14 @@ export default function Profile(props) {
           boxShadow: "none",
           display: "flex",
           alignItems: "center",
+          marginBottom: 25
         }}
       >
         {userInfo.map((option, index) => (
           <form>
             <Box
               sx={{
-                marginTop: 8,
+                marginTop: 1,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -407,5 +408,6 @@ export default function Profile(props) {
         ))}
       </Card>
     </div>
+    </MuiThemeProvider>
   );
 }
