@@ -64,6 +64,11 @@ export default function Profile(props) {
       containerId: "profile",
     });
 
+    const passSuccess = () =>
+    toast.success(<p>Password updated successfully!</p>, {
+      containerId: "A",
+    });
+
   const [error, setError] = React.useState(false);
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
@@ -151,7 +156,8 @@ export default function Profile(props) {
         password: password,
         program: program,
         year: year,
-        birthday: birthday.format("DD/MM/YYYY"),
+        birthday: birthday,
+        // birthday: birthday.format("DD/MM/YYYY"),
         phoneNumber: phoneNumber,
         music: music,
       }),
@@ -194,6 +200,14 @@ export default function Profile(props) {
     setLoading(false);
 
   };
+
+  const passwordChange = (password) => {
+    const promise = [];
+    promise.push(updatePassword(password))
+    Promise.all(promise).then(()=>{
+        passSuccess()
+    })
+  }
 
   return (
     <MuiThemeProvider theme={theme}>
