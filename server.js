@@ -92,7 +92,7 @@ app.delete("/api/deleteRequest", (req, res) => {
   let data = [postedTrip_id];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
-      return console.error(error.message);
+      return console.error("test" + error.message);
     }
     let string = JSON.stringify(results);
     let obj = JSON.parse(string);
@@ -133,6 +133,56 @@ app.post("/api/getRides", (req, res) => {
     let string = JSON.stringify(results);
     let obj = JSON.parse(string);
     res.send({ express: string });
+  });
+  connection.end();
+});
+
+app.post("/api/getUserInfo", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const userEmail = req.body.users_email;
+  let sql = `SELECT * FROM users WHERE email = (?);`;
+  let data = [userEmail];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: string }); //sending object instead of string for easy access
+  });
+  connection.end();
+});
+
+app.post("/api/updateUserProfile", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const password = req.body.password;
+  const phoneNumber = req.body.phoneNumber;
+  const birthday = req.body.birthday;
+  const schoolYear = req.body.year;
+  const program = req.body.program;
+  const music = req.body.music;
+  const userEmail = req.body.email;
+
+  let sql = `UPDATE users SET 
+  first_name = ?, 
+  last_name = ?, 
+  password = ?,
+  phone_number = ?, 
+  school_year = ?, 
+  program = ?, 
+  birthday = ?, 
+  music_prefrence = ?
+  WHERE email = ?;`
+  let data = [firstName, lastName, password, phoneNumber, schoolYear, program, birthday, music, userEmail];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: obj }); 
   });
   connection.end();
 });

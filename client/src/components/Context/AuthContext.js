@@ -11,6 +11,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = React.useState();
   const [loading, setLoading] = React.useState(true);
+  const [upSuccess, setUpSuccess] = React.useState(false);
 
   const errorEmailExists = (email) =>
     toast.error(email + " already exists", {
@@ -59,6 +60,14 @@ export function AuthProvider({ children }) {
     toast.error(email + " Not Found, try again", {
       containerId: "FP",
     });
+
+    const errorUPRecentLogin = (email) =>
+    toast.error(
+      "This operation is sensitive and requires recent authentication. Log in again before retrying this request",
+      {
+        containerId: "profile",
+      }
+    );
 
   const successCreated = (email) =>
     toast.success(
@@ -155,6 +164,24 @@ export function AuthProvider({ children }) {
     }
   }
 
+
+
+  async function updatePassword(password){
+    try{
+      await currentUser.updatePassword(password).
+      then(() => setUpSuccess(true));
+    }catch(error){
+      switch (error.code) {
+        case "auth/requires-recent-login":
+          errorUPRecentLogin();
+          break;
+        default:
+          console.log(error.message);
+          break;
+      }
+    }
+  }
+
   function logout() {
     return auth.signOut();
   }
@@ -174,6 +201,8 @@ export function AuthProvider({ children }) {
     logout,
     signup,
     resetPassword,
+    updatePassword,
+    upSuccess
   };
   return (
     <AuthContext.Provider value={value}>
