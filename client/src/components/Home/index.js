@@ -28,7 +28,7 @@ import DialogHome from "./Dialog";
 import { fontWeight } from "@mui/system";
 import { Link } from "react-router-dom";
 import "./index.css";
-import { ToastContainer, toast } from "material-react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import SignIn from "../SignUp";
 
 //Dev mode
@@ -201,7 +201,7 @@ class Home extends Component {
               <Box>
                 <CardContent xs={12} sm={12} md={6}>
                   <a>
-                    <Link to={`/Home`}>
+                    <Link to={`/Matches`}>
                       <CardMedia
                         className="image"
                         component="img"

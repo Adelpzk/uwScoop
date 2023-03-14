@@ -4,14 +4,14 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import { Avatar } from "@mui/material";
-import GroupIcon from '@mui/icons-material/Group';
+import GroupIcon from "@mui/icons-material/Group";
 import CloseIcon from "@mui/icons-material/Close";
 import CardMedia from "@mui/material/CardMedia";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
-import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
+import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
+import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
 import Dialog from "@mui/material/Dialog";
@@ -23,9 +23,8 @@ import Slide from "@mui/material/Slide";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
-import { useAuth } from "../Context/AuthContext";
 
+import { useAuth } from "../Context/AuthContext";
 
 //Dev mode
 const serverURL = " "; //enable for dev mode
@@ -55,10 +54,8 @@ const theme = createTheme({
 });
 
 export default function RequestItems(props) {
-
   const [matches, setMatches] = React.useState([]);
   const { currentUser } = useAuth();
-
 
   const callApiGetMatches = async () => {
     const url = serverURL + "/api/getMatchesFromPosts";
@@ -89,7 +86,6 @@ export default function RequestItems(props) {
   React.useEffect(() => {
     loadRidesList();
   }, []);
-
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -125,12 +121,20 @@ export default function RequestItems(props) {
                     alignItems: "center",
                   }}
                 >
-                  <Avatar sx={{ m: 1, bgcolor: "#ffd500" }}>
-                    <GroupIcon
-                      fontSize="medium"
-                      style={{ color: "black" }}
+                  {option.image == null ? (
+                    <Avatar sx={{ m: 1, bgcolor: "#ffd500", width:50, height: 50 }}>
+                      <GroupIcon
+                        fontSize="medium"
+                        style={{ color: "black", width:40, height: 40 }}
+                      ></GroupIcon>
+                    </Avatar>
+                  ) : (
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={"http://localhost:3000/" + option.image}
+                      sx={{width:80, height: 80}}
                     />
-                  </Avatar>
+                  )}
                 </Box>
                 <Typography
                   gutterBottom
@@ -144,20 +148,12 @@ export default function RequestItems(props) {
                   <b>Date:</b> {option.departure_date}
                 </Typography>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>From: </b> {option.pickup_location}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>To: </b> {option.dropoff_location}
                   </Typography>
                 </div>
@@ -171,48 +167,28 @@ export default function RequestItems(props) {
                 </Typography>
 
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
-                    <b>Name: </b> {option.first_name + " " + option.last_name} 
+                  <Typography gutterBottom variant="h7" component="div">
+                    <b>Name: </b> {option.first_name + " " + option.last_name}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
-                    <b>Phone Number: </b> {option.phone_number} 
+                  <Typography gutterBottom variant="h7" component="div">
+                    <b>Phone Number: </b> {option.phone_number}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
-                    <b>School Year: </b> {option.school_year} 
+                  <Typography gutterBottom variant="h7" component="div">
+                    <b>School Year: </b> {option.school_year}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
-                    <b>Program: </b> {option.program} 
+                  <Typography gutterBottom variant="h7" component="div">
+                    <b>Program: </b> {option.program}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
-                    <b>Music Taste: </b> {option.music_prefrence} 
+                  <Typography gutterBottom variant="h7" component="div">
+                    <b>Music Taste: </b> {option.music_prefrence}
                   </Typography>
                 </div>
               </CardContent>

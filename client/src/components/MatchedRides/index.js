@@ -11,7 +11,7 @@ import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Grid } from "@mui/material";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import CloseIcon from "@mui/icons-material/Close";

@@ -12,7 +12,7 @@ import FormControl from "@mui/material/FormControl";
 import GoogleAutoComplete from "./googleAutoComplete";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import DatePicker from "./DatePicker";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../Context/AuthContext";
 

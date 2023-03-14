@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useAuth } from "../Context/AuthContext";
-import { ToastContainer, toast } from "material-react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 import UwScoop from "../images/uw-scoop-logo-removebg.png";
 
@@ -53,6 +53,7 @@ export default function SignIn() {
     event.preventDefault();
     login(email, password, redirectHome);
   };
+  
 
   
   return (
@@ -140,6 +141,7 @@ export default function SignIn() {
                   fontWeight: "bold",
                 }}
                 onClick={handleSubmit}
+                type="submit"
               >
                 Sign In
               </Button>

@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@material-ui/core/Typography";
 import "./index.css";
 import { useHistory } from "react-router-dom";
-import { ToastContainer, toast } from "material-react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -352,6 +352,7 @@ export default function SignIn() {
               fontWeight: "bold",
             }}
             onClick={handleSubmit}
+            type="submit"
             disabled={loading}
           >
             Create Account
