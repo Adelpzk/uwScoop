@@ -22,6 +22,7 @@ import FaceIcon from '@mui/icons-material/Face';
 import { Box } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Stack from "@mui/material/Stack";
+import YearDropdown from "./YearDropdown";
 
 const serverURL = "";
 
@@ -296,7 +297,7 @@ export default function Profile(props) {
                 }}
               >
                 <Avatar sx={{ mt: 2, bgcolor: "#ffd500" }}>
-                  <FaceIcon
+                  <LockOutlinedIcon
                     fontSize="medium"
                     style={{ color: "black" }}
                   />
@@ -397,13 +398,7 @@ export default function Profile(props) {
                   onChange={(event) => setProgram(event.target.value)}
                   defaultValue={option.program}
                 />
-                <TextField
-                  label="Year"
-                  id="names"
-                  type="text"
-                  onChange={(event) => setYear(event.target.value)}
-                  defaultValue={option.school_year}
-                />
+                <YearDropdown year={year} setYear={setYear} />
               </div>
               <br />
               <div className="nameCols">
@@ -442,58 +437,6 @@ export default function Profile(props) {
                   </Select>
                 </FormControl>
               </div>
-              <Stack
-                direction="row"
-                alignItems="center"
-                spacing={1}
-                style={{ marginTop: 10 }}
-              >
-                <Button
-                  variant="contained"
-                  startIcon={<FileUploadIcon />}
-                  sx={{
-                    backgroundColor: "#ffd500",
-                    color: "black",
-                    "&:hover": {
-                      backgroundColor: "#ffd500",
-                      color: "#be0002",
-                    },
-                    fontWeight: "bold",
-                  }}
-                  component="label"
-                  disabled={loading}
-                >
-                  Upload new image {" " + fileName}
-                  <input
-                    hidden
-                    onChange={saveFile}
-                    accept="image/*"
-                    type="file"
-                  />
-                </Button>
-                <Button
-                  variant="contained"
-                  startIcon={<DeleteIcon />}
-                  sx={{
-                    backgroundColor: "#be0002",
-                    color: "black",
-                    "&:hover": {
-                      backgroundColor: "#be0002",
-                      color: "#ffd500",
-                    },
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => {
-                    callApiDeleteUserImage();
-                    ImageDeleteSuccess();
-                  }}
-                  disabled={
-                    image == "http://localhost:3000/null" ? true : false
-                  }
-                >
-                  Delete Existing Image
-                </Button>
-              </Stack>
               <Button
                 variant="contained"
                 startIcon={<StartIcon />}
