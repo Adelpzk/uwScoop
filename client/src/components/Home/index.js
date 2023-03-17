@@ -15,7 +15,7 @@ import StartIcon from "@mui/icons-material/Start";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import Landing from "../images/Landing2.jpeg";
+import Landing from "../images/Landing2.png";
 import Request from "../images/Request.gif";
 import Post from "../images/Post2.png";
 import Dialog from "@mui/material/Dialog";

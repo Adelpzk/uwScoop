@@ -17,18 +17,29 @@ import Badge from "@mui/material/Badge";
 import UwScoop from "../images/uw-scoop-logo-removebg.png";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
+import { io } from "socket.io-client";
 
 const pages = ["Home", "Request", "Post", "Matches"];
 const settings = ["Profile", "Logout"];
 
 const serverURL = "";
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({ socket }) {
   const { logout } = useAuth();
   const { currentUser } = useAuth();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNotif, setAnchorElNotif] = React.useState(null);
   const [image, setImage] = React.useState(null);
+  const [notifications, setNotifications] = React.useState([]);
+
+  React.useEffect(() => {
+    socket?.on("getNotification", (data) => {
+      setNotifications((prev) => [...prev, data]);
+    });
+  }, [socket]);
+
+  console.log(notifications);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,12 +48,20 @@ function ResponsiveAppBar() {
     setAnchorElUser(event.currentTarget);
   };
 
+  const handleOpenNotif = (event) => {
+    setAnchorElNotif(event.currentTarget);
+  };
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleCloseNotif = () => {
+    setAnchorElNotif(null);
   };
 
   const history = useHistory();
@@ -85,6 +104,64 @@ function ResponsiveAppBar() {
   React.useEffect(() => {
     loadUserInfo();
   }, []);
+
+  const displayNotifs = ({ senderEmail, date, type }) => {
+    let action;
+    let noun;
+    switch (type) {
+      case 1:
+        action = "Requested";
+        noun = "your"
+        break;
+      case 2:
+        action = "Invited";
+        noun = "their"
+        break;
+      default:
+    }
+
+    return (
+      <>
+      <Box component="span" sx={{ p: 2, borderBottom: '1px solid red' }}>
+        <Typography color="black"  variant="h8">🎉 {senderEmail + " " + action + " "} to join {noun} ride on {date}!  </Typography>
+        <Button
+          variant="contained"
+          size="small"
+          sx={{
+            backgroundColor: "#006400",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#3CB371",
+              color: "black",
+            },
+            fontWeight: "bold",
+            justifyContent: "end",
+            margin: 1
+          }}
+        >
+          Accept
+        </Button>
+
+        <Button
+          variant="contained"
+          size="small"
+          sx={{
+            backgroundColor: "#be0002",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#FF6347",
+              color: "black",
+            },
+            fontWeight: "bold",
+            justifyContent: "end",
+          }}
+        >
+          Decline
+        </Button>
+        </Box>
+      </>
+    );
+  };
 
   return (
     <AppBar position="static" style={{ background: "transparent" }}>
@@ -194,6 +271,7 @@ function ResponsiveAppBar() {
               },
             }}
           >
+            
             {pages.map((page) => (
               <Button
                 key={page}
@@ -219,16 +297,41 @@ function ResponsiveAppBar() {
               </Button>
             ))}
           </Box>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-              sx={{marginRight: 2}}
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+          <IconButton
+            size="large"
+            aria-label="show 17 new notifications"
+            color="default"
+            onClick={handleOpenNotif}
+            sx={{ marginRight: 2 }}
+          >
+            <Badge badgeContent={notifications.length} color="error">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <Box sx={{ flexGrow: 0 }}>
+          <Menu
+            sx={{ mt: "45px" }}
+            id="menu-appbar"
+            anchorEl={anchorElNotif}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(anchorElNotif)}
+            onClose={handleCloseNotif}
+          >
+            {notifications.map((notif) => (
+              <MenuItem key="profile" onClick={handleCloseNotif}>
+              {displayNotifs(notif)}
+            </MenuItem>
+            ))}
+          </Menu>
+          </Box>
           <Box sx={{ flexGrow: 0, marginRight: 1 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

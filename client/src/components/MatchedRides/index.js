@@ -44,7 +44,7 @@ const theme = createTheme({
   },
 });
 
-export default function MatchedRides() {
+export default function MatchedRides({socket}) {
   const [open, setOpen] = React.useState(false);
   const [renderList, setRenderList] = React.useState(false);
 
@@ -55,6 +55,7 @@ export default function MatchedRides() {
   const handleClose = () => {
     setOpen(false);
   };
+
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -147,7 +148,7 @@ export default function MatchedRides() {
                 >
                  Matches from your Requests:
                 </Typography>
-          <MatchedItemsRequests/>
+          <MatchedItemsRequests socket={socket}/>
           <Link to="/Request">
             <Button
               variant="contained"
@@ -177,7 +178,7 @@ export default function MatchedRides() {
                 >
                  Matches from your Posts:
                 </Typography>
-          <MatchedItemsPosts/>
+          <MatchedItemsPosts  socket={socket}/>
           <Link to="/Request">
             <Button
               variant="contained"

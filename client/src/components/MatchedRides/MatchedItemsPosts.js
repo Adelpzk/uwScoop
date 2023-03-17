@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
+import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined";
 import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
 import Dialog from "@mui/material/Dialog";
@@ -53,8 +54,9 @@ const theme = createTheme({
   },
 });
 
-export default function RequestItems(props) {
+export default function RequestItems({socket}) {
   const [matches, setMatches] = React.useState([]);
+  const [InviteSent, setInviteSent] = React.useState({});
   const { currentUser } = useAuth();
 
   const callApiGetMatches = async () => {
@@ -86,6 +88,21 @@ export default function RequestItems(props) {
   React.useEffect(() => {
     loadRidesList();
   }, []);
+
+  const handleInviteButton = (email, date, type, postedtrips_id) => {
+    setInviteSent((InviteSent => ({
+      ...InviteSent,
+      [postedtrips_id]: !InviteSent[postedtrips_id],
+    })));
+    console.log(email);
+    console.log(currentUser.email);
+    socket.emit("sendNotification", {
+      senderEmail: currentUser.email,
+      receiverEmail: email.toLowerCase(),
+      date: date,
+      type: type,
+    });
+  };
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -193,22 +210,43 @@ export default function RequestItems(props) {
                 </div>
               </CardContent>
               <CardActions sx={{ justifyContent: "end" }}>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    borderColor: "#ffd500",
-                    color: "black",
-                    "&:hover": {
+              {InviteSent[option.postedtrips_id] ? (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      borderColor: "#be0002",
+                      color: "black",
+                      "&:hover": {
+                        borderColor: "#be0002",
+                        color: "red",
+                      },
+                      fontWeight: "bold",
+                      justifyContent: "end",
+                    }}
+                    startIcon={<PendingOutlinedIcon />}
+                    onClick={() => handleInviteButton(option.email, option.departure_date, 2, option.postedtrips_id)}
+                  >
+                    Pending
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    sx={{
                       borderColor: "#ffd500",
-                      color: "green",
-                    },
-                    fontWeight: "bold",
-                    justifyContent: "end",
-                  }}
-                  startIcon={<PersonAddAltOutlinedIcon />}
-                >
-                  Invite
-                </Button>
+                      color: "black",
+                      "&:hover": {
+                        borderColor: "#ffd500",
+                        color: "green",
+                      },
+                      fontWeight: "bold",
+                      justifyContent: "end",
+                    }}
+                    startIcon={<PersonAddAltOutlinedIcon />}
+                    onClick={() => handleInviteButton(option.email, option.departure_date, 2, option.postedtrips_id)}
+                  >
+                    Invite
+                  </Button>
+                )}
                 <Button
                   variant="outlined"
                   sx={{

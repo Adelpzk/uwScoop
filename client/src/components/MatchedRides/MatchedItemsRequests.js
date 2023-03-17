@@ -10,16 +10,14 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
+import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import { useAuth } from "../Context/AuthContext";
 import { Link } from "react-router-dom";
-import { io } from "socket.io-client";
+
 import { lightGreen } from "@mui/material/colors";
-
-
-
 
 //Dev mode
 const serverURL = " "; //enable for dev mode
@@ -48,16 +46,11 @@ const theme = createTheme({
   },
 });
 
-export default function RequestItems(props) {
+export default function RequestItems({ socket }) {
   const [matches, setMatches] = React.useState([]);
+  const [requestSent, setRequestSent] = React.useState({});
   const { currentUser } = useAuth();
 
-  React.useEffect(() => {
-    const socket = io("http://localhost:7500");
-    console.log(socket.on("firstEvent", (msg) => {
-      console.log(msg);
-    }));
-  } , [])
 
   const callApiGetMatches = async () => {
     const url = serverURL + "/api/getMatchesFromRequests";
@@ -88,6 +81,21 @@ export default function RequestItems(props) {
   React.useEffect(() => {
     loadRidesList();
   }, []);
+
+  const handleRequestButton = (email, date, type, postedtrips_id) => {
+    setRequestSent((requestSent => ({
+      ...requestSent,
+      [postedtrips_id]: !requestSent[postedtrips_id],
+    })));
+    console.log(email);
+    console.log(currentUser.email);
+    socket.emit("sendNotification", {
+      senderEmail: currentUser.email,
+      receiverEmail: email.toLowerCase(),
+      date: date,
+      type: type,
+    });
+  };
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -124,17 +132,19 @@ export default function RequestItems(props) {
                   }}
                 >
                   {option.image == null ? (
-                    <Avatar sx={{ m: 1, bgcolor: "#ffd500", width:50, height: 50 }}>
+                    <Avatar
+                      sx={{ m: 1, bgcolor: "#ffd500", width: 50, height: 50 }}
+                    >
                       <GroupIcon
                         fontSize="medium"
-                        style={{ color: "black", width:40, height: 40 }}
+                        style={{ color: "black", width: 40, height: 40 }}
                       ></GroupIcon>
                     </Avatar>
                   ) : (
                     <Avatar
                       alt="Remy Sharp"
                       src={"http://localhost:3000/" + option.image}
-                      sx={{width:80, height: 80}}
+                      sx={{ width: 80, height: 80 }}
                     />
                   )}
                 </Box>
@@ -217,25 +227,50 @@ export default function RequestItems(props) {
                   <Typography gutterBottom variant="h7" component="div">
                     <b>Music Taste: </b> {option.music_prefrence}
                   </Typography>
+                  <Typography gutterBottom variant="h7" component="div">
+                    <b>email: </b> {option.email.toLowerCase()}
+                  </Typography>
                 </div>
               </CardContent>
               <CardActions sx={{ justifyContent: "end" }}>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    borderColor: "#ffd500",
-                    color: "black",
-                    "&:hover": {
+                {requestSent[option.postedtrips_id] ? (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      borderColor: "#be0002",
+                      color: "black",
+                      "&:hover": {
+                        borderColor: "#be0002",
+                        color: "red",
+                      },
+                      fontWeight: "bold",
+                      justifyContent: "end",
+                    }}
+                    startIcon={<PendingOutlinedIcon />}
+                    onClick={() => handleRequestButton(option.email, option.departure_date, 1, option.postedtrips_id)}
+                  >
+                    Pending
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    sx={{
                       borderColor: "#ffd500",
-                      color: "green",
-                    },
-                    fontWeight: "bold",
-                    justifyContent: "end",
-                  }}
-                  startIcon={<PendingOutlinedIcon />}
-                >
-                  Request
-                </Button>
+                      color: "black",
+                      "&:hover": {
+                        borderColor: "#ffd500",
+                        color: "green",
+                      },
+                      fontWeight: "bold",
+                      justifyContent: "end",
+                    }}
+                    startIcon={<PersonAddAltOutlinedIcon />}
+                    onClick={() => handleRequestButton(option.email, option.departure_date, 1, option.postedtrips_id)}
+                  >
+                    Request
+                  </Button>
+                )}
+
                 <Button
                   variant="outlined"
                   sx={{
