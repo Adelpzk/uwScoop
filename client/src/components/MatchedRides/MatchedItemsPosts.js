@@ -22,8 +22,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import MessagingModal from "./MessagingModal";
+
 
 import { useAuth } from "../Context/AuthContext";
 
@@ -58,6 +58,16 @@ export default function RequestItems({socket}) {
   const [matches, setMatches] = React.useState([]);
   const [InviteSent, setInviteSent] = React.useState({});
   const { currentUser } = useAuth();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
 
   const callApiGetMatches = async () => {
     const url = serverURL + "/api/getMatchesFromPosts";
@@ -260,9 +270,44 @@ export default function RequestItems({socket}) {
                     justifyContent: "end",
                   }}
                   startIcon={<MessageOutlinedIcon />}
+                  onClick = {handleClickOpen}
                 >
                   Message
                 </Button>
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  style={{ boxShadow: "none", border: "none" }}
+                >
+                  <DialogTitle>
+                    <strong>Chat with your driver!</strong>
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      Remember to be kind and respectful to your peers!
+                    </DialogContentText>
+                    <MessagingModal setOpen={handleClose} receiver={option.email}/>
+
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        borderColor: "#ffd500",
+                        color: "black",
+                        "&:hover": {
+                          borderColor: "#ffd500",
+                          color: "#be0002",
+                        },
+                        fontWeight: "bold",
+                      }}
+                      onClick={handleClose}
+                      startIcon={<CloseIcon />}
+                    >
+                      Close
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </CardActions>
             </Card>
           ))}

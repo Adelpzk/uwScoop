@@ -15,6 +15,13 @@ import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import { useAuth } from "../Context/AuthContext";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CloseIcon from "@mui/icons-material/Close";
+import MessagingModal from "./MessagingModal";
 import { Link } from "react-router-dom";
 
 import { lightGreen } from "@mui/material/colors";
@@ -50,6 +57,16 @@ export default function RequestItems({ socket }) {
   const [matches, setMatches] = React.useState([]);
   const [requestSent, setRequestSent] = React.useState({});
   const { currentUser } = useAuth();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 
   const callApiGetMatches = async () => {
@@ -95,6 +112,13 @@ export default function RequestItems({ socket }) {
       date: date,
       type: type,
     });
+  };
+
+  const styles = {
+    dialogPaper: {
+      minHeight: '80vh',
+      maxHeight: '80vh',
+    },
   };
 
   return (
@@ -284,9 +308,52 @@ export default function RequestItems({ socket }) {
                     justifyContent: "end",
                   }}
                   startIcon={<MessageOutlinedIcon />}
+                  onClick={handleClickOpen}
                 >
                   Message
                 </Button>
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  style={{
+                    boxShadow: "none", border: "none",
+                  }}
+                  PaperProps={{
+                    sx: {
+                      maxHeight: 600
+                    }
+                  }}
+                  fullWidth
+                  maxWidth="sm"
+                >
+                  <DialogTitle>
+                    <strong>Chat with your driver!</strong>
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        borderColor: "#ffd500",
+                        color: "black",
+                        // "&:hover": {
+                        //   borderColor: "#ffd500",
+                        //   color: "#be0002",
+                        // },
+                        fontWeight: "bold",
+                        marginLeft: "278px",
+                      }}
+                      onClick={handleClose}
+                    >
+                      <CloseIcon />
+                    </Button>
+
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      Remember to be kind and respectful to your peers!
+                    </DialogContentText>
+                    <MessagingModal setOpen={handleClose} socket={socket} receiver={option.email} />
+                  </DialogContent>
+
+                </Dialog>
               </CardActions>
             </Card>
           ))}
