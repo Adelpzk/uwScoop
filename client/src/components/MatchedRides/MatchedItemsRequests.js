@@ -15,8 +15,9 @@ import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import { useAuth } from "../Context/AuthContext";
-import { Link } from "react-router-dom";
+import GoogleApiMaps from "./GoogleApiMaps";
 
+import { Link } from "react-router-dom";
 import { lightGreen } from "@mui/material/colors";
 
 //Dev mode
@@ -46,10 +47,15 @@ const theme = createTheme({
   },
 });
 
+
+
 export default function RequestItems({ socket }) {
   const [matches, setMatches] = React.useState([]);
   const [requestSent, setRequestSent] = React.useState([]);
+
+
   const { currentUser } = useAuth();
+
 
   const callApiGetMatches = async () => {
     const url = serverURL + "/api/getMatchesFromRequests";
@@ -69,8 +75,6 @@ export default function RequestItems({ socket }) {
     return body;
   };
 
-  
-
   const loadRidesList = () => {
     callApiGetMatches().then((res) => {
       var parsed = JSON.parse(res.express);
@@ -80,7 +84,7 @@ export default function RequestItems({ socket }) {
         // console.log([element.postedtrips_id] + ": {" +
         //   element.pendingPosts + "}"
         // );
-        if ((element.pending != 0)) {
+        if (element.pending != 0) {
           setRequestSent((requestSent) => ({
             ...requestSent,
             [element.requestedtrips_id]: JSON.parse(element.pending),
@@ -95,17 +99,17 @@ export default function RequestItems({ socket }) {
   }, []);
 
   matches.forEach((element) => {
-      if (!(element.requestedtrips_id in requestSent)) {
-        setRequestSent((requestSent) => ({
-          ...requestSent,
-          [element.requestedtrips_id]: {
-            ...requestSent[element.requestedtrips_id],
-            [element.postedtrips_id]: 0
-          },
-        }));
-      }
+    if (!(element.requestedtrips_id in requestSent)) {
+      setRequestSent((requestSent) => ({
+        ...requestSent,
+        [element.requestedtrips_id]: {
+          ...requestSent[element.requestedtrips_id],
+          [element.postedtrips_id]: 0,
+        },
+      }));
+    }
   });
-  
+
   console.log(requestSent);
 
   const callApiPostPending = async (id, pending) => {
@@ -127,7 +131,13 @@ export default function RequestItems({ socket }) {
     return body;
   };
 
-  const callApiSendNotid = async (requestId, postId, senderEmail, receiverEmail, status) => {
+  const callApiSendNotid = async (
+    requestId,
+    postId,
+    senderEmail,
+    receiverEmail,
+    status
+  ) => {
     const url = serverURL + "/api/sendNotification";
     const response = await fetch(url, {
       method: "POST",
@@ -139,7 +149,7 @@ export default function RequestItems({ socket }) {
         postId: postId,
         senderEmail: senderEmail,
         receiverEmail: receiverEmail,
-        status: status
+        status: status,
       }),
     });
     const body = await response.json();
@@ -159,7 +169,7 @@ export default function RequestItems({ socket }) {
       body: JSON.stringify({
         requestId: requestId,
         postId: postId,
-        status: status
+        status: status,
       }),
     });
     const body = await response.json();
@@ -168,7 +178,6 @@ export default function RequestItems({ socket }) {
     }
     return body;
   };
-
 
   for (const key in requestSent) {
     callApiPostPending(Number(key), JSON.stringify(requestSent[key]));
@@ -222,29 +231,36 @@ export default function RequestItems({ socket }) {
     }
     setRequestSent((invite) => ({
       ...invite,
-      [requestedtrips_id]:{
+      [requestedtrips_id]: {
         ...invite[requestedtrips_id],
-        [postedtrips_id]: action
-      }
-    }))
-    if (action == 1){
-      callApiSendNotid(requestedtrips_id, postedtrips_id, currentUser.email, email.toLowerCase(), type)
-    //   socket.emit("sendNotification", {
-    //   id: newId,
-    //   requestedtrips_id: requestedtrips_id,
-    //   postedtrips_id: postedtrips_id,
-    //   senderEmail: currentUser.email,
-    //   receiverEmail: email.toLowerCase(),
-    //   date: date,
-    //   type: type,
-    //   pending: pending
-    // });
+        [postedtrips_id]: action,
+      },
+    }));
+    if (action == 1) {
+      callApiSendNotid(
+        requestedtrips_id,
+        postedtrips_id,
+        currentUser.email,
+        email.toLowerCase(),
+        type
+      );
+      //   socket.emit("sendNotification", {
+      //   id: newId,
+      //   requestedtrips_id: requestedtrips_id,
+      //   postedtrips_id: postedtrips_id,
+      //   senderEmail: currentUser.email,
+      //   receiverEmail: email.toLowerCase(),
+      //   date: date,
+      //   type: type,
+      //   pending: pending
+      // });
     }
-    if (action == 0){
-      callApiUnsedNotif(requestedtrips_id, postedtrips_id, type)
+    if (action == 0) {
+      callApiUnsedNotif(requestedtrips_id, postedtrips_id, type);
     }
     window.location.reload(false);
   };
+
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -372,7 +388,7 @@ export default function RequestItems({ socket }) {
                     <b>Program: </b> {option.program}
                   </Typography>
                 </div>
-                <div>
+                <div style={{marginBottom: 10}}>
                   <Typography gutterBottom variant="h7" component="div">
                     <b>Music Taste: </b> {option.music_prefrence}
                   </Typography>
@@ -380,6 +396,7 @@ export default function RequestItems({ socket }) {
                     <b>email: </b> {option.email.toLowerCase()}
                   </Typography>
                 </div>
+               <GoogleApiMaps locationOrigin={option.pickup_location} locationDropOff={option.dropoff_location}/>
               </CardContent>
               <CardActions sx={{ justifyContent: "end" }}>
                 {JSON.parse(option.pending)[option.postedtrips_id] == 1 && (
@@ -442,11 +459,11 @@ export default function RequestItems({ socket }) {
                 )}
                 {JSON.parse(option.pending)[option.postedtrips_id] == 2 && (
                   <Button
-                  disabled="true"
+                    disabled="true"
                     variant="contained"
                     sx={{
                       backgroundColor: "#006400 !important",
-                      color: "white !important" ,
+                      color: "white !important",
                       fontWeight: "bold",
                       justifyContent: "end",
                     }}

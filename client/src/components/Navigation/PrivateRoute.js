@@ -13,6 +13,7 @@ import PrivateRouteAuth from "./PrivateRoute-authenticated";
 import { AuthProvider, useAuth } from "../Context/AuthContext";
 import { io } from "socket.io-client";
 import Profile from "../Profile";
+import History from "../History";
 
 
 export default function PrivateRoute ({socket}) {
@@ -37,6 +38,7 @@ export default function PrivateRoute ({socket}) {
           <PrivateRouteAuth path="/Post" exact component={Driver} socket={socket}/>
           <PrivateRouteAuth path="/Request" exact component={Request} socket={socket}/>
           <PrivateRouteAuth path="/Profile" exact component={Profile} socket={socket}/>
+          <PrivateRouteAuth path="/History" exact component={History} socket={socket}/>
           <PrivateRouteAuth path="/Matches" exact component={MatchedRides} socket={socket}/>
           <Route path="/SignUp" component={SignUpForm} />
           <Route path="/SignIn" component={SignInPage} />

@@ -352,7 +352,7 @@ export default function SignIn() {
               fontWeight: "bold",
             }}
             onClick={handleSubmit}
-            type="submit"
+            // type="submit"
             disabled={loading}
           >
             Create Account

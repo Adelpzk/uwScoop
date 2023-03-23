@@ -645,6 +645,17 @@ function ResponsiveAppBar({ socket }) {
                   <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
               </Link>
+              <Link
+                style={{
+                  textDecoration: "none",
+                  color: "black",
+                }}
+                to={`/History`}
+              >
+                <MenuItem key="profile" onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">History</Typography>
+                </MenuItem>
+              </Link>
               <MenuItem key="logout" onClick={handleLogOut}>
                 <Typography textAlign="center">Log Out</Typography>
               </MenuItem>

@@ -270,7 +270,47 @@ app.post("/api/getNotifs", (req, res) => {
   connection.end();
 });
 
+app.post("/api/getReqHistory", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const userEmail = req.body.users_email;
 
+  let sql = `SELECT * FROM apazokit.trip_history inner join apazokit.posted_trips on
+  apazokit.trip_history.posted_trips_id = apazokit.posted_trips.postedtrips_id
+  inner join apazokit.users on  apazokit.posted_trips.users_email = apazokit.users.email
+  where requested_trips_users_email = (?)`;
+  let data = [userEmail];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: string });
+  });
+  connection.end();
+});
+
+
+app.post("/api/getPostHistory", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const userEmail = req.body.users_email;
+
+  let sql = `SELECT * FROM apazokit.trip_history inner join apazokit.requested_trips on
+  apazokit.trip_history.requested_trips_id = apazokit.requested_trips.requestedtrips_id
+  inner join apazokit.users on  apazokit.requested_trips.users_email = apazokit.users.email
+  where posted_trips_users_email = (?)`;
+  
+  let data = [userEmail];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: string });
+  });
+  connection.end();
+});
 
 
 app.post("/api/getUserInfo", (req, res) => {
