@@ -48,13 +48,15 @@ export default function MessagingModal({ socket, receiver }) {
       sender: currentUser.email,
       receiver: receiver,
       message: message,
+      time:time
     }
     console.log(messageInfo)
 
     socket.emit("sendMessage", {
       senderEmail: currentUser.email,
       receiverEmail: receiver,
-      text: message
+      text: message,
+      time: time
     })
 
     setMessages([...messages, messageInfo]);
@@ -68,6 +70,7 @@ export default function MessagingModal({ socket, receiver }) {
         sender: data.senderEmail,
         receiver: data.receiverEmail,
         message: data.text,
+        time: data.time
       }
       setMessages((prev) => [...prev, messageInfo]);
       console.log(messages)
@@ -78,7 +81,7 @@ export default function MessagingModal({ socket, receiver }) {
     <MuiThemeProvider theme={theme}>
       <div>
         {messages.map(m => (
-          <Message message={m} />
+          <Message message={m} own={m.sender === currentUser.email}/>
         ))}
 
         <div className="sendBox">

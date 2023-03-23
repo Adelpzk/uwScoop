@@ -24,7 +24,7 @@ const getUser = (userEmail) => {
 
 io.on("connection", (socket) => {
     console.log('CONNECTED')
-    socket.on('sendMessage', ({senderEmail, receiverEmail, text})=>{
+    socket.on('sendMessage', ({senderEmail, receiverEmail, text, time})=>{
         console.log("Sent by:" + senderEmail)
         console.log("Received by:" + receiverEmail)
 
@@ -32,7 +32,8 @@ io.on("connection", (socket) => {
         io.to(receiver.socketId).emit("getMessage", {
             senderEmail,
             receiverEmail,
-            text
+            text,
+            time
         })
     })
   socket.on("newUser", (userEmail) => {
