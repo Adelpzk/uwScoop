@@ -98,17 +98,20 @@ export default function RequestItems({ socket }) {
     loadRidesList();
   }, []);
 
-  matches.forEach((element) => {
-    if (!(element.requestedtrips_id in requestSent)) {
-      setRequestSent((requestSent) => ({
-        ...requestSent,
-        [element.requestedtrips_id]: {
-          ...requestSent[element.requestedtrips_id],
-          [element.postedtrips_id]: 0,
-        },
-      }));
-    }
-  });
+  React.useEffect(() => {
+    matches.forEach((element) => {
+      if (!(element.requestedtrips_id in requestSent)) {
+        setRequestSent((requestSent) => ({
+          ...requestSent,
+          [element.requestedtrips_id]: {
+            ...requestSent[element.requestedtrips_id],
+            [element.postedtrips_id]: 0,
+          },
+        }));
+      }
+    });
+  }, [matches]);
+ 
 
   console.log(requestSent);
 

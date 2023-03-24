@@ -90,7 +90,7 @@ app.post("/api/getRequests", (req, res) => {
 app.delete("/api/deleteRequest", (req, res) => {
   let connection = mysql.createConnection(config);
   const postedTrip_id = req.body.postedTrip_id;
-  let sql = `DELETE FROM requested_trips WHERE (postedtrips_id = ?);`;
+  let sql = `DELETE FROM requested_trips WHERE (requestedtrips_id = ?);`;
   let data = [postedTrip_id];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {

@@ -88,7 +88,7 @@ export default function RequestItems({ socket }) {
         // console.log([element.postedtrips_id] + ": {" +
         //   element.pendingPosts + "}"
         // );
-        if ((element.pendingPosts != 0)) {
+        if ((element.pendingPosts != 0 || element.pendingPosts != {})) {
           setInviteSent((requestSent) => ({
             ...requestSent,
             [element.postedtrips_id]: JSON.parse(element.pendingPosts),
@@ -102,7 +102,10 @@ export default function RequestItems({ socket }) {
     loadRidesList();
   }, []);
 
-  matches.forEach((element) => {
+  
+
+  React.useEffect(() => {
+    matches.forEach((element) => {
       if (!(element.postedtrips_id in InviteSent)) {
         setInviteSent((requestSent) => ({
           ...requestSent,
@@ -113,6 +116,8 @@ export default function RequestItems({ socket }) {
         }));
       }
   });
+  }, [matches]);
+  
 
   console.log(InviteSent);
 

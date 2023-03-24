@@ -80,6 +80,8 @@ export default function RequestItems(props) {
   
 
   const handleClickOpen = (selectedId, pickup, dropoff, date) => {
+    console.log(selectedId);
+    console.log(pickup);
     setOpen(true);
     setId(selectedId);
     setPickup(pickup);
@@ -177,7 +179,7 @@ export default function RequestItems(props) {
                 marginTop: 2,
                 marginBottom: 2,
               }}
-              key={option.postedtrips_id}
+              key={option.requestedtrips_id}
             >
               <CardContent>
                 <Box
@@ -240,7 +242,7 @@ export default function RequestItems(props) {
                   }}
                   onClick={() =>
                     handleClickOpen(
-                      option.postedtrips_id,
+                      option.requestedtrips_id,
                       option.pickup_location,
                       option.dropoff_location,
                       option.departure_date
