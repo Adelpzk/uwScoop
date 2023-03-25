@@ -1,6 +1,5 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
@@ -18,11 +17,9 @@ import FormControl from "@mui/material/FormControl";
 import { useAuth } from "../Context/AuthContext";
 import DatePicker from "./DatePicker";
 import dayjs from "dayjs";
-import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import FaceIcon from '@mui/icons-material/Face';
 import { Box } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Stack from "@mui/material/Stack";
 

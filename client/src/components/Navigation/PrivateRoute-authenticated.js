@@ -1,13 +1,7 @@
 import React from "react";
 import { Router, Switch, Route, Redirect } from "react-router-dom";
-import SignInForm from "../SignUp";
-import SignUpPage from "../SignIn";
-import LandingPage from "../Landing";
-import HomePage from "../Home";
 import Navbar from "../NavBar";
-import history from "./history";
 import { AuthProvider, useAuth } from "../Context/AuthContext";
-import { io } from "socket.io-client";
 import Footer from "../Footer";
 
 export default function PrivateRoute({ component: Component, socket, ...rest }) {

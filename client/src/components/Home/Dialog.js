@@ -11,13 +11,11 @@ import { Typography } from "@material-ui/core";
 export default function Dialog(props) {
   return (
     <>
-      <Link to={`/Post`}>
-        <Card>
-          <Box>
-            <CardContent xs={12} sm={12} md={6}>
+      <Link to={`/Post`} style={{ textDecoration: "none" }}>
+        <Card className="RequestCard" >
+            <CardContent >
               <a>
                 <CardMedia
-                  className="image"
                   component="img"
                   image={Car}
                   alt="Live from space album cover"
@@ -37,13 +35,12 @@ export default function Dialog(props) {
                 </Typography>
               </a>
             </CardContent>
-          </Box>
         </Card>
       </Link>
-      <Link to={`/Request`}>
-        <Card style={{marginTop: 10}}>
+      <Link to={`/Request`} style={{ textDecoration: "none" }}>
+        <Card style={{marginTop: 20}} className="RequestCard">
           <Box>
-            <CardContent xs={12} sm={12} md={6}>
+            <CardContent >
               <a>
                 <CardMedia
                   className="imageBell"
