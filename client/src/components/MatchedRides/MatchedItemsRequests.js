@@ -47,15 +47,11 @@ const theme = createTheme({
   },
 });
 
-
-
 export default function RequestItems({ socket }) {
   const [matches, setMatches] = React.useState([]);
   const [requestSent, setRequestSent] = React.useState([]);
 
-
   const { currentUser } = useAuth();
-
 
   const callApiGetMatches = async () => {
     const url = serverURL + "/api/getMatchesFromRequests";
@@ -111,7 +107,6 @@ export default function RequestItems({ socket }) {
       }
     });
   }, [matches]);
- 
 
   console.log(requestSent);
 
@@ -264,7 +259,6 @@ export default function RequestItems({ socket }) {
     window.location.reload(false);
   };
 
-
   return (
     <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
@@ -289,6 +283,7 @@ export default function RequestItems({ socket }) {
                 marginBottom: 2,
               }}
               key={option.postedtrips_id}
+              id={option.postedtrips_id}
             >
               <CardContent>
                 <Box
@@ -301,6 +296,7 @@ export default function RequestItems({ socket }) {
                 >
                   {option.image == null ? (
                     <Avatar
+                      
                       sx={{ m: 1, bgcolor: "#ffd500", width: 50, height: 50 }}
                     >
                       <GroupIcon
@@ -313,6 +309,7 @@ export default function RequestItems({ socket }) {
                       alt="Remy Sharp"
                       src={"http://localhost:3000/" + option.image}
                       sx={{ width: 80, height: 80 }}
+                      className="profileImage"
                     />
                   )}
                 </Box>
@@ -391,7 +388,7 @@ export default function RequestItems({ socket }) {
                     <b>Program: </b> {option.program}
                   </Typography>
                 </div>
-                <div style={{marginBottom: 10}}>
+                <div style={{ marginBottom: 10 }}>
                   <Typography gutterBottom variant="h7" component="div">
                     <b>Music Taste: </b> {option.music_prefrence}
                   </Typography>
@@ -399,7 +396,10 @@ export default function RequestItems({ socket }) {
                     <b>email: </b> {option.email.toLowerCase()}
                   </Typography>
                 </div>
-               <GoogleApiMaps locationOrigin={option.pickup_location} locationDropOff={option.dropoff_location}/>
+                <GoogleApiMaps
+                  locationOrigin={option.pickup_location}
+                  locationDropOff={option.dropoff_location}
+                />
               </CardContent>
               <CardActions sx={{ justifyContent: "end" }}>
                 {JSON.parse(option.pending)[option.postedtrips_id] == 1 && (

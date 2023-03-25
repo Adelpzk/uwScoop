@@ -8,6 +8,19 @@
     min-width: 500px;
   }
 
+  .profileImage{
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: .2s ease-in-out;
+    transition: .2s ease-in-out;
+  }
+  
+  
+  .profileImage:hover {
+    -webkit-transform: scale(1.5);
+    transform: scale(1.5);
+  }
+
   @media only screen and (max-width: 522px) {
 
     .card{

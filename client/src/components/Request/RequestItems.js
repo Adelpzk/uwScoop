@@ -77,7 +77,6 @@ export default function RequestItems(props) {
   const [pickup, setPickup] = React.useState();
   const [dropoff, setDropoff] = React.useState();
   const [date, setDate] = React.useState();
-  
 
   const handleClickOpen = (selectedId, pickup, dropoff, date) => {
     console.log(selectedId);
@@ -115,6 +114,25 @@ export default function RequestItems(props) {
     return body;
   };
 
+  const callApiDeleteHistory = async () => {
+    const url = serverURL + "/api/deleteHistoryRequest";
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        postedTrip_id: id,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    await loadRequestsList();
+    return body;
+  };
+
   const callApiGetRequests = async () => {
     const url = serverURL + "/api/getRequests";
     const response = await fetch(url, {
@@ -133,7 +151,6 @@ export default function RequestItems(props) {
     return body;
   };
 
-  
   console.log("list  ");
 
   const loadRequestsList = () => {
@@ -150,7 +167,7 @@ export default function RequestItems(props) {
 
   const handleRemove = () => {
     console.log(id);
-    callApiDeleteRequest();
+    callApiDeleteHistory().then(callApiDeleteRequest());
     notifyAll();
     handleClose();
     //window.location.reload(false);
@@ -209,20 +226,12 @@ export default function RequestItems(props) {
                   <b>Date:</b> {option.departure_date}
                 </Typography>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>From: </b> {option.pickup_location}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>To: </b> {option.dropoff_location}
                   </Typography>
                 </div>

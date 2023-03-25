@@ -300,7 +300,8 @@ export default function RequestItems({ socket }) {
                 marginTop: 2,
                 marginBottom: 2,
               }}
-              key={option.postedtrips_id}
+              key={option.requestedtrips_id}
+              id={option.requestedtrips_id}
             >
               <CardContent>
                 <Box
@@ -325,6 +326,7 @@ export default function RequestItems({ socket }) {
                       alt="Remy Sharp"
                       src={"http://localhost:3000/" + option.image}
                       sx={{ width: 80, height: 80 }}
+                      className="profileImage"
                     />
                   )}
                 </Box>

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { HashLink } from "react-router-hash-link";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -232,7 +233,7 @@ function ResponsiveAppBar({ socket }) {
       body: JSON.stringify({
         requestId: requestId,
         postId: postId,
-        status: status
+        status: status,
       }),
     });
     const body = await response.json();
@@ -293,7 +294,7 @@ function ResponsiveAppBar({ socket }) {
       notifyAccept(action, senderEmail);
       callApiRequestPending(requestedTripsId, JSON.stringify(pendingState));
       // setNotifications(notifications.filter((notif) => notif.id !== id));
-      callApiUnsedNotif(requestedTripsId, postedTripsId, type)
+      callApiUnsedNotif(requestedTripsId, postedTripsId, type);
     }
     if (
       requestedTripsEmail &&
@@ -306,11 +307,16 @@ function ResponsiveAppBar({ socket }) {
       notifyAccept(action, senderEmail);
       callApiPostPending(postedTripsId, JSON.stringify(pendingPostState));
       //setNotifications(notifications.filter((notif) => notif.id !== id));
-      callApiUnsedNotif(requestedTripsId, postedTripsId, type)
+      callApiUnsedNotif(requestedTripsId, postedTripsId, type);
     }
   };
 
-  const handleDeclineNotif = (postedtrips_id, requestedtrips_id, type, senderEmail) => {
+  const handleDeclineNotif = (
+    postedtrips_id,
+    requestedtrips_id,
+    type,
+    senderEmail
+  ) => {
     let action;
     if (type == 1) {
       setPendingState((prevState) => ({
@@ -327,24 +333,16 @@ function ResponsiveAppBar({ socket }) {
     }
     setRequestedTripsId(requestedtrips_id);
     setPostedTripsId(postedtrips_id);
-    if (
-      requestedTripsId &&
-      postedTripsId &&
-      type == 1
-    ) {
+    if (requestedTripsId && postedTripsId && type == 1) {
       callApiRequestPending(requestedTripsId, JSON.stringify(pendingState));
       // setNotifications(notifications.filter((notif) => notif.id !== id));
-      callApiUnsedNotif(requestedTripsId, postedTripsId, type)
+      callApiUnsedNotif(requestedTripsId, postedTripsId, type);
       notifyDecline(action, senderEmail);
     }
-    if (
-      requestedTripsId &&
-      postedTripsId &&
-      type == 2
-    ) {
-      callApiPostPending(postedTripsId, JSON.stringify(pendingState));
+    if (requestedTripsId && postedTripsId && type == 2) {
+      callApiPostPending(postedTripsId, JSON.stringify(pendingPostState));
       // setNotifications(notifications.filter((notif) => notif.id !== id));
-      callApiUnsedNotif(requestedTripsId, postedTripsId, type)
+      callApiUnsedNotif(requestedTripsId, postedTripsId, type);
       notifyDecline(action, senderEmail);
     }
   };
@@ -357,28 +355,36 @@ function ResponsiveAppBar({ socket }) {
     date,
     type,
     pending,
-    pendingPost,
+    pendingPost
   ) => {
     let action;
     let noun;
+    let route;
     switch (type) {
       case 1:
         action = "Requested";
         noun = "your";
+        route = requestedtrips_id;
         break;
       case 2:
         action = "Invited";
         noun = "their";
+        route = postedtrips_id;
         break;
       default:
     }
 
+    console.log("id " + route);
+
     return (
       <>
         <Box component="span" sx={{ p: 2, borderBottom: "1px solid red" }}>
-          <Typography color="black" variant="h8">
-            🎉 {senderEmail + " " + action + " "} to join {noun} ride on {date}!{" "}
-          </Typography>
+          <HashLink to={`Matches#${route}`} style={{ textDecoration: "none" }}>
+            <Typography color="black" variant="h8" onClick={handleCloseNotif}>
+              🎉 {senderEmail + " " + action + " "} to join {noun} ride on{" "}
+              {date}!{" "}
+            </Typography>
+          </HashLink>
           <Button
             variant="contained"
             size="small"
@@ -422,7 +428,14 @@ function ResponsiveAppBar({ socket }) {
               fontWeight: "bold",
               justifyContent: "end",
             }}
-            onClick={() => handleDeclineNotif(postedtrips_id, requestedtrips_id, type, senderEmail)}
+            onClick={() =>
+              handleDeclineNotif(
+                postedtrips_id,
+                requestedtrips_id,
+                type,
+                senderEmail
+              )
+            }
           >
             Decline
           </Button>
@@ -589,17 +602,9 @@ function ResponsiveAppBar({ socket }) {
               open={Boolean(anchorElNotif)}
               onClose={handleCloseNotif}
             >
-              {notifications.map((notif) => (
-                console.log(notif.senderEmail,
-                  notif.postedtrips_id,
-                  notif.requestedtrips_id,
-                  notif.departure_date,
-                  notif.status,
-                  notif.pending,
-                  notif.pendingPosts),
-                <MenuItem key={"Notif" + key++}>
-                  {displayNotifs(
-                    notif.idnotification,
+              {notifications.map(
+                (notif) => (
+                  console.log(
                     notif.senderEmail,
                     notif.postedtrips_id,
                     notif.requestedtrips_id,
@@ -607,9 +612,23 @@ function ResponsiveAppBar({ socket }) {
                     notif.status,
                     notif.pending,
                     notif.pendingPosts
-                  )}
-                </MenuItem>
-              ))}
+                  ),
+                  (
+                    <MenuItem key={"Notif" + key++}>
+                      {displayNotifs(
+                        notif.idnotification,
+                        notif.senderEmail,
+                        notif.postedtrips_id,
+                        notif.requestedtrips_id,
+                        notif.departure_date,
+                        notif.status,
+                        notif.pending,
+                        notif.pendingPosts
+                      )}
+                    </MenuItem>
+                  )
+                )
+              )}
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 0, marginRight: 1 }}>
