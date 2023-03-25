@@ -58,7 +58,7 @@ export default function RequestItems(props) {
   const [matches, setMatches] = React.useState([]);
   const { currentUser } = useAuth();
   const [openProfileModal, setOpenProfileModal] = React.useState(false);
-  const [data, setData] = React.useState(null)
+  const [data, setData] = React.useState(null);
 
   const callApiGetMatches = async () => {
     const url = serverURL + "/api/getMatchesFromPosts";
@@ -124,17 +124,26 @@ export default function RequestItems(props) {
                     alignItems: "center",
                   }}
                 >
-
-                  <Avatar
-                    alt="Remy Sharp"
-                    src={"http://localhost:3000/" + option.image}
-                    sx={{ width: 80, height: 80, cursor: 'pointer' }}
-                    onClick={() => {
-                      setData(option)
-                      setOpenProfileModal(true)
-                    }}
-                  />
-
+                  {option.image == null ? (
+                    <Avatar
+                      sx={{ m: 1, bgcolor: "#ffd500", width: 50, height: 50 }}
+                    >
+                      <GroupIcon
+                        fontSize="medium"
+                        style={{ color: "black", width: 40, height: 40 }}
+                      ></GroupIcon>
+                    </Avatar>
+                  ) : (
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={"http://localhost:3000/" + option.image}
+                      sx={{ width: 80, height: 80, cursor: "pointer" }}
+                      onClick={() => {
+                        setData(option);
+                        setOpenProfileModal(true);
+                      }}
+                    />
+                  )}
                 </Box>
                 <Typography
                   gutterBottom
@@ -176,21 +185,6 @@ export default function RequestItems(props) {
                     <b>Phone Number: </b> {option.phone_number}
                   </Typography>
                 </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>School Year: </b> {option.school_year}
-                  </Typography>
-                </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>Program: </b> {option.program}
-                  </Typography>
-                </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>Music Taste: </b> {option.music_prefrence}
-                  </Typography>
-                </div>
               </CardContent>
               <CardActions sx={{ justifyContent: "end" }}>
                 <Button
@@ -230,7 +224,11 @@ export default function RequestItems(props) {
           ))}
         </Grid>
       </div>
-      <ProfileModal open={openProfileModal} handleClose={() => setOpenProfileModal(false)} data={data} />
+      <ProfileModal
+        open={openProfileModal}
+        handleClose={() => setOpenProfileModal(false)}
+        data={data}
+      />
     </MuiThemeProvider>
   );
 }

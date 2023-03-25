@@ -36,7 +36,7 @@ const ProfileModal = ({ open, handleClose, data }) => {
                     >
                         <b>
 
-                            Driver Profile
+                            Driver's Profile
 
                         </b>
                     </Typography>
@@ -51,7 +51,7 @@ const ProfileModal = ({ open, handleClose, data }) => {
                         <Avatar
                             alt={data?.name}
                             src={`http://localhost:3000/${data?.image}`}
-                            sx={{ width: 80, height: 80, cursor: 'pointer' }}
+                            sx={{ width: 150, height: 150}}
                         />
                     </Box>
                     <div style={{ marginTop: 30 }}>
@@ -87,7 +87,6 @@ const ProfileModal = ({ open, handleClose, data }) => {
                     <div>
                         <Typography gutterBottom variant="h6" component="div">
                             <b>Bio: </b>
-                            <br />
                             {data?.bio}
                         </Typography>
                     </div>
