@@ -191,7 +191,7 @@ const Footer = () => {
 
                 <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', marginBottom: '15px' }}>
                   <IconButton sx={{ p: 0 }}>
-                    <Avatar alt="Adel" src={Adel} />
+                    <Avatar alt="Adel" src={Adel} style={{width:'70px', height:'70px'}}/>
                   </IconButton>
                   <ul style={{ marginLeft: '8px', marginRight: '5px' }}>Adel Pazoki</ul>
                   <Link href="https://www.linkedin.com/in/adel-pazoki-toroudi/" target="_blank">
@@ -202,7 +202,7 @@ const Footer = () => {
 
                 <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', marginBottom: '15px' }}>
                   <IconButton sx={{ p: 0 }}>
-                    <Avatar alt="Michael" src={Michael} />
+                    <Avatar alt="Michael" src={Michael} style={{width:'70px', height:'70px'}}/>
                   </IconButton>
                   <ul style={{ marginLeft: '8px', marginRight: '5px' }}>Michael Sheng</ul>
                   <Link href="https://www.linkedin.com/in/michaeljsheng/" target="_blank">
@@ -212,7 +212,7 @@ const Footer = () => {
 
                 <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', marginBottom: '15px' }}>
                   <IconButton sx={{ p: 0 }}>
-                    <Avatar alt="Free" src={Free} />
+                    <Avatar alt="Free" src={Free} style={{width:'70px', height:'70px'}}/>
                   </IconButton>
                   <ul style={{ marginLeft: '8px', marginRight: '5px' }}>Free Guang Zhang</ul>
                   <Link href="https://www.linkedin.com/in/freezhang/" target="_blank">
@@ -222,7 +222,7 @@ const Footer = () => {
 
                 <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', marginBottom: '15px' }}>
                   <IconButton sx={{ p: 0 }}>
-                    <Avatar alt="Saed" src={Saed} />
+                    <Avatar alt="Saed" src={Saed} style={{width:'70px', height:'70px'}}/>
                   </IconButton>
                   <ul style={{ marginLeft: '8px', marginRight: '5px' }}>Saed Nour</ul>
                   <Link href="https://www.linkedin.com/in/saed-nour/" target="_blank">
