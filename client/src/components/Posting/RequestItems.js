@@ -22,7 +22,7 @@ import Slide from "@mui/material/Slide";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import { useAuth } from "../Context/AuthContext";
 
 

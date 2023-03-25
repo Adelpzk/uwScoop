@@ -1,18 +1,19 @@
 let mysql = require("mysql");
 let config = require("./config.js");
+const multer = require("multer");
 const fetch = require("node-fetch");
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const { response } = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
-
-app.use(express.static(path.join(__dirname, "client/build")));
-
+app.use(cors());
+app.use("/", express.static(path.join(__dirname, "/")));
 
 app.post("/api/loadUserSettings", (req, res) => {
   let connection = mysql.createConnection(config);
@@ -46,8 +47,9 @@ app.post("/api/registerUser", (req, res) => {
   const birthday = req.body.birthday;
   const phoneNumber = req.body.phoneNumber;
   const music = req.body.music;
-  let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program, birthday, phone_number, music_prefrence) values 
-  (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+  const bio = req.body.bio;
+  let sql = `INSERT INTO users (first_name, email, last_name, password, school_year, program, birthday, phone_number, music_prefrence,bio) values 
+  (?, ?, ?, ?, ?, ?, ?, ?, ?,?);`;
   let data = [
     firstName,
     email,
@@ -58,6 +60,7 @@ app.post("/api/registerUser", (req, res) => {
     birthday,
     phoneNumber,
     music,
+    bio
   ];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
@@ -154,6 +157,41 @@ app.post("/api/getUserInfo", (req, res) => {
   connection.end();
 });
 
+//! Use of Multer
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "client/imageUploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+var upload = multer({
+  storage: storage,
+});
+
+app.post("/upload", upload.single("file"), (req, res) => {
+  let connection = mysql.createConnection(config);
+  const userEmail = req.body.users_email;
+  if (!req.file) {
+    console.log("No file upload");
+  } else {
+    console.log(req.file.filename);
+    var imgsrc = "client/imageUploads/" + req.file.filename;
+    var insertData =
+      "UPDATE users SET image = ? WHERE email = ?;";
+    connection.query(insertData, [imgsrc, userEmail], (err, result) => {
+      if (err) throw err;
+      console.log("file uploaded");
+    });
+  }
+});
+
+var upload = multer({
+  storage: storage,
+});
+
 app.post("/api/updateUserProfile", (req, res) => {
   let connection = mysql.createConnection(config);
   const firstName = req.body.firstName;
@@ -164,6 +202,7 @@ app.post("/api/updateUserProfile", (req, res) => {
   const schoolYear = req.body.year;
   const program = req.body.program;
   const music = req.body.music;
+  const bio = req.body.bio;
   const userEmail = req.body.email;
 
   let sql = `UPDATE users SET 
@@ -174,9 +213,42 @@ app.post("/api/updateUserProfile", (req, res) => {
   school_year = ?, 
   program = ?, 
   birthday = ?, 
-  music_prefrence = ?
-  WHERE email = ?;`
-  let data = [firstName, lastName, password, phoneNumber, schoolYear, program, birthday, music, userEmail];
+  music_prefrence = ?,
+  bio=?
+  WHERE email = ?;`;
+
+  let data = [
+    firstName,
+    lastName,
+    password,
+    phoneNumber,
+    schoolYear,
+    program,
+    birthday,
+    music,
+    bio,
+    userEmail,
+  ];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: obj });
+  });
+  connection.end();
+});
+
+app.post("/api/DeleteUserImage", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const userEmail = req.body.email;
+
+  let sql = `UPDATE users SET 
+  image = null
+  WHERE email = ?;`;
+
+  let data = [userEmail];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
       return console.error(error.message);

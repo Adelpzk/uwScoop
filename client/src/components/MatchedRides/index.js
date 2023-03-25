@@ -11,7 +11,7 @@ import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Grid } from "@mui/material";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import CloseIcon from "@mui/icons-material/Close";
@@ -74,7 +74,7 @@ export default function MatchedRides() {
           pauseOnHover
           theme="light"
         />
-        <Card style={{ border: "none", boxShadow: "none", marginBottom:20 }}>
+        <Card style={{ border: "none", boxShadow: "none", marginBottom: 20 }}>
           <Box>
             <CardContent xs={12} sm={12} md={6}>
               <a>
@@ -128,7 +128,7 @@ export default function MatchedRides() {
           className={classes.paper}
           style={{ border: "none", boxShadow: "none", overflow: "hidden" }}
         >
-             <Card style={{ border: "none", boxShadow: "none" }}>
+          <Card style={{ border: "none", boxShadow: "none" }}>
             <Grid
               container
               spacing={0}
@@ -137,67 +137,67 @@ export default function MatchedRides() {
               justify="center"
               marginBottom={3}
             >
-             <Typography
-                  variant="h4"
-                  style={{
-                    fontStyle: "oblique",
+              <Typography
+                variant="h4"
+                style={{
+                  fontStyle: "oblique",
+                  fontWeight: "bold",
+                  marginBottom: 25
+                }}
+              >
+                Matches from your Requests:
+              </Typography>
+              <MatchedItemsRequests />
+              <Link to="/Request">
+                <Button
+                  variant="contained"
+                  startIcon={<AddCircleIcon />}
+                  sx={{
+                    marginTop: 3,
+                    marginBottom: 5,
+                    backgroundColor: "#ffd500",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "#ffd500",
+                      color: "#be0002",
+                    },
                     fontWeight: "bold",
-                    marginBottom: 25
                   }}
                 >
-                 Matches from your Requests:
-                </Typography>
-          <MatchedItemsRequests/>
-          <Link to="/Request">
-            <Button
-              variant="contained"
-              startIcon={<AddCircleIcon />}
-              sx={{
-                marginTop: 3,
-                marginBottom:5,
-                backgroundColor: "#ffd500",
-                color: "black",
-                "&:hover": {
-                  backgroundColor: "#ffd500",
-                  color: "#be0002",
-                },
-                fontWeight: "bold",
-              }}
-            >
-              Make a new Request
-            </Button>
-          </Link>
-          <Typography
-                  variant="h4"
-                  style={{
-                    fontStyle: "oblique",
+                  Make a new Request
+                </Button>
+              </Link>
+              <Typography
+                variant="h4"
+                style={{
+                  fontStyle: "oblique",
+                  fontWeight: "bold",
+                  marginBottom: 25
+                }}
+              >
+                Matches from your Posts:
+              </Typography>
+              <MatchedItemsPosts />
+              <Link to="/Request">
+                <Button
+                  variant="contained"
+                  startIcon={<AddCircleIcon />}
+                  sx={{
+                    marginTop: 3,
+                    marginBottom: 5,
+                    backgroundColor: "#ffd500",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "#ffd500",
+                      color: "#be0002",
+                    },
                     fontWeight: "bold",
-                    marginBottom: 25
                   }}
                 >
-                 Matches from your Posts:
-                </Typography>
-          <MatchedItemsPosts/>
-          <Link to="/Request">
-            <Button
-              variant="contained"
-              startIcon={<AddCircleIcon />}
-              sx={{
-                marginTop: 3,
-                marginBottom:5,
-                backgroundColor: "#ffd500",
-                color: "black",
-                "&:hover": {
-                  backgroundColor: "#ffd500",
-                  color: "#be0002",
-                },
-                fontWeight: "bold",
-              }}
-            >
-              Make a new Post
-            </Button>
-          </Link>
-          </Grid>
+                  Make a new Post
+                </Button>
+              </Link>
+            </Grid>
           </Card>
         </Paper>
       </div>

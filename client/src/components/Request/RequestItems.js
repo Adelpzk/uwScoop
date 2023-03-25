@@ -22,7 +22,7 @@ import Slide from "@mui/material/Slide";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import { useAuth } from "../Context/AuthContext";
 
 //Dev mode
@@ -77,7 +77,7 @@ export default function RequestItems(props) {
   const [pickup, setPickup] = React.useState();
   const [dropoff, setDropoff] = React.useState();
   const [date, setDate] = React.useState();
-  
+
 
   const handleClickOpen = (selectedId, pickup, dropoff, date) => {
     setOpen(true);
@@ -131,7 +131,7 @@ export default function RequestItems(props) {
     return body;
   };
 
-  
+
   console.log("list  ");
 
   const loadRequestsList = () => {

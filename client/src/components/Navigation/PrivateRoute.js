@@ -13,7 +13,7 @@ import PrivateRouteAuth from "./PrivateRoute-authenticated";
 import { AuthProvider, useAuth } from "../Context/AuthContext";
 import Profile from "../Profile";
 
-export default function PrivateRoute () {
+export default function PrivateRoute() {
   // const { currentUser } = useAuth();
   return (
     <AuthProvider>

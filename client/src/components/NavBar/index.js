@@ -12,6 +12,8 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Badge from "@mui/material/Badge";
 import UwScoop from "../images/uw-scoop-logo-removebg.png";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
@@ -19,12 +21,14 @@ import { useAuth } from "../Context/AuthContext";
 const pages = ["Home", "Request", "Post", "Matches"];
 const settings = ["Profile", "Logout"];
 
-function ResponsiveAppBar() {
+const serverURL = "";
 
+function ResponsiveAppBar() {
   const { logout } = useAuth();
   const { currentUser } = useAuth();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [image, setImage] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -45,8 +49,42 @@ function ResponsiveAppBar() {
 
   function handleLogOut() {
     logout();
-    history.push("/signin")
+    history.push("/signin");
   }
+
+  const callApiGetUserInfo = async () => {
+    const url = serverURL + "/api/getUserInfo";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        users_email: currentUser.email,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    return body;
+  };
+
+  const loadUserInfo = () => {
+    callApiGetUserInfo().then((res) => {
+      var parsed = JSON.parse(res.express);
+      console.log("User Info Returned: " + JSON.stringify(parsed));
+      if (parsed[0].image == null) {
+        setImage("");
+      } else {
+        setImage("http://localhost:3000/" + parsed[0].image);
+      }
+    });
+  };
+
+  React.useEffect(() => {
+    loadUserInfo();
+  }, []);
 
   return (
     <AppBar position="static" style={{ background: "transparent" }}>
@@ -181,11 +219,20 @@ function ResponsiveAppBar() {
               </Button>
             ))}
           </Box>
-
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+              sx={{marginRight: 2}}
+            >
+              <Badge badgeContent={17} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
           <Box sx={{ flexGrow: 0, marginRight: 1 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="" />
+                <Avatar alt="Remy Sharp" src={image == "" ? "" : image} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -204,16 +251,16 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-               <Link
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                  to={`/Profile`}
-                >
-              <MenuItem key="profile" onClick={handleCloseUserMenu}>
+              <Link
+                style={{
+                  textDecoration: "none",
+                  color: "black",
+                }}
+                to={`/Profile`}
+              >
+                <MenuItem key="profile" onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">Profile</Typography>
-              </MenuItem>
+                </MenuItem>
               </Link>
               <MenuItem key="logout" onClick={handleLogOut}>
                 <Typography textAlign="center">Log Out</Typography>

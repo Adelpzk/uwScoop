@@ -5,8 +5,6 @@ import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import { Avatar } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
-import CloseIcon from "@mui/icons-material/Close";
-import CardMedia from "@mui/material/CardMedia";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -14,19 +12,15 @@ import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
 import { useAuth } from "../Context/AuthContext";
 import { Link } from "react-router-dom";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { io } from "socket.io-client";
+import { lightGreen } from "@mui/material/colors";
+import ProfileModal from "./ProfileModal";
+
+
+
 
 //Dev mode
 const serverURL = " "; //enable for dev mode
@@ -58,6 +52,15 @@ const theme = createTheme({
 export default function RequestItems(props) {
   const [matches, setMatches] = React.useState([]);
   const { currentUser } = useAuth();
+  const [openProfileModal, setOpenProfileModal] = React.useState(false);
+  const [data, setData] = React.useState(null)
+
+  React.useEffect(() => {
+    const socket = io("http://localhost:5000");
+    console.log(socket.on("firstEvent", (msg) => {
+      console.log(msg);
+    }));
+  }, [])
 
   const callApiGetMatches = async () => {
     const url = serverURL + "/api/getMatchesFromRequests";
@@ -114,6 +117,7 @@ export default function RequestItems(props) {
               }}
               key={option.postedtrips_id}
             >
+              {console.log('data', option)}
               <CardContent>
                 <Box
                   sx={{
@@ -123,9 +127,17 @@ export default function RequestItems(props) {
                     alignItems: "center",
                   }}
                 >
-                  <Avatar sx={{ m: 1, bgcolor: "#ffd500" }}>
-                    <GroupIcon fontSize="medium" style={{ color: "black" }} />
-                  </Avatar>
+
+                  <Avatar
+                    alt="Remy Sharp"
+                    src={"http://localhost:3000/" + option.image}
+                    sx={{ width: 80, height: 80, cursor: 'pointer' }}
+                    onClick={() => {
+                      setData(option)
+                      setOpenProfileModal(true)
+                    }}
+                  />
+
                 </Box>
                 <Typography
                   gutterBottom
@@ -173,6 +185,25 @@ export default function RequestItems(props) {
                     <b>Car Details: </b> {option.car_brand}, {option.car_color}
                   </Typography>
                 </div>
+                {/*    <Box
+                  sx={{
+                    marginTop: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Avatar
+                    alt={option.name}
+                    src={`http://localhost:3000/${option?.driverImage}`}
+                    sx={{ width: 80, height: 80, cursor: 'pointer' }}
+                    onClick={() => {
+                      setOpenProfileModal(true);
+                      setIsRider(false);
+                    }}
+                  />
+
+                </Box> */}
                 <Typography
                   gutterBottom
                   variant="h5"
@@ -192,7 +223,7 @@ export default function RequestItems(props) {
                     <b>Phone Number: </b> {option.phone_number}
                   </Typography>
                 </div>
-                <div>
+                {/*    <div>
                   <Typography gutterBottom variant="h7" component="div">
                     <b>School Year: </b> {option.school_year}
                   </Typography>
@@ -207,6 +238,13 @@ export default function RequestItems(props) {
                     <b>Music Taste: </b> {option.music_prefrence}
                   </Typography>
                 </div>
+                <div>
+                  <Typography gutterBottom variant="h7" component="div">
+                    <b>Bio: </b>
+                    <br />
+                    {option.bio}
+                  </Typography>
+                </div> */}
               </CardContent>
               <CardActions sx={{ justifyContent: "end" }}>
                 <Button
@@ -246,6 +284,7 @@ export default function RequestItems(props) {
           ))}
         </Grid>
       </div>
+      <ProfileModal open={openProfileModal} handleClose={() => setOpenProfileModal(false)} data={data} />
     </MuiThemeProvider>
   );
 }
