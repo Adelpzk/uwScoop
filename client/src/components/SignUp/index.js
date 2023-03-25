@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@material-ui/core/Typography";
 import "./index.css";
 import { useHistory } from "react-router-dom";
-import { ToastContainer, toast } from "material-react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -57,7 +57,7 @@ const theme = createTheme({
   },
 });
 
-export default function SignIn() {
+export default function SignUp() {
   const { signup } = useAuth();
   const { currentUser } = useAuth();
 
@@ -205,7 +205,6 @@ export default function SignIn() {
         <form>
           <Box
             sx={{
-              marginTop: 8,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -352,6 +351,7 @@ export default function SignIn() {
               fontWeight: "bold",
             }}
             onClick={handleSubmit}
+            // type="submit"
             disabled={loading}
           >
             Create Account

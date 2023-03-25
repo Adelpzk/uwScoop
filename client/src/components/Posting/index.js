@@ -12,7 +12,7 @@ import Card from "@material-ui/core/Card";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Grid } from "@mui/material";
 import Form from "./Form";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import RequestItems from "./RequestItems";

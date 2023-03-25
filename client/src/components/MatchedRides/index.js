@@ -11,7 +11,7 @@ import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Grid } from "@mui/material";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import CloseIcon from "@mui/icons-material/Close";
@@ -44,9 +44,10 @@ const theme = createTheme({
   },
 });
 
-export default function MatchedRides() {
+export default function MatchedRides({socket}) {
   const [open, setOpen] = React.useState(false);
   const [renderList, setRenderList] = React.useState(false);
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -55,6 +56,7 @@ export default function MatchedRides() {
   const handleClose = () => {
     setOpen(false);
   };
+
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -147,7 +149,7 @@ export default function MatchedRides() {
                 >
                  Matches from your Requests:
                 </Typography>
-          <MatchedItemsRequests/>
+          <MatchedItemsRequests socket={socket}/>
           <Link to="/Request">
             <Button
               variant="contained"
@@ -177,8 +179,8 @@ export default function MatchedRides() {
                 >
                  Matches from your Posts:
                 </Typography>
-          <MatchedItemsPosts/>
-          <Link to="/Request">
+          <MatchedItemsPosts  socket={socket}/>
+          <Link to="/Post">
             <Button
               variant="contained"
               startIcon={<AddCircleIcon />}

@@ -22,7 +22,7 @@ import Slide from "@mui/material/Slide";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import { useAuth } from "../Context/AuthContext";
 
 //Dev mode
@@ -77,9 +77,10 @@ export default function RequestItems(props) {
   const [pickup, setPickup] = React.useState();
   const [dropoff, setDropoff] = React.useState();
   const [date, setDate] = React.useState();
-  
 
   const handleClickOpen = (selectedId, pickup, dropoff, date) => {
+    console.log(selectedId);
+    console.log(pickup);
     setOpen(true);
     setId(selectedId);
     setPickup(pickup);
@@ -96,6 +97,25 @@ export default function RequestItems(props) {
 
   const callApiDeleteRequest = async () => {
     const url = serverURL + "/api/deleteRequest";
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        postedTrip_id: id,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    await loadRequestsList();
+    return body;
+  };
+
+  const callApiDeleteHistory = async () => {
+    const url = serverURL + "/api/deleteHistoryRequest";
     const response = await fetch(url, {
       method: "DELETE",
       headers: {
@@ -131,7 +151,6 @@ export default function RequestItems(props) {
     return body;
   };
 
-  
   console.log("list  ");
 
   const loadRequestsList = () => {
@@ -148,7 +167,7 @@ export default function RequestItems(props) {
 
   const handleRemove = () => {
     console.log(id);
-    callApiDeleteRequest();
+    callApiDeleteHistory().then(callApiDeleteRequest());
     notifyAll();
     handleClose();
     //window.location.reload(false);
@@ -177,7 +196,7 @@ export default function RequestItems(props) {
                 marginTop: 2,
                 marginBottom: 2,
               }}
-              key={option.postedtrips_id}
+              key={option.requestedtrips_id}
             >
               <CardContent>
                 <Box
@@ -207,20 +226,12 @@ export default function RequestItems(props) {
                   <b>Date:</b> {option.departure_date}
                 </Typography>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>From: </b> {option.pickup_location}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>To: </b> {option.dropoff_location}
                   </Typography>
                 </div>
@@ -240,7 +251,7 @@ export default function RequestItems(props) {
                   }}
                   onClick={() =>
                     handleClickOpen(
-                      option.postedtrips_id,
+                      option.requestedtrips_id,
                       option.pickup_location,
                       option.dropoff_location,
                       option.departure_date
