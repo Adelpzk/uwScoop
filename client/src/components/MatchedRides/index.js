@@ -48,6 +48,7 @@ export default function MatchedRides({socket}) {
   const [open, setOpen] = React.useState(false);
   const [renderList, setRenderList] = React.useState(false);
 
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -179,7 +180,7 @@ export default function MatchedRides({socket}) {
                  Matches from your Posts:
                 </Typography>
           <MatchedItemsPosts  socket={socket}/>
-          <Link to="/Request">
+          <Link to="/Post">
             <Button
               variant="contained"
               startIcon={<AddCircleIcon />}

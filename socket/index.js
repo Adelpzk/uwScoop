@@ -42,15 +42,19 @@ io.on("connection", (socket) => {
     console.log(onlineUsers);
   })
 
-  socket.on("sendNotification", ({senderEmail, receiverEmail, date, type}) => {
+  socket.on("sendNotification", ({id,requestedtrips_id, postedtrips_id, senderEmail, receiverEmail, date, type, pending}) => {
     console.log(senderEmail)
     console.log(receiverEmail);
     const receiver = getUser(receiverEmail)
     console.log("receiver: " + JSON.stringify(receiver));
     io.to(receiver.socketId).emit("getNotification", {
+        id,
+        requestedtrips_id,
+        postedtrips_id,
         senderEmail,
         date,
-        type
+        type,
+        pending
     })
   })
   socket.on("disconnect", () => {

@@ -57,7 +57,7 @@ const theme = createTheme({
   },
 });
 
-export default function SignIn() {
+export default function SignUp() {
   const { signup } = useAuth();
   const { currentUser } = useAuth();
 
@@ -205,7 +205,6 @@ export default function SignIn() {
         <form>
           <Box
             sx={{
-              marginTop: 8,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -352,7 +351,7 @@ export default function SignIn() {
               fontWeight: "bold",
             }}
             onClick={handleSubmit}
-            type="submit"
+            // type="submit"
             disabled={loading}
           >
             Create Account

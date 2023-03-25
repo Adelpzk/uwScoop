@@ -15,6 +15,7 @@ import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import { useAuth } from "../Context/AuthContext";
+
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -24,6 +25,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import MessagingModal from "./MessagingModal";
 import { Link } from "react-router-dom";
 
+import GoogleApiMaps from "./GoogleApiMaps";
+
+
+import { Link } from "react-router-dom";
 import { lightGreen } from "@mui/material/colors";
 
 //Dev mode
@@ -55,8 +60,7 @@ const theme = createTheme({
 
 export default function RequestItems({ socket }) {
   const [matches, setMatches] = React.useState([]);
-  const [requestSent, setRequestSent] = React.useState({});
-  const { currentUser } = useAuth();
+  const [requestSent, setRequestSent] = React.useState([]);
 
   const [open, setOpen] = React.useState(false);
 
@@ -68,6 +72,8 @@ export default function RequestItems({ socket }) {
     setOpen(false);
   };
 
+
+  const { currentUser } = useAuth();
 
   const callApiGetMatches = async () => {
     const url = serverURL + "/api/getMatchesFromRequests";
@@ -92,6 +98,17 @@ export default function RequestItems({ socket }) {
       var parsed = JSON.parse(res.express);
       console.log("LoadMoviesList Returned: " + JSON.stringify(parsed));
       setMatches(parsed);
+      parsed.forEach((element) => {
+        // console.log([element.postedtrips_id] + ": {" +
+        //   element.pendingPosts + "}"
+        // );
+        if (element.pending != 0) {
+          setRequestSent((requestSent) => ({
+            ...requestSent,
+            [element.requestedtrips_id]: JSON.parse(element.pending),
+          }));
+        }
+      });
     });
   };
 
@@ -99,19 +116,169 @@ export default function RequestItems({ socket }) {
     loadRidesList();
   }, []);
 
-  const handleRequestButton = (email, date, type, postedtrips_id) => {
-    setRequestSent((requestSent => ({
-      ...requestSent,
-      [postedtrips_id]: !requestSent[postedtrips_id],
-    })));
-    console.log(email);
-    console.log(currentUser.email);
-    socket.emit("sendNotification", {
-      senderEmail: currentUser.email,
-      receiverEmail: email.toLowerCase(),
-      date: date,
-      type: type,
+  React.useEffect(() => {
+    matches.forEach((element) => {
+      if (!(element.requestedtrips_id in requestSent)) {
+        setRequestSent((requestSent) => ({
+          ...requestSent,
+          [element.requestedtrips_id]: {
+            ...requestSent[element.requestedtrips_id],
+            [element.postedtrips_id]: 0,
+          },
+        }));
+      }
     });
+  }, [matches]);
+
+  console.log(requestSent);
+
+  const callApiPostPending = async (id, pending) => {
+    const url = serverURL + "/api/postPendingPosts";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        pending: pending,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    return body;
+  };
+
+  const callApiSendNotid = async (
+    requestId,
+    postId,
+    senderEmail,
+    receiverEmail,
+    status
+  ) => {
+    const url = serverURL + "/api/sendNotification";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        requestId: requestId,
+        postId: postId,
+        senderEmail: senderEmail,
+        receiverEmail: receiverEmail,
+        status: status,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    return body;
+  };
+
+  const callApiUnsedNotif = async (requestId, postId, status) => {
+    const url = serverURL + "/api/unsedNotif";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        requestId: requestId,
+        postId: postId,
+        status: status,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    return body;
+  };
+
+  for (const key in requestSent) {
+    callApiPostPending(Number(key), JSON.stringify(requestSent[key]));
+  }
+
+  const randomId = function (length = 6) {
+    return Math.random()
+      .toString(36)
+      .substring(2, length + 2);
+  };
+  const checkId = function (id, existing = []) {
+    let match = existing.find(function (item) {
+      return item === id;
+    });
+    return match ? false : true;
+  };
+  const getId = function ({ length, existing = [] }) {
+    const limit = 100; // max tries to create unique id
+    let attempts = 0; // how many attempts
+    let id = false;
+    while (!id && attempts < limit) {
+      id = randomId(length); // create id
+      if (!checkId(id, existing)) {
+        // check unique
+        id = false; // reset id
+        attempts++; // record failed attempt
+      }
+    }
+    return id; // the id or false if did not get unique after max attempts
+  };
+
+  const handleRequestButton = (
+    email,
+    date,
+    type,
+    postedtrips_id,
+    requestedtrips_id,
+    action,
+    pending
+  ) => {
+    let options = {
+      "12ea": "An option",
+      ufhg: "Another option.",
+      psrw: "A different option",
+    };
+    let newId = getId({ length: 4, existing: Object.keys(options) }); // 'a9b'
+    if (newId) {
+      options[newId] = "A new option";
+    } else {
+      throw new Error("Could not create unique ID!");
+    }
+    setRequestSent((invite) => ({
+      ...invite,
+      [requestedtrips_id]: {
+        ...invite[requestedtrips_id],
+        [postedtrips_id]: action,
+      },
+    }));
+    if (action == 1) {
+      callApiSendNotid(
+        requestedtrips_id,
+        postedtrips_id,
+        currentUser.email,
+        email.toLowerCase(),
+        type
+      );
+      //   socket.emit("sendNotification", {
+      //   id: newId,
+      //   requestedtrips_id: requestedtrips_id,
+      //   postedtrips_id: postedtrips_id,
+      //   senderEmail: currentUser.email,
+      //   receiverEmail: email.toLowerCase(),
+      //   date: date,
+      //   type: type,
+      //   pending: pending
+      // });
+    }
+    if (action == 0) {
+      callApiUnsedNotif(requestedtrips_id, postedtrips_id, type);
+    }
+    window.location.reload(false);
   };
 
   const styles = {
@@ -145,6 +312,7 @@ export default function RequestItems({ socket }) {
                 marginBottom: 2,
               }}
               key={option.postedtrips_id}
+              id={option.postedtrips_id}
             >
               <CardContent>
                 <Box
@@ -157,6 +325,7 @@ export default function RequestItems({ socket }) {
                 >
                   {option.image == null ? (
                     <Avatar
+                      
                       sx={{ m: 1, bgcolor: "#ffd500", width: 50, height: 50 }}
                     >
                       <GroupIcon
@@ -169,6 +338,7 @@ export default function RequestItems({ socket }) {
                       alt="Remy Sharp"
                       src={"http://localhost:3000/" + option.image}
                       sx={{ width: 80, height: 80 }}
+                      className="profileImage"
                     />
                   )}
                 </Box>
@@ -247,7 +417,7 @@ export default function RequestItems({ socket }) {
                     <b>Program: </b> {option.program}
                   </Typography>
                 </div>
-                <div>
+                <div style={{ marginBottom: 10 }}>
                   <Typography gutterBottom variant="h7" component="div">
                     <b>Music Taste: </b> {option.music_prefrence}
                   </Typography>
@@ -255,9 +425,13 @@ export default function RequestItems({ socket }) {
                     <b>email: </b> {option.email.toLowerCase()}
                   </Typography>
                 </div>
+                <GoogleApiMaps
+                  locationOrigin={option.pickup_location}
+                  locationDropOff={option.dropoff_location}
+                />
               </CardContent>
               <CardActions sx={{ justifyContent: "end" }}>
-                {requestSent[option.postedtrips_id] ? (
+                {JSON.parse(option.pending)[option.postedtrips_id] == 1 && (
                   <Button
                     variant="outlined"
                     sx={{
@@ -271,11 +445,22 @@ export default function RequestItems({ socket }) {
                       justifyContent: "end",
                     }}
                     startIcon={<PendingOutlinedIcon />}
-                    onClick={() => handleRequestButton(option.email, option.departure_date, 1, option.postedtrips_id)}
+                    onClick={() =>
+                      handleRequestButton(
+                        option.email,
+                        option.departure_date,
+                        1,
+                        option.postedtrips_id,
+                        option.requestedtrips_id,
+                        0,
+                        option.pending
+                      )
+                    }
                   >
                     Pending
                   </Button>
-                ) : (
+                )}{" "}
+                {JSON.parse(option.pending)[option.postedtrips_id] == 0 && (
                   <Button
                     variant="outlined"
                     sx={{
@@ -289,12 +474,35 @@ export default function RequestItems({ socket }) {
                       justifyContent: "end",
                     }}
                     startIcon={<PersonAddAltOutlinedIcon />}
-                    onClick={() => handleRequestButton(option.email, option.departure_date, 1, option.postedtrips_id)}
+                    onClick={() =>
+                      handleRequestButton(
+                        option.email,
+                        option.departure_date,
+                        1,
+                        option.postedtrips_id,
+                        option.requestedtrips_id,
+                        1,
+                        option.pending
+                      )
+                    }
                   >
                     Request
                   </Button>
                 )}
-
+                {JSON.parse(option.pending)[option.postedtrips_id] == 2 && (
+                  <Button
+                    disabled="true"
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#006400 !important",
+                      color: "white !important",
+                      fontWeight: "bold",
+                      justifyContent: "end",
+                    }}
+                  >
+                    Accepted
+                  </Button>
+                )}
                 <Button
                   variant="outlined"
                   sx={{

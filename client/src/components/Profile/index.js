@@ -166,7 +166,7 @@ export default function Profile(props) {
     formData.append("fileName", fileName);
     formData.append("users_email", currentUser.email);
     try {
-      const res = await axios.post("http://localhost:5000/upload", formData, {
+      const res = await axios.post("http://localhost:5000/api/upload", formData, {
         users_email: currentUser.email,
       });
       console.log(res);
