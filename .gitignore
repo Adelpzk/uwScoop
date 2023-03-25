@@ -2,8 +2,8 @@ node_modules/
 client/node_modules/
 client/build/
 serviceAccountKey.json
-.env
-.env.local
-.env.test.locals
+*.env
+*.env.local
+*.env.test.locals
 package-lock.json
 client/package-lock.json
