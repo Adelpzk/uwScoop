@@ -5,8 +5,6 @@ import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import { Avatar } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
-import CloseIcon from "@mui/icons-material/Close";
-import CardMedia from "@mui/material/CardMedia";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -15,18 +13,11 @@ import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined";
 import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
-import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
+import { MuiThemeProvider, createTheme } from "@material-ui/core/styles"
 import MessagingModal from "./MessagingModal";
-
-
 import { useAuth } from "../Context/AuthContext";
-import { element } from "prop-types";
+import ProfileModal from "./ProfileModal";
+import GoogleApiMaps from "./GoogleApiMaps";
 
 //Dev mode
 const serverURL = " "; //enable for dev mode
@@ -59,6 +50,8 @@ export default function RequestItems({ socket }) {
   const [matches, setMatches] = React.useState([]);
   const [InviteSent, setInviteSent] = React.useState([]);
   const [inviteUpdate, setInviteUpdate]= React.useState({});
+  const [openProfileModal, setOpenProfileModal] = React.useState(false);
+  const [data, setData] = React.useState(null)
   const { currentUser } = useAuth();
   const [open, setOpen] = React.useState(false);
 
@@ -322,7 +315,7 @@ export default function RequestItems({ socket }) {
                     alignItems: "center",
                   }}
                 >
-                  {option.image == null ? (
+                 {option.image == null ? (
                     <Avatar
                       sx={{ m: 1, bgcolor: "#ffd500", width: 50, height: 50 }}
                     >
@@ -335,8 +328,12 @@ export default function RequestItems({ socket }) {
                     <Avatar
                       alt="Remy Sharp"
                       src={"http://localhost:3000/" + option.image}
-                      sx={{ width: 80, height: 80 }}
                       className="profileImage"
+                      sx={{ width: 80, height: 80, cursor: "pointer" }}
+                      onClick={() => {
+                        setData(option);
+                        setOpenProfileModal(true);
+                      }}
                     />
                   )}
                 </Box>
@@ -380,21 +377,10 @@ export default function RequestItems({ socket }) {
                     <b>Phone Number: </b> {option.phone_number}
                   </Typography>
                 </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>School Year: </b> {option.school_year}
-                  </Typography>
-                </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>Program: </b> {option.program}
-                  </Typography>
-                </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>Music Taste: </b> {option.music_prefrence}
-                  </Typography>
-                </div>
+                <GoogleApiMaps
+                  locationOrigin={option.pickup_location}
+                  locationDropOff={option.dropoff_location}
+                />
               </CardContent>
               <CardActions sx={{ justifyContent: "end" }}>
                 {JSON.parse(option.pendingPosts)[option.requestedtrips_id] ==
@@ -528,6 +514,11 @@ export default function RequestItems({ socket }) {
           ))}
         </Grid>
       </div>
+      <ProfileModal
+        open={openProfileModal}
+        handleClose={() => setOpenProfileModal(false)}
+        data={data}
+      />
     </MuiThemeProvider>
   );
 }

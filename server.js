@@ -36,6 +36,9 @@ app.post("/api/loadUserSettings", (req, res) => {
   connection.end();
 });
 
+
+
+
 app.post("/api/registerUser", (req, res) => {
   let connection = mysql.createConnection(config);
   const firstName = req.body.firstName;
@@ -447,6 +450,38 @@ app.delete("/api/deleteRide", (req, res) => {
   let connection = mysql.createConnection(config);
   const postedTrip_id = req.body.postedTrip_id;
   let sql = `DELETE FROM posted_trips WHERE (postedtrips_id = ?);`;
+  let data = [postedTrip_id];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: string });
+  });
+  connection.end();
+});
+
+app.delete("/api/deleteHistoryPost", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const postedTrip_id = req.body.postedTrip_id;
+  let sql = `DELETE FROM trip_history WHERE (posted_trips_id = ?);`;
+  let data = [postedTrip_id];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: string });
+  });
+  connection.end();
+});
+
+app.delete("/api/deleteHistoryRequest", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const postedTrip_id = req.body.postedTrip_id;
+  let sql = `DELETE FROM trip_history WHERE (requested_trips_id = ?);`;
   let data = [postedTrip_id];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
