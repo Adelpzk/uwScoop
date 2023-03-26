@@ -19,6 +19,9 @@ export default function YearDropdown({ year, setYear }) {
         <MenuItem value={"3B"}>3B</MenuItem>
         <MenuItem value={"4A"}>4A</MenuItem>
         <MenuItem value={"4B"}>4B</MenuItem>
+        <MenuItem value={"Masters"}>Masters</MenuItem>
+        <MenuItem value={"PhD"}>PhD</MenuItem>
+        <MenuItem value={"Intructor"}>Instructor</MenuItem>
       </Select>
     </FormControl>
   );
