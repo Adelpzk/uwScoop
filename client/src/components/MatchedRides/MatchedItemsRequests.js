@@ -22,7 +22,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import MessagingModal from "./MessagingModal";
-import { Link } from "react-router-dom";
 import GoogleApiMaps from "./GoogleApiMaps";
 import { Link } from "react-router-dom";
 import { lightGreen } from "@mui/material/colors";
@@ -102,6 +101,7 @@ export default function RequestItems({ socket }) {
         //   element.pendingPosts + "}"
         // );
         if (element.pending != 0) {
+          console.log("issue" + JSON.parse(element.pending)[element.postedtrips_id]);
           setRequestSent((requestSent) => ({
             ...requestSent,
             [element.requestedtrips_id]: JSON.parse(element.pending),
@@ -121,13 +121,13 @@ export default function RequestItems({ socket }) {
         setRequestSent((requestSent) => ({
           ...requestSent,
           [element.requestedtrips_id]: {
-            ...requestSent[element.requestedtrips_id],
+            ...requestSent[element.postedtrips_id],
             [element.postedtrips_id]: 0,
           },
         }));
       }
     });
-  }, [matches]);
+  }, []);
 
   console.log(requestSent);
 

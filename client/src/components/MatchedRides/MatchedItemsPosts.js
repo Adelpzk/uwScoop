@@ -11,6 +11,12 @@ import Typography from "@mui/material/Typography";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CloseIcon from "@mui/icons-material/Close";
 import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles"
@@ -119,7 +125,7 @@ export default function RequestItems({ socket }) {
         }));
       }
   });
-  }, [matches]);
+  }, []);
   
 
   console.log(InviteSent);
