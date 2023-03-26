@@ -417,6 +417,26 @@ app.post("/api/updateUserProfile", (req, res) => {
   connection.end();
 });
 
+app.post("/api/DeleteUserImage", (req, res) => {
+  let connection = mysql.createConnection(config);
+  const userEmail = req.body.email;
+
+  let sql = `UPDATE users SET 
+  image = null
+  WHERE email = ?;`;
+
+  let data = [userEmail];
+  connection.query(sql, data, (error, results, fields) => {
+    if (error) {
+      return console.error(error.message);
+    }
+    let string = JSON.stringify(results);
+    let obj = JSON.parse(string);
+    res.send({ express: obj });
+  });
+  connection.end();
+});
+
 // app.post("/api/getRides", (req, res) => {
 //   let connection = mysql.createConnection(config);
 //   let sql = `SELECT * FROM posted_trips Where users_user_id = 1;`;

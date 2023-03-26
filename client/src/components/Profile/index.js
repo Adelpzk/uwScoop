@@ -437,6 +437,58 @@ export default function Profile(props) {
                   </Select>
                 </FormControl>
               </div>
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={1}
+                style={{ marginTop: 10 }}
+              >
+                <Button
+                  variant="contained"
+                  startIcon={<FileUploadIcon />}
+                  sx={{
+                    backgroundColor: "#ffd500",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "#ffd500",
+                      color: "#be0002",
+                    },
+                    fontWeight: "bold",
+                  }}
+                  component="label"
+                  disabled={loading}
+                >
+                  Upload new image {" " + fileName}
+                  <input
+                    hidden
+                    onChange={saveFile}
+                    accept="image/*"
+                    type="file"
+                  />
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<DeleteIcon />}
+                  sx={{
+                    backgroundColor: "#be0002",
+                    color: "black",
+                    "&:hover": {
+                      backgroundColor: "#be0002",
+                      color: "#ffd500",
+                    },
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => {
+                    callApiDeleteUserImage();
+                    ImageDeleteSuccess();
+                  }}
+                  disabled={
+                    image == "http://localhost:3000/null" ? true : false
+                  }
+                >
+                  Delete Existing Image
+                </Button>
+              </Stack>
               <Button
                 variant="contained"
                 startIcon={<StartIcon />}
