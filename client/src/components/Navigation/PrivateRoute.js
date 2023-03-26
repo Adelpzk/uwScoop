@@ -11,7 +11,6 @@ import SignInPage from "../SignIn";
 import ForgotPassword from "../SignIn/ForgotPassword";
 import PrivateRouteAuth from "./PrivateRoute-authenticated";
 import { AuthProvider, useAuth } from "../Context/AuthContext";
-import { io } from "socket.io-client";
 import Profile from "../Profile";
 import History from "../History";
 

@@ -16,9 +16,7 @@ import classes from "./MatchedItems.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import { useAuth } from "../Context/AuthContext";
 import GoogleApiMaps from "./GoogleApiMaps";
-
-import { Link } from "react-router-dom";
-import { lightGreen } from "@mui/material/colors";
+import ProfileModal from "./ProfileModal";
 
 //Dev mode
 const serverURL = " "; //enable for dev mode
@@ -50,6 +48,8 @@ const theme = createTheme({
 export default function RequestItems({ socket }) {
   const [matches, setMatches] = React.useState([]);
   const [requestSent, setRequestSent] = React.useState([]);
+  const [openProfileModal, setOpenProfileModal] = React.useState(false);
+  const [data, setData] = React.useState(null);
 
   const { currentUser } = useAuth();
 
@@ -296,7 +296,6 @@ export default function RequestItems({ socket }) {
                 >
                   {option.image == null ? (
                     <Avatar
-                      
                       sx={{ m: 1, bgcolor: "#ffd500", width: 50, height: 50 }}
                     >
                       <GroupIcon
@@ -308,8 +307,12 @@ export default function RequestItems({ socket }) {
                     <Avatar
                       alt="Remy Sharp"
                       src={"http://localhost:3000/" + option.image}
-                      sx={{ width: 80, height: 80 }}
+                      sx={{ width: 80, height: 80, cursor: "pointer" }}
                       className="profileImage"
+                      onClick={() => {
+                        setData(option);
+                        setOpenProfileModal(true);
+                      }}
                     />
                   )}
                 </Box>
@@ -376,24 +379,6 @@ export default function RequestItems({ socket }) {
                 <div>
                   <Typography gutterBottom variant="h7" component="div">
                     <b>Phone Number: </b> {option.phone_number}
-                  </Typography>
-                </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>School Year: </b> {option.school_year}
-                  </Typography>
-                </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>Program: </b> {option.program}
-                  </Typography>
-                </div>
-                <div style={{ marginBottom: 10 }}>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>Music Taste: </b> {option.music_prefrence}
-                  </Typography>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>email: </b> {option.email.toLowerCase()}
                   </Typography>
                 </div>
                 <GoogleApiMaps
@@ -495,6 +480,11 @@ export default function RequestItems({ socket }) {
           ))}
         </Grid>
       </div>
+      <ProfileModal
+        open={openProfileModal}
+        handleClose={() => setOpenProfileModal(false)}
+        data={data}
+      />
     </MuiThemeProvider>
   );
 }

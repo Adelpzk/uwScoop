@@ -1,11 +1,5 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import classes from "./index.module.css";
 import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
@@ -14,14 +8,10 @@ import { Grid } from "@mui/material";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
-import CloseIcon from "@mui/icons-material/Close";
 import "./index.module.css";
 import MatchedItemsRequests from "./MatchedItemsRequests"
 import MatchedItemsPosts from "./MatchedItemsPosts"
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import CarPool from "../images/carpool-vector.jpeg";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
