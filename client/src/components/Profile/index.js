@@ -297,7 +297,7 @@ export default function Profile(props) {
                 }}
               >
                 <Avatar sx={{ mt: 2, bgcolor: "#ffd500" }}>
-                  <LockOutlinedIcon
+                  <FaceIcon
                     fontSize="medium"
                     style={{ color: "black" }}
                   />
