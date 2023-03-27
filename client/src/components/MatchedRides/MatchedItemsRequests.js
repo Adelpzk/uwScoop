@@ -70,7 +70,6 @@ export default function RequestItems({ socket }) {
     setOpen(false);
   };
 
-
   const { currentUser } = useAuth();
 
   const callApiGetMatches = async () => {
@@ -101,7 +100,9 @@ export default function RequestItems({ socket }) {
         //   element.pendingPosts + "}"
         // );
         if (element.pending != 0) {
-          console.log("issue" + JSON.parse(element.pending)[element.postedtrips_id]);
+          console.log(
+            "issue" + JSON.parse(element.pending)[element.postedtrips_id]
+          );
           setRequestSent((requestSent) => ({
             ...requestSent,
             [element.requestedtrips_id]: JSON.parse(element.pending),
@@ -121,13 +122,13 @@ export default function RequestItems({ socket }) {
         setRequestSent((requestSent) => ({
           ...requestSent,
           [element.requestedtrips_id]: {
-            ...requestSent[element.requestedtrips_id],
+            ...requestSent[element.postedtrips_id],
             [element.postedtrips_id]: 0,
           },
         }));
       }
     });
-  }, []);
+  }, [matches]);
 
   console.log(requestSent);
 
@@ -282,8 +283,8 @@ export default function RequestItems({ socket }) {
 
   const styles = {
     dialogPaper: {
-      minHeight: '80vh',
-      maxHeight: '80vh',
+      minHeight: "80vh",
+      maxHeight: "80vh",
     },
   };
 
@@ -508,12 +509,13 @@ export default function RequestItems({ socket }) {
                   open={open}
                   onClose={handleClose}
                   style={{
-                    boxShadow: "none", border: "none",
+                    boxShadow: "none",
+                    border: "none",
                   }}
                   PaperProps={{
                     sx: {
-                      maxHeight: 600
-                    }
+                      maxHeight: 600,
+                    },
                   }}
                   fullWidth
                   maxWidth="sm"
@@ -536,15 +538,17 @@ export default function RequestItems({ socket }) {
                     >
                       <CloseIcon />
                     </Button>
-
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText>
                       Remember to be kind and respectful to your peers!
                     </DialogContentText>
-                    <MessagingModal setOpen={handleClose} socket={socket} receiver={option.email} />
+                    <MessagingModal
+                      setOpen={handleClose}
+                      socket={socket}
+                      receiver={option.email}
+                    />
                   </DialogContent>
-
                 </Dialog>
               </CardActions>
             </Card>

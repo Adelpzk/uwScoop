@@ -96,7 +96,7 @@ export default function RequestItems({ socket }) {
         // console.log([element.postedtrips_id] + ": {" +
         //   element.pendingPosts + "}"
         // );
-        if (element.pendingPosts != 0 || element.pendingPosts != {}) {
+        if (element.pendingPosts != 0) {
           setInviteSent((requestSent) => ({
             ...requestSent,
             [element.postedtrips_id]: JSON.parse(element.pendingPosts),
@@ -104,6 +104,7 @@ export default function RequestItems({ socket }) {
         }
       });
     });
+    
   };
 
   React.useEffect(() => {
@@ -122,7 +123,7 @@ export default function RequestItems({ socket }) {
         }));
       }
     });
-  }, []);
+  }, [matches]);
 
   console.log(InviteSent);
 
