@@ -77,7 +77,7 @@ app.post("/api/registerUser", (req, res) => {
 app.post("/api/getRequests", (req, res) => {
   let connection = mysql.createConnection(config);
   const userEmail = req.body.users_email;
-  let sql = `SELECT * FROM requested_trips Where users_email = (?);`;
+  let sql = `SELECT * FROM requested_trips Where users_email = (?) order by actual_date asc;`;
   let data = [userEmail];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
@@ -112,9 +112,16 @@ app.post("/api/postRequest", (req, res) => {
   const dropoffLocation = req.body.dropoffLocation;
   const deaprtureDate = req.body.departureDate;
   const users_email = req.body.users_email;
-  let sql = `INSERT INTO requested_trips (pickup_location, dropoff_location, departure_date, users_email) values 
-  (?, ?, ?, ?)`;
-  let data = [pickupLocation, dropoffLocation, deaprtureDate, users_email];
+  const actual_date = req.body.departureDate.split("/").reverse().join("-");
+  let sql = `INSERT INTO requested_trips (pickup_location, dropoff_location, departure_date, users_email, actual_date) values 
+  (?, ?, ?, ?, ?)`;
+  let data = [
+    pickupLocation,
+    dropoffLocation,
+    deaprtureDate,
+    users_email,
+    actual_date,
+  ];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
       return console.error(error.message);
@@ -129,7 +136,7 @@ app.post("/api/postRequest", (req, res) => {
 app.post("/api/getRides", (req, res) => {
   let connection = mysql.createConnection(config);
   const userEmail = req.body.users_email;
-  let sql = `SELECT * FROM posted_trips Where users_email = (?);`;
+  let sql = `SELECT * FROM posted_trips Where users_email = (?) order by actual_date asc;`;
   let data = [userEmail];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {
@@ -388,7 +395,6 @@ app.post("/api/updateUserProfile", (req, res) => {
   birthday = ?, 
   music_prefrence = ?
   WHERE email = ?;`;
-
   let data = [
     firstName,
     lastName,
@@ -506,8 +512,9 @@ app.post("/api/postRide", (req, res) => {
   const departureTime = req.body.departureTime;
   const arrivalTime = req.body.arrivalTime;
   const users_email = req.body.users_email;
-  let sql = `INSERT INTO posted_trips (pickup_location, dropoff_location, departure_date, departure_time, arrival_time, payment_method, amount, car_brand, car_color, users_email)
-   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+  const actual_date = req.body.departureDate.split("/").reverse().join("-");
+  let sql = `INSERT INTO posted_trips (pickup_location, dropoff_location, departure_date, departure_time, arrival_time, payment_method, amount, car_brand, car_color, users_email, actual_date)
+   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
   let data = [
     pickupLocation,
     dropoffLocation,
@@ -519,6 +526,7 @@ app.post("/api/postRide", (req, res) => {
     carModel,
     color,
     users_email,
+    actual_date,
   ];
   connection.query(sql, data, (error, results, fields) => {
     if (error) {

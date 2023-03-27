@@ -22,6 +22,7 @@ import FaceIcon from '@mui/icons-material/Face';
 import { Box } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Stack from "@mui/material/Stack";
+import YearDropdown from "./YearDropdown";
 
 const serverURL = "";
 
@@ -397,13 +398,7 @@ export default function Profile(props) {
                   onChange={(event) => setProgram(event.target.value)}
                   defaultValue={option.program}
                 />
-                <TextField
-                  label="Year"
-                  id="names"
-                  type="text"
-                  onChange={(event) => setYear(event.target.value)}
-                  defaultValue={option.school_year}
-                />
+                <YearDropdown year={year} setYear={setYear} />
               </div>
               <br />
               <div className="nameCols">
