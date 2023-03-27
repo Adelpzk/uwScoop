@@ -138,7 +138,7 @@ const Footer = () => {
               <Typography
                 color="white"
                 variant="subtitle1"
-                style={{ float: "right", marginRight: 40 }}
+                style={{ float: "right", marginRight: 10 }}
               >
                 {`The Algorithm Avengers © ${new Date().getFullYear()}`}
               </Typography>
@@ -153,7 +153,7 @@ const Footer = () => {
             }}
             PaperProps={{
               sx: {
-                maxHeight: 600
+                maxHeight: 1000
               }
             }}
             fullWidth

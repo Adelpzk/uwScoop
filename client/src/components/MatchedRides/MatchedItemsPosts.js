@@ -19,7 +19,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
-import { MuiThemeProvider, createTheme } from "@material-ui/core/styles"
+import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import MessagingModal from "./MessagingModal";
 import { useAuth } from "../Context/AuthContext";
 import ProfileModal from "./ProfileModal";
@@ -55,9 +55,9 @@ const theme = createTheme({
 export default function RequestItems({ socket }) {
   const [matches, setMatches] = React.useState([]);
   const [InviteSent, setInviteSent] = React.useState([]);
-  const [inviteUpdate, setInviteUpdate]= React.useState({});
+  const [inviteUpdate, setInviteUpdate] = React.useState({});
   const [openProfileModal, setOpenProfileModal] = React.useState(false);
-  const [data, setData] = React.useState(null)
+  const [data, setData] = React.useState(null);
   const { currentUser } = useAuth();
   const [open, setOpen] = React.useState(false);
 
@@ -68,7 +68,6 @@ export default function RequestItems({ socket }) {
   const handleClose = () => {
     setOpen(false);
   };
-
 
   const callApiGetMatches = async () => {
     const url = serverURL + "/api/getMatchesFromPosts";
@@ -97,7 +96,7 @@ export default function RequestItems({ socket }) {
         // console.log([element.postedtrips_id] + ": {" +
         //   element.pendingPosts + "}"
         // );
-        if ((element.pendingPosts != 0 || element.pendingPosts != {})) {
+        if (element.pendingPosts != 0 || element.pendingPosts != {}) {
           setInviteSent((requestSent) => ({
             ...requestSent,
             [element.postedtrips_id]: JSON.parse(element.pendingPosts),
@@ -111,8 +110,6 @@ export default function RequestItems({ socket }) {
     loadRidesList();
   }, []);
 
-  
-
   React.useEffect(() => {
     matches.forEach((element) => {
       if (!(element.postedtrips_id in InviteSent)) {
@@ -120,13 +117,12 @@ export default function RequestItems({ socket }) {
           ...requestSent,
           [element.postedtrips_id]: {
             ...requestSent[element.postedtrips_id],
-            [element.requestedtrips_id]: 0
+            [element.requestedtrips_id]: 0,
           },
         }));
       }
-  });
+    });
   }, []);
-  
 
   console.log(InviteSent);
 
@@ -160,7 +156,13 @@ export default function RequestItems({ socket }) {
     callApiPostPending(Number(key), JSON.stringify(InviteSent[key]));
   }
 
-  const callApiSendNotid = async (requestId, postId, senderEmail, receiverEmail, status) => {
+  const callApiSendNotid = async (
+    requestId,
+    postId,
+    senderEmail,
+    receiverEmail,
+    status
+  ) => {
     const url = serverURL + "/api/sendNotification";
     const response = await fetch(url, {
       method: "POST",
@@ -172,7 +174,7 @@ export default function RequestItems({ socket }) {
         postId: postId,
         senderEmail: senderEmail,
         receiverEmail: receiverEmail,
-        status: status
+        status: status,
       }),
     });
     const body = await response.json();
@@ -192,7 +194,7 @@ export default function RequestItems({ socket }) {
       body: JSON.stringify({
         requestId: requestId,
         postId: postId,
-        status: status
+        status: status,
       }),
     });
     const body = await response.json();
@@ -248,7 +250,7 @@ export default function RequestItems({ socket }) {
     } else {
       throw new Error("Could not create unique ID!");
     }
-    
+
     // setInviteSent({
     //   ...InviteSent,
     //   [postedtrips_id]:{
@@ -259,29 +261,33 @@ export default function RequestItems({ socket }) {
 
     setInviteSent((invite) => ({
       ...invite,
-      [postedtrips_id]:{
+      [postedtrips_id]: {
         ...invite[postedtrips_id],
-        [requestedtrips_id]: action
-      }
-    }))
+        [requestedtrips_id]: action,
+      },
+    }));
 
-     callApiPostPending(postedtrips_id, JSON.stringify(InviteSent[postedtrips_id]));
-    
-     if (action == 1){
-      callApiSendNotid(requestedtrips_id, postedtrips_id, currentUser.email, email.toLowerCase(), type)
-    //   socket.emit("sendNotification", {
-    //   id: newId,
-    //   requestedtrips_id: requestedtrips_id,
-    //   postedtrips_id: postedtrips_id,
-    //   senderEmail: currentUser.email,
-    //   receiverEmail: email.toLowerCase(),
-    //   date: date,
-    //   type: type,
-    //   pending: pending
-    // });
+    if (action == 1) {
+      callApiSendNotid(
+        requestedtrips_id,
+        postedtrips_id,
+        currentUser.email,
+        email.toLowerCase(),
+        type
+      );
+      //   socket.emit("sendNotification", {
+      //   id: newId,
+      //   requestedtrips_id: requestedtrips_id,
+      //   postedtrips_id: postedtrips_id,
+      //   senderEmail: currentUser.email,
+      //   receiverEmail: email.toLowerCase(),
+      //   date: date,
+      //   type: type,
+      //   pending: pending
+      // });
     }
-    if (action == 0){
-      callApiUnsedNotif(requestedtrips_id, postedtrips_id, type)
+    if (action == 0) {
+      callApiUnsedNotif(requestedtrips_id, postedtrips_id, type);
     }
     window.location.reload(false);
   };
@@ -321,7 +327,7 @@ export default function RequestItems({ socket }) {
                     alignItems: "center",
                   }}
                 >
-                 {option.image == null ? (
+                  {option.image == null ? (
                     <Avatar
                       sx={{ m: 1, bgcolor: "#ffd500", width: 50, height: 50 }}
                     >
@@ -477,7 +483,7 @@ export default function RequestItems({ socket }) {
                     justifyContent: "end",
                   }}
                   startIcon={<MessageOutlinedIcon />}
-                  onClick = {handleClickOpen}
+                  onClick={handleClickOpen}
                 >
                   Message
                 </Button>
@@ -485,6 +491,13 @@ export default function RequestItems({ socket }) {
                   open={open}
                   onClose={handleClose}
                   style={{ boxShadow: "none", border: "none" }}
+                  PaperProps={{
+                    sx: {
+                      maxHeight: 600,
+                    },
+                  }}
+                  fullWidth
+                  maxWidth="sm"
                 >
                   <DialogTitle>
                     <strong>Chat with your driver!</strong>
@@ -493,8 +506,11 @@ export default function RequestItems({ socket }) {
                     <DialogContentText>
                       Remember to be kind and respectful to your peers!
                     </DialogContentText>
-                    <MessagingModal setOpen={handleClose} receiver={option.email}/>
-
+                    <MessagingModal
+                      setOpen={handleClose}
+                      socket={socket}
+                      receiver={option.email}
+                    />
                   </DialogContent>
                   <DialogActions>
                     <Button

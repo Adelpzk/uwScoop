@@ -182,6 +182,7 @@ export default function Profile(props) {
       },
       body: JSON.stringify({
         email: email,
+        fileName: "client/imageUploads/" + fileName
       }),
     });
     const body = await response.json();

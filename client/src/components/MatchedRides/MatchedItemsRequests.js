@@ -121,7 +121,7 @@ export default function RequestItems({ socket }) {
         setRequestSent((requestSent) => ({
           ...requestSent,
           [element.requestedtrips_id]: {
-            ...requestSent[element.postedtrips_id],
+            ...requestSent[element.requestedtrips_id],
             [element.postedtrips_id]: 0,
           },
         }));
