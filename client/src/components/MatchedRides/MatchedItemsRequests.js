@@ -5,28 +5,27 @@ import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import { Avatar } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
-import CloseIcon from "@mui/icons-material/Close";
-import CardMedia from "@mui/material/CardMedia";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
+import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import "./MatchedItems.css";
 import classes from "./MatchedItems.css";
+import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
+import { useAuth } from "../Context/AuthContext";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
-import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
-import { useAuth } from "../Context/AuthContext";
+import CloseIcon from "@mui/icons-material/Close";
+import MessagingModal from "./MessagingModal";
+import GoogleApiMaps from "./GoogleApiMaps";
 import { Link } from "react-router-dom";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { lightGreen } from "@mui/material/colors";
+import ProfileModal from "./ProfileModal";
 
 //Dev mode
 const serverURL = " "; //enable for dev mode
@@ -55,8 +54,22 @@ const theme = createTheme({
   },
 });
 
-export default function RequestItems(props) {
+export default function RequestItems({ socket }) {
   const [matches, setMatches] = React.useState([]);
+  const [requestSent, setRequestSent] = React.useState([]);
+  const [openProfileModal, setOpenProfileModal] = React.useState(false);
+  const [data, setData] = React.useState(null);
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const { currentUser } = useAuth();
 
   const callApiGetMatches = async () => {
@@ -82,12 +95,216 @@ export default function RequestItems(props) {
       var parsed = JSON.parse(res.express);
       console.log("LoadMoviesList Returned: " + JSON.stringify(parsed));
       setMatches(parsed);
+      parsed.forEach((element) => {
+        // console.log([element.postedtrips_id] + ": {" +
+        //   element.pendingPosts + "}"
+        // );
+        if (element.pending != 0) {
+          console.log(
+            "issue" + JSON.parse(element.pending)[element.postedtrips_id]
+          );
+          setRequestSent((requestSent) => ({
+            ...requestSent,
+            [element.requestedtrips_id]: JSON.parse(element.pending),
+          }));
+        }
+        else{
+          setRequestSent((requestSent) => ({
+            ...requestSent,
+            [element.requestedtrips_id]: 0,
+          }));
+        }
+      });
     });
   };
 
   React.useEffect(() => {
     loadRidesList();
   }, []);
+
+  React.useEffect(() => {
+    if (requestSent.length != 0) {
+      matches.forEach((element) => {
+        if (element.pending != 0) {
+          if (!(element.postedtrips_id in JSON.parse(element.pending))) {
+            setRequestSent((requestSent) => ({
+              ...requestSent,
+              [element.requestedtrips_id]: {
+                ...requestSent[element.requestedtrips_id],
+                [element.postedtrips_id]: 0,
+              },
+            }));
+          }
+        } else {
+          setRequestSent((requestSent) => ({
+            ...requestSent,
+            [element.requestedtrips_id]: {
+              ...requestSent[element.requestedtrips_id],
+              [element.postedtrips_id]: 0,
+            },
+          }));
+        }
+      });
+    }
+  }, [requestSent]);
+
+  console.log(requestSent);
+
+  const callApiPostPending = async (id, pending) => {
+    const url = serverURL + "/api/postPendingPosts";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        pending: pending,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    return body;
+  };
+
+  const callApiSendNotid = async (
+    requestId,
+    postId,
+    senderEmail,
+    receiverEmail,
+    status
+  ) => {
+    const url = serverURL + "/api/sendNotification";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        requestId: requestId,
+        postId: postId,
+        senderEmail: senderEmail,
+        receiverEmail: receiverEmail,
+        status: status,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    return body;
+  };
+
+  const callApiUnsedNotif = async (requestId, postId, status) => {
+    const url = serverURL + "/api/unsedNotif";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        requestId: requestId,
+        postId: postId,
+        status: status,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    return body;
+  };
+
+  for (const key in requestSent) {
+    callApiPostPending(Number(key), JSON.stringify(requestSent[key]));
+  }
+
+  const randomId = function (length = 6) {
+    return Math.random()
+      .toString(36)
+      .substring(2, length + 2);
+  };
+  const checkId = function (id, existing = []) {
+    let match = existing.find(function (item) {
+      return item === id;
+    });
+    return match ? false : true;
+  };
+  const getId = function ({ length, existing = [] }) {
+    const limit = 100; // max tries to create unique id
+    let attempts = 0; // how many attempts
+    let id = false;
+    while (!id && attempts < limit) {
+      id = randomId(length); // create id
+      if (!checkId(id, existing)) {
+        // check unique
+        id = false; // reset id
+        attempts++; // record failed attempt
+      }
+    }
+    return id; // the id or false if did not get unique after max attempts
+  };
+
+  const handleRequestButton = (
+    email,
+    date,
+    type,
+    postedtrips_id,
+    requestedtrips_id,
+    action,
+    pending
+  ) => {
+    let options = {
+      "12ea": "An option",
+      ufhg: "Another option.",
+      psrw: "A different option",
+    };
+    let newId = getId({ length: 4, existing: Object.keys(options) }); // 'a9b'
+    if (newId) {
+      options[newId] = "A new option";
+    } else {
+      throw new Error("Could not create unique ID!");
+    }
+    setRequestSent((invite) => ({
+      ...invite,
+      [requestedtrips_id]: {
+        ...invite[requestedtrips_id],
+        [postedtrips_id]: action,
+      },
+    }));
+    if (action == 1) {
+      callApiSendNotid(
+        requestedtrips_id,
+        postedtrips_id,
+        currentUser.email,
+        email.toLowerCase(),
+        type
+      );
+      //   socket.emit("sendNotification", {
+      //   id: newId,
+      //   requestedtrips_id: requestedtrips_id,
+      //   postedtrips_id: postedtrips_id,
+      //   senderEmail: currentUser.email,
+      //   receiverEmail: email.toLowerCase(),
+      //   date: date,
+      //   type: type,
+      //   pending: pending
+      // });
+    }
+    if (action == 0) {
+      callApiUnsedNotif(requestedtrips_id, postedtrips_id, type);
+    }
+    window.location.reload(false);
+  };
+
+  const styles = {
+    dialogPaper: {
+      minHeight: "80vh",
+      maxHeight: "80vh",
+    },
+  };
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -113,6 +330,7 @@ export default function RequestItems(props) {
                 marginBottom: 2,
               }}
               key={option.postedtrips_id}
+              id={option.postedtrips_id}
             >
               <CardContent>
                 <Box
@@ -123,9 +341,27 @@ export default function RequestItems(props) {
                     alignItems: "center",
                   }}
                 >
-                  <Avatar sx={{ m: 1, bgcolor: "#ffd500" }}>
-                    <GroupIcon fontSize="medium" style={{ color: "black" }} />
-                  </Avatar>
+                  {option.image == null ? (
+                    <Avatar
+                      sx={{ m: 1, bgcolor: "#ffd500", width: 50, height: 50 }}
+                    >
+                      <GroupIcon
+                        fontSize="medium"
+                        style={{ color: "black", width: 40, height: 40 }}
+                      ></GroupIcon>
+                    </Avatar>
+                  ) : (
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={"http://localhost:3000/" + option.image}
+                      sx={{ width: 80, height: 80, cursor: "pointer" }}
+                      className="profileImage"
+                      onClick={() => {
+                        setData(option);
+                        setOpenProfileModal(true);
+                      }}
+                    />
+                  )}
                 </Box>
                 <Typography
                   gutterBottom
@@ -192,39 +428,84 @@ export default function RequestItems(props) {
                     <b>Phone Number: </b> {option.phone_number}
                   </Typography>
                 </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>School Year: </b> {option.school_year}
-                  </Typography>
-                </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>Program: </b> {option.program}
-                  </Typography>
-                </div>
-                <div>
-                  <Typography gutterBottom variant="h7" component="div">
-                    <b>Music Taste: </b> {option.music_prefrence}
-                  </Typography>
-                </div>
+                <GoogleApiMaps
+                  locationOrigin={option.pickup_location}
+                  locationDropOff={option.dropoff_location}
+                />
               </CardContent>
               <CardActions sx={{ justifyContent: "end" }}>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    borderColor: "#ffd500",
-                    color: "black",
-                    "&:hover": {
+                {JSON.parse(option.pending)[option.postedtrips_id] == 1 && (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      borderColor: "#be0002",
+                      color: "black",
+                      "&:hover": {
+                        borderColor: "#be0002",
+                        color: "red",
+                      },
+                      fontWeight: "bold",
+                      justifyContent: "end",
+                    }}
+                    startIcon={<PendingOutlinedIcon />}
+                    onClick={() =>
+                      handleRequestButton(
+                        option.email,
+                        option.departure_date,
+                        1,
+                        option.postedtrips_id,
+                        option.requestedtrips_id,
+                        0,
+                        option.pending
+                      )
+                    }
+                  >
+                    Pending
+                  </Button>
+                )}{" "}
+                {JSON.parse(option.pending)[option.postedtrips_id] == 0 && (
+                  <Button
+                    variant="outlined"
+                    sx={{
                       borderColor: "#ffd500",
-                      color: "green",
-                    },
-                    fontWeight: "bold",
-                    justifyContent: "end",
-                  }}
-                  startIcon={<PendingOutlinedIcon />}
-                >
-                  Request
-                </Button>
+                      color: "black",
+                      "&:hover": {
+                        borderColor: "#ffd500",
+                        color: "green",
+                      },
+                      fontWeight: "bold",
+                      justifyContent: "end",
+                    }}
+                    startIcon={<PersonAddAltOutlinedIcon />}
+                    onClick={() =>
+                      handleRequestButton(
+                        option.email,
+                        option.departure_date,
+                        1,
+                        option.postedtrips_id,
+                        option.requestedtrips_id,
+                        1,
+                        option.pending
+                      )
+                    }
+                  >
+                    Request
+                  </Button>
+                )}
+                {JSON.parse(option.pending)[option.postedtrips_id] == 2 && (
+                  <Button
+                    disabled="true"
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#006400 !important",
+                      color: "white !important",
+                      fontWeight: "bold",
+                      justifyContent: "end",
+                    }}
+                  >
+                    Accepted
+                  </Button>
+                )}
                 <Button
                   variant="outlined"
                   sx={{
@@ -238,14 +519,65 @@ export default function RequestItems(props) {
                     justifyContent: "end",
                   }}
                   startIcon={<MessageOutlinedIcon />}
+                  onClick={handleClickOpen}
                 >
                   Message
                 </Button>
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  style={{
+                    boxShadow: "none",
+                    border: "none",
+                  }}
+                  PaperProps={{
+                    sx: {
+                      maxHeight: 600,
+                    },
+                  }}
+                  fullWidth
+                  maxWidth="sm"
+                >
+                  <DialogTitle>
+                    <strong>Chat with your driver!</strong>
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        borderColor: "#ffd500",
+                        color: "black",
+                        // "&:hover": {
+                        //   borderColor: "#ffd500",
+                        //   color: "#be0002",
+                        // },
+                        fontWeight: "bold",
+                        marginLeft: "278px",
+                      }}
+                      onClick={handleClose}
+                    >
+                      <CloseIcon />
+                    </Button>
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      Remember to be kind and respectful to your peers!
+                    </DialogContentText>
+                    <MessagingModal
+                      setOpen={handleClose}
+                      socket={socket}
+                      receiver={option.email}
+                    />
+                  </DialogContent>
+                </Dialog>
               </CardActions>
             </Card>
           ))}
         </Grid>
       </div>
+      <ProfileModal
+        open={openProfileModal}
+        handleClose={() => setOpenProfileModal(false)}
+        data={data}
+      />
     </MuiThemeProvider>
   );
 }

@@ -1,0 +1,16 @@
+.links{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.link{
+    padding-top: 10px;
+    margin-right: 40px;
+    color: white;
+}
+
+.devIcon{
+    display: flex;
+    align-items: center;
+}

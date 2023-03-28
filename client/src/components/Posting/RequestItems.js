@@ -4,9 +4,8 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import { Avatar } from "@mui/material";
-import DriveEtaIcon from '@mui/icons-material/DriveEta';
+import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import CloseIcon from "@mui/icons-material/Close";
-import CardMedia from "@mui/material/CardMedia";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -18,13 +17,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import { useAuth } from "../Context/AuthContext";
-
 
 //Dev mode
 const serverURL = " "; //enable for dev mode
@@ -89,7 +86,7 @@ export default function RequestItems(props) {
     setPickup(pickup);
     setDropoff(dropoff);
     setDate(date);
-    setAmount(amount)
+    setAmount(amount);
   };
 
   const handleClose = () => {
@@ -101,6 +98,25 @@ export default function RequestItems(props) {
 
   const callApiDeleteRide = async () => {
     const url = serverURL + "/api/deleteRide";
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        postedTrip_id: id,
+      }),
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    await loadRidesList();
+    return body;
+  };
+
+  const callApiDeleteHistory = async () => {
+    const url = serverURL + "/api/deleteHistoryPost";
     const response = await fetch(url, {
       method: "DELETE",
       headers: {
@@ -152,7 +168,7 @@ export default function RequestItems(props) {
 
   const handleRemove = () => {
     console.log(id);
-    callApiDeleteRide();
+    callApiDeleteHistory().then(callApiDeleteRide());
     notifyAll();
     handleClose();
     //window.location.reload(false);
@@ -211,65 +227,37 @@ export default function RequestItems(props) {
                   <b>Date:</b> {option.departure_date}
                 </Typography>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>From: </b> {option.pickup_location}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>To: </b> {option.dropoff_location}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>Departure Time: </b> {option.departure_time}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>Estimated Arrival Time: </b> {option.arrival_time}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>Payment Method: </b> {option.payment_method}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>Amount: </b> {option.amount}
                   </Typography>
                 </div>
                 <div>
-                  <Typography
-                    gutterBottom
-                    variant="h7"
-                    component="div"
-                  >
+                  <Typography gutterBottom variant="h7" component="div">
                     <b>Car Details: </b> {option.car_brand}, {option.car_color}
                   </Typography>
                 </div>

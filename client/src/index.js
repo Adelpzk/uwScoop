@@ -2,12 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./components/App";
+import { AuthProvider, useAuth } from "../src/components/Context/AuthContext";
 
 
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-    <App />,
+    <AuthProvider> <App /></AuthProvider>,
   document.getElementById("root")
 );
 

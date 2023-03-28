@@ -15,7 +15,7 @@ import StartIcon from "@mui/icons-material/Start";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import Landing from "../images/Landing2.jpeg";
+import Landing from "../images/Landing2.png";
 import Request from "../images/Request.gif";
 import Post from "../images/Post2.png";
 import Dialog from "@mui/material/Dialog";
@@ -28,7 +28,7 @@ import DialogHome from "./Dialog";
 import { fontWeight } from "@mui/system";
 import { Link } from "react-router-dom";
 import "./index.css";
-import { ToastContainer, toast } from "material-react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import SignIn from "../SignUp";
 
 //Dev mode
@@ -201,7 +201,7 @@ class Home extends Component {
               <Box>
                 <CardContent xs={12} sm={12} md={6}>
                   <a>
-                    <Link to={`/Home`}>
+                    <Link to={`/Matches`}>
                       <CardMedia
                         className="image"
                         component="img"

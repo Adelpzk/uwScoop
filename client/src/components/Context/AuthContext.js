@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { auth } from "../Firebase/firebase";
-import { ToastContainer, toast } from "material-react-toastify";
+import { ToastContainer, toast } from 'react-toastify';
+import 'material-react-toastify/dist/ReactToastify.css';
 
 const AuthContext = React.createContext();
 

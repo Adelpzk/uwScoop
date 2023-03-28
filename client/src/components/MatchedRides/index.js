@@ -1,27 +1,17 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import classes from "./index.module.css";
 import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Grid } from "@mui/material";
-import { ToastContainer, toast, Bounce } from "material-react-toastify";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
-import CloseIcon from "@mui/icons-material/Close";
 import "./index.module.css";
 import MatchedItemsRequests from "./MatchedItemsRequests"
 import MatchedItemsPosts from "./MatchedItemsPosts"
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import CarPool from "../images/carpool-vector.jpeg";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
@@ -44,9 +34,10 @@ const theme = createTheme({
   },
 });
 
-export default function MatchedRides() {
+export default function MatchedRides({socket}) {
   const [open, setOpen] = React.useState(false);
   const [renderList, setRenderList] = React.useState(false);
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -55,6 +46,7 @@ export default function MatchedRides() {
   const handleClose = () => {
     setOpen(false);
   };
+
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -88,7 +80,7 @@ export default function MatchedRides() {
                   />
                 </Link>
               </a>
-              <div style={{ marginTop: 130 }}>
+              <div style={{ marginTop: 130, float: "Right", marginRight: 30 }}>
                 <Typography
                   variant="h4"
                   style={{
@@ -147,7 +139,7 @@ export default function MatchedRides() {
                 >
                  Matches from your Requests:
                 </Typography>
-          <MatchedItemsRequests/>
+          <MatchedItemsRequests socket={socket}/>
           <Link to="/Request">
             <Button
               variant="contained"
@@ -177,8 +169,8 @@ export default function MatchedRides() {
                 >
                  Matches from your Posts:
                 </Typography>
-          <MatchedItemsPosts/>
-          <Link to="/Request">
+          <MatchedItemsPosts  socket={socket}/>
+          <Link to="/Post">
             <Button
               variant="contained"
               startIcon={<AddCircleIcon />}
