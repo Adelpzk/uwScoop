@@ -94,7 +94,7 @@ const Footer = () => {
                   HOME
                 </Typography>
               </Link>
-              <Link href="/Requests">
+              <Link href="/Request">
                 <Typography variant="subtitle1" style={{
                   color: "white",
                   margin: "12px",
@@ -103,7 +103,7 @@ const Footer = () => {
                   REQUEST
                 </Typography>
               </Link>
-              <Link href="/Posts">
+              <Link href="/Post">
                 <Typography variant="subtitle1" style={{
                   color: "white",
                   margin: "12px",
