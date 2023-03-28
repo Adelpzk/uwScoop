@@ -108,6 +108,12 @@ export default function RequestItems({ socket }) {
             [element.requestedtrips_id]: JSON.parse(element.pending),
           }));
         }
+        else{
+          setRequestSent((requestSent) => ({
+            ...requestSent,
+            [element.requestedtrips_id]: 0,
+          }));
+        }
       });
     });
   };
@@ -117,18 +123,30 @@ export default function RequestItems({ socket }) {
   }, []);
 
   React.useEffect(() => {
-    matches.forEach((element) => {
-      if (!(element.requestedtrips_id in requestSent)) {
-        setRequestSent((requestSent) => ({
-          ...requestSent,
-          [element.requestedtrips_id]: {
-            ...requestSent[element.postedtrips_id],
-            [element.postedtrips_id]: 0,
-          },
-        }));
-      }
-    });
-  }, [matches]);
+    if (requestSent.length != 0) {
+      matches.forEach((element) => {
+        if (element.pending != 0) {
+          if (!(element.postedtrips_id in JSON.parse(element.pending))) {
+            setRequestSent((requestSent) => ({
+              ...requestSent,
+              [element.requestedtrips_id]: {
+                ...requestSent[element.requestedtrips_id],
+                [element.postedtrips_id]: 0,
+              },
+            }));
+          }
+        } else {
+          setRequestSent((requestSent) => ({
+            ...requestSent,
+            [element.requestedtrips_id]: {
+              ...requestSent[element.requestedtrips_id],
+              [element.postedtrips_id]: 0,
+            },
+          }));
+        }
+      });
+    }
+  }, [requestSent]);
 
   console.log(requestSent);
 

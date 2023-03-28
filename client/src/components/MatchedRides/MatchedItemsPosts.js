@@ -55,7 +55,6 @@ const theme = createTheme({
 export default function RequestItems({ socket }) {
   const [matches, setMatches] = React.useState([]);
   const [InviteSent, setInviteSent] = React.useState([]);
-  const [inviteUpdate, setInviteUpdate] = React.useState({});
   const [openProfileModal, setOpenProfileModal] = React.useState(false);
   const [data, setData] = React.useState(null);
   const { currentUser } = useAuth();
@@ -101,10 +100,14 @@ export default function RequestItems({ socket }) {
             ...requestSent,
             [element.postedtrips_id]: JSON.parse(element.pendingPosts),
           }));
+        } else {
+          setInviteSent((requestSent) => ({
+            ...requestSent,
+            [element.postedtrips_id]: 0,
+          }));
         }
       });
     });
-    
   };
 
   React.useEffect(() => {
@@ -112,27 +115,34 @@ export default function RequestItems({ socket }) {
   }, []);
 
   React.useEffect(() => {
-    matches.forEach((element) => {
-      if (!(element.postedtrips_id in InviteSent)) {
-        setInviteSent((requestSent) => ({
-          ...requestSent,
-          [element.postedtrips_id]: {
-            ...requestSent[element.postedtrips_id],
-            [element.requestedtrips_id]: 0,
-          },
-        }));
-      }
-    });
-  }, [matches]);
+    if (InviteSent.length != 0) {
+      matches.forEach((element) => {
+        if (element.pendingPosts != 0) {
+          if (
+            !(element.requestedtrips_id in JSON.parse(element.pendingPosts))
+          ) {
+            setInviteSent((requestSent) => ({
+              ...requestSent,
+              [element.postedtrips_id]: {
+                ...requestSent[element.postedtrips_id],
+                [element.requestedtrips_id]: 0,
+              },
+            }));
+          }
+        } else {
+          setInviteSent((requestSent) => ({
+            ...requestSent,
+            [element.postedtrips_id]: {
+              ...requestSent[element.postedtrips_id],
+              [element.requestedtrips_id]: 0,
+            },
+          }));
+        }
+      });
+    }
+  }, [InviteSent]);
 
   console.log(InviteSent);
-
-  // React.useEffect(() => {
-  //   InviteSent.forEach((element) => {
-  //     callApiPostPending(element[])
-  //   })
-
-  // }, []);
 
   const callApiPostPending = async (id, pending) => {
     const url = serverURL + "/api/postPendingRequests";
@@ -252,14 +262,6 @@ export default function RequestItems({ socket }) {
       throw new Error("Could not create unique ID!");
     }
 
-    // setInviteSent({
-    //   ...InviteSent,
-    //   [postedtrips_id]:{
-    //     ...InviteSent[postedtrips_id],
-    //     [requestedtrips_id]: action
-    //   }
-    // })
-
     setInviteSent((invite) => ({
       ...invite,
       [postedtrips_id]: {
@@ -276,16 +278,6 @@ export default function RequestItems({ socket }) {
         email.toLowerCase(),
         type
       );
-      //   socket.emit("sendNotification", {
-      //   id: newId,
-      //   requestedtrips_id: requestedtrips_id,
-      //   postedtrips_id: postedtrips_id,
-      //   senderEmail: currentUser.email,
-      //   receiverEmail: email.toLowerCase(),
-      //   date: date,
-      //   type: type,
-      //   pending: pending
-      // });
     }
     if (action == 0) {
       callApiUnsedNotif(requestedtrips_id, postedtrips_id, type);

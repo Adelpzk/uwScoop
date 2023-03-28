@@ -80,7 +80,7 @@ export default function MatchedRides({socket}) {
                   />
                 </Link>
               </a>
-              <div style={{ marginTop: 130 }}>
+              <div style={{ marginTop: 130, float: "Right", marginRight: 30 }}>
                 <Typography
                   variant="h4"
                   style={{

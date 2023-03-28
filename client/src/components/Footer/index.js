@@ -85,7 +85,7 @@ const Footer = () => {
               justifyContent="center"
               alignItems="center"
               marginTop={'1px'}>
-              <Link href="/Home" className="link">
+              <Link href="/Home" className="link" >
                 <Typography variant="subtitle1" style={{
                   color: "white",
                   margin: "12px",

@@ -92,11 +92,11 @@ export default function Request() {
                   />
                 </Link>
               </a>
-              <div style={{ marginTop: 100 }}>
+              <div style={{ marginTop: 100, float: "Right", marginRight: 5 }}>
                 <Typography
                   variant="h4"
                   style={{
-                    marginLeft: 50,
+                    marginRight: 50,
                     fontStyle: "oblique",
                     fontWeight: "bold",
                   }}
@@ -106,7 +106,7 @@ export default function Request() {
                 <Typography
                   variant="h4"
                   style={{
-                    marginLeft: 50,
+                    marginRight: 50,
                     fontStyle: "oblique",
                     fontWeight: "bold",
                   }}
@@ -116,7 +116,7 @@ export default function Request() {
                 <Typography
                   variant="h4"
                   style={{
-                    marginLeft: 50,
+                    marginRight: 50,
                     fontStyle: "oblique",
                     fontWeight: "bold",
                   }}
@@ -126,7 +126,7 @@ export default function Request() {
                 <Typography
                   variant="h4"
                   style={{
-                    marginLeft: 50,
+                    marginRight: 50,
                     fontStyle: "oblique",
                     fontWeight: "bold",
                   }}
@@ -149,60 +149,58 @@ export default function Request() {
                       color: "#be0002",
                     },
                     fontWeight: "bold",
-                    '@media (max-width: 931px)': {
-                      marginLeft: "8%"
-                    }
                   }}
                 >
                   Make a new Request
                 </Button>
-              </div>
-              <br />
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  marginTop: 40,
-                  marginLeft: 50,
-                }}
-              >
-                <MonetizationOnIcon fontSize="large" />
-                <Typography
-                  variant="caption"
-                  display="block"
+
+                <br />
+                <div
                   style={{
-                    fontSize: 12,
+                    display: "flex",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    marginTop: 40,
+                    marginRight: 50,
                   }}
                 >
-                  cheap & <br />
-                  affordable
-                </Typography>
-                <EmojiEmotionsIcon
-                  fontSize="large"
-                  style={{ marginLeft: 30 }}
-                />
-                <Typography
-                  variant="caption"
-                  display="block"
-                  style={{
-                    fontSize: 12,
-                  }}
-                >
-                  safe & <br />
-                  secure
-                </Typography>
-                <PeopleAltIcon fontSize="large" style={{ marginLeft: 30 }} />
-                <Typography
-                  variant="caption"
-                  display="block"
-                  style={{
-                    fontSize: 12,
-                  }}
-                >
-                  friendly & <br />
-                  comfortable
-                </Typography>
+                  <MonetizationOnIcon fontSize="large" />
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    style={{
+                      fontSize: 12,
+                    }}
+                  >
+                    cheap & <br />
+                    affordable
+                  </Typography>
+                  <EmojiEmotionsIcon
+                    fontSize="large"
+                    style={{ marginLeft: 30 }}
+                  />
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    style={{
+                      fontSize: 12,
+                    }}
+                  >
+                    safe & <br />
+                    secure
+                  </Typography>
+                  <PeopleAltIcon fontSize="large" style={{ marginLeft: 30 }} />
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    style={{
+                      fontSize: 12,
+                    }}
+                  >
+                    friendly & <br />
+                    comfortable
+                  </Typography>
+                </div>
               </div>
             </CardContent>
           </Box>
