@@ -4,6 +4,8 @@ uwScoop is a new rideshare application exclusive to University of Waterloo Stude
 Rather than havingto scroll through rides that dont fit your criteria in a Facebook group, uwScoop automatically matches you with rides that fit your criteria.
 You meet new people along the way too! uwScoop considers your year, program and music preferences to make your ride most enjoyable
 
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/HCBylS9ibK8/0.jpg)](https://www.youtube.com/watch?v=HCBylS9ibK8)
+
 # Installation Requirements
 To install our app, simply clone our repository to your machine. You can run by either running "yarn dev" on main directory or run "npm start" on both main and client directories.
 
